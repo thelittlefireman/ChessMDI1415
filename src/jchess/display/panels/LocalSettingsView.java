@@ -4,15 +4,13 @@
  */
 package jchess.display.panels;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
+import jchess.core.GameEngine;
+import jchess.utils.Settings;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import jchess.core.Game;
-import jchess.utils.Settings;
 
 /**
  *
@@ -29,12 +27,12 @@ public class LocalSettingsView extends JPanel implements ActionListener
     private GridBagConstraints gbc;
     
     private GridBagLayout gbl;
-    
-    private Game game;
-    
-    public LocalSettingsView(Game game)
+
+    private GameEngine gameEngine;
+
+    public LocalSettingsView(GameEngine gameEngine)
     {
-        this.game = game;
+        this.gameEngine = gameEngine;
         
         this.gbc = new GridBagConstraints();
         this.gbl = new GridBagLayout();
@@ -91,9 +89,9 @@ public class LocalSettingsView extends JPanel implements ActionListener
     {
         if (isInitiatedCorrectly())
         {
-            isUpsideDown.setSelected(game.getSettings().isUpsideDown());
-            isDisplayLegalMovesEnabled.setSelected(game.getSettings().isDisplayLegalMovesEnabled());
-            isRenderLabelsEnabled.setSelected(game.getSettings().isRenderLabels());
+            isUpsideDown.setSelected(gameEngine.getSettings().isUpsideDown());
+            isDisplayLegalMovesEnabled.setSelected(gameEngine.getSettings().isDisplayLegalMovesEnabled());
+            isRenderLabelsEnabled.setSelected(gameEngine.getSettings().isRenderLabels());
         }
     }
 
@@ -103,18 +101,18 @@ public class LocalSettingsView extends JPanel implements ActionListener
         JCheckBox clickedComponent = (JCheckBox) e.getSource();
         if (clickedComponent == isUpsideDown)
         {
-            game.getSettings().setUpsideDown(isUpsideDown.isSelected());
+            gameEngine.getSettings().setUpsideDown(isUpsideDown.isSelected());
         } 
         else if (clickedComponent == isDisplayLegalMovesEnabled)
         {
-            game.getSettings().setDisplayLegalMovesEnabled(isDisplayLegalMovesEnabled.isSelected());
+            gameEngine.getSettings().setDisplayLegalMovesEnabled(isDisplayLegalMovesEnabled.isSelected());
         }
         else if (clickedComponent == isRenderLabelsEnabled) 
         {
-            game.getSettings().setRenderLabels(isRenderLabelsEnabled.isSelected());
-            game.resizeGame();
+            gameEngine.getSettings().setRenderLabels(isRenderLabelsEnabled.isSelected());
+            gameEngine.getjPanelGame().resizeGame();
         }
-        game.repaint();
+        gameEngine.getjPanelGame().repaint();
     }
     
     @Override

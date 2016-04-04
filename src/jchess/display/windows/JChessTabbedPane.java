@@ -16,19 +16,21 @@
 
 package jchess.display.windows;
 
+import jchess.JChessApp;
 import jchess.JChessView;
-import jchess.core.GameClock;
+import jchess.NewGameWindow;
+import jchess.display.panels.JPanelGame;
+import jchess.display.panels.JPanelGameClock;
+import jchess.utils.GUI;
+import org.apache.log4j.Logger;
+
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.image.ImageObserver;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import jchess.utils.GUI;
-import jchess.JChessApp;
-import jchess.NewGameWindow;
-import jchess.core.Game;
-import org.apache.log4j.Logger;
+import java.awt.*;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.ImageObserver;
 
 
 /**
@@ -37,7 +39,7 @@ import org.apache.log4j.Logger;
  */
 public class JChessTabbedPane extends JTabbedPane implements MouseListener, ImageObserver, ChangeListener
 {
-    private static final Logger LOG = Logger.getLogger(GameClock.class);
+    private static final Logger LOG = Logger.getLogger(JPanelGameClock.class);
 
     private TabbedPaneIcon closeIcon;
     
@@ -173,8 +175,8 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         if (1 != getTabCount())
         {
             JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
-            Game game = (Game) sourceTabbedPane.getSelectedComponent();
-            game.resizeGame(); 
+            JPanelGame JPanelGame = (JPanelGame) sourceTabbedPane.getSelectedComponent();
+            JPanelGame.resizeGame();
         }
     }
 }

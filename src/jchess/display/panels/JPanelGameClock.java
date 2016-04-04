@@ -18,40 +18,43 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess.core;
+package jchess.display.panels;
 
-import java.awt.*;
-import java.awt.image.*;
-import javax.swing.JPanel;
+import jchess.core.Clock;
+import jchess.core.Player;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
 
-/** Class to representing the full game time
- * @param game The current game
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+/** Class to representing the full JPanelGame time
+ * @param game The current JPanelGame
  */
-public class GameClock extends JPanel implements Runnable
+public class JPanelGameClock extends JPanel implements Runnable
 {
-    private static final Logger LOG = org.apache.log4j.Logger.getLogger(GameClock.class);
+    private static final Logger LOG = org.apache.log4j.Logger.getLogger(JPanelGameClock.class);
 
     public Clock clock1;
     public Clock clock2;
     private Clock runningClock;
     private Settings settings;
     private Thread thread;
-    private Game game;
+    private jchess.display.panels.JPanelGame JPanelGame;
     private Graphics g;
     private String white_clock, black_clock;
     private BufferedImage background;
     private Graphics bufferedGraphics;
 
-    GameClock(Game game)
+    JPanelGameClock(JPanelGame JPanelGame)
     {
         super();
         this.clock1 = new Clock();//white player clock
         this.clock2 = new Clock();//black player clock
         this.runningClock = this.clock1;//running/active clock
-        this.game = game;
-        this.settings = game.getSettings();
+        this.JPanelGame = JPanelGame;
+        this.settings = JPanelGame.getGameEngine().getSettings();
         this.background = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB);
 
         int time = this.settings.getTimeForGame();
@@ -68,14 +71,14 @@ public class GameClock extends JPanel implements Runnable
         this.setDoubleBuffered(true);
     }
 
-    /** Method to init game clock
+    /** Method to init JPanelGame clock
      */
     public void start()
     {
         this.thread.start();
     }
 
-    /** Method to stop game clock
+    /** Method to stop JPanelGame clock
      */
     public void stop()
     {
@@ -189,7 +192,7 @@ public class GameClock extends JPanel implements Runnable
      */
     public void setTimes(int t1, int t2)
     {
-        /*rather in chess game players got the same time 4 game, so why in documentation
+        /*rather in chess JPanelGame players got the same time 4 JPanelGame, so why in documentation
          * this method've 2 parameters ? */
         this.clock1.init(t1);
         this.clock2.init(t2);
@@ -233,10 +236,10 @@ public class GameClock extends JPanel implements Runnable
                     }
                     catch (InterruptedException e)
                     {
-                        LOG.error("Some error in gameClock thread: " + e);
+                        LOG.error("Some error in JPanelGameClock thread: " + e);
                     }
-                    //if(this.game.blockedChessboard)
-                    //  this.game.blockedChessboard = false;
+                    //if(this.JPanelGame.blockedChessboard)
+                    //  this.JPanelGame.blockedChessboard = false;
                 }
                 if (this.runningClock != null && this.runningClock.getLeftTime() == 0)
                 {
@@ -246,7 +249,7 @@ public class GameClock extends JPanel implements Runnable
         }
     }
 
-    /** Method of checking is the time of the game is not over
+    /** Method of checking is the time of the JPanelGame is not over
      */
     private void timeOver()
     {
@@ -263,7 +266,7 @@ public class GameClock extends JPanel implements Runnable
         {//if called in wrong moment
             LOG.debug("Time over called when player got time 2 play");
         }
-        this.game.endGame("Time is over! " + color + " player win the game.");
+        this.JPanelGame.getGameEngine().endGame("Time is over! " + color + " player win the JPanelGame.");
         this.stop();
 
         //JOptionPane.showMessageDialog(this, "koniec czasu");

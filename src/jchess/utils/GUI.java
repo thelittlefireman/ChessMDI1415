@@ -16,24 +16,24 @@
 package jchess.utils;
 
 import jchess.JChessApp;
-import jchess.core.Game;
-import java.awt.*;
-import java.net.*;
-import java.io.*;
-import java.util.Properties;
-import java.io.FileOutputStream;
-import org.apache.log4j.Logger;
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import javax.imageio.stream.ImageInputStream;
 import jchess.core.Colors;
+import jchess.display.panels.JPanelGame;
+import org.apache.log4j.Logger;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 /** 
  * @author: Mateusz Sławomir Lach ( matlak, msl )
  * @author: Damian Marciniak
- * Class representing the game interface which is seen by a player and
+ * Class representing the JPanelGame interface which is seen by a player and
  * where are lockated available for player opptions, current games and where
- * can he start a new game (load it or save it)
+ * can he start a new JPanelGame (load it or save it)
  */
 public class GUI
 {
@@ -41,19 +41,18 @@ public class GUI
     private static final Logger LOG = Logger.getLogger(GUI.class);
     
     private static final String CONFIG_FILENAME = "config.txt";
-    
-    private Game game;
-    
     private static final Properties CONFIG_FILE = GUI.getConfigFile();
-    
     private static final String IMAGE_PATH = "theme/%s/images/%s";
+    private JPanelGame JPanelGame;
 
     /**
      * Default constructor
      */
-    public GUI()
+    public GUI(JPanelGame jPanelGame)
     {
-        this.game = new Game();
+        //TODO
+        System.out.println("lol");
+        this.JPanelGame = jPanelGame;
     }/*--endOf-GUI--*/
 
     public static Image loadPieceImage(String pieceName, Colors color, int size, String fileExt)
@@ -155,10 +154,10 @@ public class GUI
     }
 
     /**
-     * @return the game
+     * @return the JPanelGame
      */
-    public Game getGame()
+    public JPanelGame getJPanelGame()
     {
-        return game;
+        return JPanelGame;
     }
 }

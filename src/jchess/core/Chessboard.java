@@ -18,24 +18,20 @@
  */
 package jchess.core;
 
-import jchess.core.pieces.implementation.King;
-import jchess.core.pieces.implementation.Knight;
-import jchess.core.pieces.implementation.Queen;
-import jchess.core.pieces.implementation.Rook;
-import jchess.core.pieces.implementation.Pawn;
-import jchess.core.pieces.implementation.Bishop;
-import jchess.core.pieces.Piece;
-import java.awt.event.ComponentEvent;
-import java.util.ArrayList;
-import java.util.Set;
 import jchess.JChessApp;
 import jchess.core.moves.Castling;
 import jchess.core.moves.Move;
 import jchess.core.moves.Moves;
-import jchess.display.views.chessboard.implementation.graphic2D.Chessboard2D;
+import jchess.core.pieces.Piece;
+import jchess.core.pieces.implementation.*;
 import jchess.display.views.chessboard.ChessboardView;
+import jchess.display.views.chessboard.implementation.graphic2D.Chessboard2D;
 import jchess.utils.Settings;
-import org.apache.log4j.*;
+import org.apache.log4j.Logger;
+
+import java.awt.event.ComponentEvent;
+import java.util.ArrayList;
+import java.util.Set;
 
 /** 
  * @author: Mateusz Sławomir Lach ( matlak, msl )
@@ -46,37 +42,24 @@ import org.apache.log4j.*;
  */
 public class Chessboard 
 {
-    private static final Logger LOG = Logger.getLogger(Chessboard.class);
-    
     protected static final int TOP = 0;
-    
     protected static final int BOTTOM = 7;
-    
+    private static final Logger LOG = Logger.getLogger(Chessboard.class);
     /*
      * squares of chessboard
      */
     protected Square squares[][];
-
-    private Set<Square> moves;
-    
-    private Settings settings;
-    
     protected King kingWhite;
-    
     protected King kingBlack;
-    
     //For En passant:
     //|-> Pawn whose in last turn moved two square
     protected Pawn twoSquareMovedPawn = null;
-    
-    private Moves Moves;
-    
     protected Square activeSquare;
-    
     protected int activeSquareX;
-    
-    protected int activeSquareY;      
-    
+    protected int activeSquareY;
+    private Set<Square> moves;
+    private Settings settings;
+    private Moves Moves;
     /**
      * chessboard view data object
      */  
@@ -85,9 +68,9 @@ public class Chessboard
     /** 
      * Chessboard class constructor
      * @param settings reference to Settings class object for this chessboard
-     * @param moves_history reference to Moves class object for this chessboard 
+     * @param moves_history reference to Moves class object for this chessboard
      */
-    public Chessboard(Settings settings, Moves Moves)
+    public Chessboard(Settings settings, Moves moves_history)
     {
         this.settings = settings;
         this.chessboardView = new Chessboard2D(this);
@@ -104,7 +87,7 @@ public class Chessboard
                 this.squares[i][y] = new Square(i, y, null);
             }
         }//--endOf--create object for each square
-        this.Moves = Moves;
+        this.Moves = moves_history;
 
     }/*--endOf-Chessboard--*/
 
@@ -123,6 +106,13 @@ public class Chessboard
     {
         return BOTTOM;
     }
+
+    public static boolean wasEnPassant(Square sq) {
+        return sq.getPiece() != null
+                && sq.getPiece().getChessboard().getTwoSquareMovedPawn() != null
+                && sq == sq.getPiece().getChessboard().getTwoSquareMovedPawn().getSquare();
+    }
+
     /** Method setPieces on begin of new game or loaded game
      * @param places string with pieces to set on chessboard
      * @param plWhite reference to white player
@@ -134,13 +124,12 @@ public class Chessboard
         if (places.equals("")) //if newGame
         {
             this.setPieces4NewGame(plWhite, plBlack);
-        } 
+        }
         else //if loadedGame
         {
             return;
         }
     }/*--endOf-setPieces--*/
-
 
     /**
      *
@@ -156,8 +145,7 @@ public class Chessboard
         this.setPawns4NewGame(6, player1);
     }/*--endOf-setPieces(boolean upsideDown)--*/
 
-
-    /**  
+    /**
      *  Method to set Figures in row (and set Queen and King to right position)
      *  @param i row where to set figures (Rook, Knight etc.)
      *  @param player which is owner of pawns
@@ -181,7 +169,7 @@ public class Chessboard
         this.getSquare(6, i).setPiece(new Knight(this, player));
         this.getSquare(2, i).setPiece(new Bishop(this, player));
         this.getSquare(5, i).setPiece(new Bishop(this, player));
-        
+
 
         this.getSquare(3, i).setPiece(new Queen(this, player));
         if (player.getColor() == Colors.WHITE)
@@ -212,7 +200,7 @@ public class Chessboard
             this.getSquare(x, i).setPiece(new Pawn(this, player));
         }
     }
-    
+
     /** Method selecting piece in chessboard
      * @param  sq square to select (when clicked))
      */
@@ -234,12 +222,12 @@ public class Chessboard
 
         this.getChessboardView().unselect();
     }/*--endOf-unselect--*/
-        
-    public void resetActiveSquare() 
+
+    public void resetActiveSquare()
     {
         this.setActiveSquare(null);
     }
- 
+
     public void move(Square begin, Square end)
     {
         move(begin, end, true);
@@ -347,7 +335,7 @@ public class Chessboard
                 {
                     String color = String.valueOf(end.getPiece().getPlayer().getColor().getSymbolAsString().toUpperCase());
                     String newPiece = JChessApp.getJavaChessView().showPawnPromotionBox(color); //return name of new piece
-                    
+
                     Piece piece;
                     switch (newPiece)
                     {
@@ -367,7 +355,7 @@ public class Chessboard
                     piece.setChessboard(end.getPiece().getChessboard());
                     piece.setPlayer(end.getPiece().getPlayer());
                     piece.setSquare(end.getPiece().getSquare());
-                    end.piece = piece;                    
+                    end.piece = piece;
                     promotedPiece = end.piece;
                 }
             }
@@ -393,7 +381,6 @@ public class Chessboard
             this.Moves.addMove(tempBegin, tempEnd, false, wasCastling, wasEnPassant, promotedPiece);
         }
     }/*endOf-move()-*/
-
 
     public boolean redo()
     {
@@ -426,7 +413,7 @@ public class Chessboard
                 }
                 return true;
             }
-            
+
         }
         return false;
     }
@@ -550,18 +537,17 @@ public class Chessboard
     /**
      * @return the squares
      */
-    public Square[][] getSquares() 
+    public Square[][] getSquares()
     {
         return squares;
     }
-    
-    public Square getSquare(int x, int y) 
+
+    public Square getSquare(int x, int y)
     {
-        try 
+        try
         {
             return squares[x][y];
-        } 
-        catch(ArrayIndexOutOfBoundsException exc) 
+        } catch (ArrayIndexOutOfBoundsException exc)
         {
             return null;
         }
@@ -570,9 +556,16 @@ public class Chessboard
     /**
      * @return the activeSquare
      */
-    public Square getActiveSquare() 
+    public Square getActiveSquare()
     {
         return activeSquare;
+    }
+
+    /**
+     * @param activeSquare the activeSquare to set
+     */
+    public void setActiveSquare(Square activeSquare) {
+        this.activeSquare = activeSquare;
     }
 
     public ArrayList<Piece> getAllPieces(Colors color)
@@ -588,16 +581,9 @@ public class Chessboard
                     result.add(sq.getPiece());
                 }
             }
-        }       
+        }
         return result;
     }
-    
-    public static boolean wasEnPassant(Square sq)
-    {
-        return sq.getPiece() != null
-                    && sq.getPiece().getChessboard().getTwoSquareMovedPawn() != null
-                    && sq == sq.getPiece().getChessboard().getTwoSquareMovedPawn().getSquare();
-    }    
 
     /**
      * @return the kingWhite
@@ -638,7 +624,7 @@ public class Chessboard
     {
         this.chessboardView = chessboardView;
     }
-    
+
     public void repaint()
     {
         getChessboardView().repaint();
@@ -674,14 +660,6 @@ public class Chessboard
     public void setMoves(Set<Square> moves)
     {
         this.moves = moves;
-    }
-
-    /**
-     * @param activeSquare the activeSquare to set
-     */
-    public void setActiveSquare(Square activeSquare)
-    {
-        this.activeSquare = activeSquare;
     }
 
     /**

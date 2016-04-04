@@ -15,24 +15,32 @@
 
 package jchess;
 
+import jchess.core.GameEngine;
+import jchess.display.panels.JPanelGame;
+import jchess.utils.Settings;
+import org.apache.log4j.PropertyConfigurator;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.SingleFrameApplication;
-import java.awt.Window;
+
+import java.awt.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
-import org.apache.log4j.PropertyConfigurator;
 
 /**
  * The main class of the application.
  */
 public class JChessApp extends SingleFrameApplication {
-    
-    protected static JChessView javaChessView; 
-     
-    public final static String LOG_FILE = "log4j.properties"; 
-    
-    public final static String MAIN_PACKAGE_NAME = "jchess";
 
+    public final static String LOG_FILE = "log4j.properties";
+    public final static String MAIN_PACKAGE_NAME = "jchess";
+    protected static JChessView javaChessView;
+    protected static List<GameEngine> activeGameEngine;
+
+    public JChessApp() {
+        activeGameEngine = new ArrayList<>();
+    }
     /**
      * @return the jcv
      */
@@ -40,30 +48,21 @@ public class JChessApp extends SingleFrameApplication {
     {
         return javaChessView;
     }
-     
-    /**
-     * At startup create and show the main frame of the application.
-     */
-    @Override 
-    protected void startup() 
-    {
-        javaChessView = new JChessView(this);
-        show(getJavaChessView());
-    }
 
-    /**
-     * This method is to initialize the specified window by injecting resources.
-     * Windows shown in our application come fully initialized from the GUI
-     * builder, so this additional configuration is not needed.
-     */
-    @Override 
-    protected void configureWindow(Window root) {}
+    public static GameEngine addNewGame(Settings settings, String title) {
+        GameEngine gameEngine = new GameEngine(settings);
+        JPanelGame jPanelGame = getJavaChessView().addNewTab(title, gameEngine);
+        gameEngine.setjPanelGame(jPanelGame);
+        activeGameEngine.add(gameEngine);
+        gameEngine.newGame();
+        return gameEngine;
+    }
 
     /**
      * A convenient static getter for the application instance.
      * @return the instance of JChessApp
      */
-    public static JChessApp getApplication() 
+    public static JChessApp getApplication()
     {
         return Application.getInstance(JChessApp.class);
     }
@@ -71,18 +70,36 @@ public class JChessApp extends SingleFrameApplication {
     /**
      * Main method launching the application.
      */
-    public static void main(String[] args) 
+    public static void main(String[] args)
     {
         launch(JChessApp.class, args);
         Properties logProp = new Properties();
-        try
-        {   
-            logProp.load(JChessApp.class.getClassLoader().getResourceAsStream(LOG_FILE)); 
+        try {
+            logProp.load(JChessApp.class.getClassLoader().getResourceAsStream(LOG_FILE));
             PropertyConfigurator.configure(logProp);
         }
         catch (NullPointerException | IOException e)
         {
             System.err.println("Logging not enabled : "+e.getMessage());
-        } 
+        }
+    }
+
+    /**
+     * At startup create and show the main frame of the application.
+     */
+    @Override
+    protected void startup() {
+        javaChessView = new JChessView(this);
+        show(getJavaChessView());
+        GameEngine.newAutoGame();
+    }
+
+    /**
+     * This method is to initialize the specified window by injecting resources.
+     * Windows shown in our application come fully initialized from the GUI
+     * builder, so this additional configuration is not needed.
+     */
+    @Override
+    protected void configureWindow(Window root) {
     }
 }

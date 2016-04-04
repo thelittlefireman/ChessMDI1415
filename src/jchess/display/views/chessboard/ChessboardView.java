@@ -4,14 +4,12 @@
  */
 package jchess.display.views.chessboard;
 
-import jchess.display.views.chessboard.implementation.graphic2D.Chessboard2D;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.Point;
-import javax.swing.JPanel;
 import jchess.core.Chessboard;
 import jchess.core.Square;
 import jchess.utils.GUI;
+
+import javax.swing.*;
+import java.awt.*;
 
 /*
  * Authors:
@@ -19,71 +17,54 @@ import jchess.utils.GUI;
  */
 public abstract class ChessboardView extends JPanel
 {
-    private static final int CENTER_POSITION = 3;
-    
-    /*
-     * image of chessboard
-     */
-    protected static final Image orgImage = GUI.loadImage("chessboard.png");
-    
-    /*
-     * image of chessboard
-     */    
-    protected Image image = ChessboardView.orgImage;
-    
-    /*
-     * image of highlited square
-     */
-    protected static final Image orgSelSquare = GUI.loadImage("sel_square.png");
-    
-    /*
-     * image of highlited square
-     */
-    protected static Image selSquare = orgSelSquare;
-    
-    /*
-     * image of square where piece can go
-     */
-    protected static final Image orgAbleSquare = GUI.loadImage("able_square.png");
-    
-    /*
-     * image of square where piece can go
-     */
-    protected static Image ableSquare = orgAbleSquare;
-
-    
-    private Image upDownLabel = null;
-    
-    protected Image leftRightLabel = null;
-    
-    protected Point topLeft = new Point(0, 0);
-
-    
-    /*
-     * height of square
-     */
-    protected float squareHeight;
-    
     /*
      * image x position (used in JChessView class!)
      */
-    public static final int imgX = 5; 
-    
+    public static final int imgX = 5;
     /*
      * image y position (used in JChessView class!)
      */
     public static final int imgY = imgX;
-    
     /*
      * image width
      */
     public static final int imgWidht = 480;
-    
     /*
      * image height
      */
     public static final int imgHeight = imgWidht;
-    
+    /*
+     * image of chessboard
+     */
+    protected static final Image orgImage = GUI.loadImage("chessboard.png");
+    /*
+     * image of highlited square
+     */
+    protected static final Image orgSelSquare = GUI.loadImage("sel_square.png");
+    /*
+     * image of square where piece can go
+     */
+    protected static final Image orgAbleSquare = GUI.loadImage("able_square.png");
+    private static final int CENTER_POSITION = 3;
+    /*
+     * image of highlited square
+     */
+    protected static Image selSquare = orgSelSquare;
+    /*
+     * image of square where piece can go
+     */
+    protected static Image ableSquare = orgAbleSquare;
+    /*
+     * image of chessboard
+     */
+    protected Image image = ChessboardView.orgImage;
+    protected Image leftRightLabel = null;
+    protected Point topLeft = new Point(0, 0);
+    /*
+     * height of square
+     */
+    protected float squareHeight;
+    private Image upDownLabel = null;
     private Chessboard chessboard;
     
     abstract public Square getSquare(int clickedX, int clickedY);
@@ -105,7 +86,7 @@ public abstract class ChessboardView extends JPanel
     abstract public Point getTopLeftPoint();
     
     /**
-     * Annotations to superclass Game updateing and painting the crossboard
+     * Annotations to superclass JPanelGame updateing and painting the crossboard
      */
     @Override
     public void update(Graphics g)

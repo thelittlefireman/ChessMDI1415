@@ -16,17 +16,18 @@
 package jchess.display.windows;
 
 import jchess.JChessApp;
-import jchess.core.Game;
+import jchess.core.GameEngine;
 import jchess.core.Player;
-import javax.swing.*;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import java.awt.event.TextListener;
-import java.awt.event.TextEvent;
-import java.awt.*;
-import javax.swing.text.BadLocationException;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.TextEvent;
+import java.awt.event.TextListener;
 
 /**
  * @author: Mateusz Sławomir Lach ( matlak, msl )
@@ -66,131 +67,8 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
     {
         "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"
     };
-        
-    /** 
-     * Method witch is checking correction of edit tables
-     * @param e Object where is saving this what contents edit tables
-     */
-    @Override
-    public void textValueChanged(TextEvent e)
-    {
-        Object target = e.getSource();
-        if (target == this.firstName || target == this.secondName)
-        {
-            JTextField temp = new JTextField();
-            if (target == this.firstName)
-            {
-                temp = this.firstName;
-            }
-            else if (target == this.secondName)
-            {
-                temp = this.secondName;
-            }
 
-            int len = temp.getText().length();
-            if (len > 8)
-            {
-                try
-                {
-                    temp.setText(temp.getText(0, 7));
-                }
-                catch (BadLocationException exc)
-                {
-                    LOG.error("BadLocationException: Something wrong in editables, msg: " + exc.getMessage() + " object: " + exc);
-                }
-            }
-        }
-    }
-
-    /** Method responsible for changing the options which can make a player
-     * when he want to start new local game
-     * @param e where is saving data of performed action
-     */
-    @Override
-    public void actionPerformed(ActionEvent e)
-    {
-        Object target = e.getSource(); 
-        if (target == this.oponentComp) //toggle enabled of controls depends of oponent (if computer)
-        {
-            this.computerLevel.setEnabled(true);//enable level of computer abilities
-            this.secondName.setEnabled(false);//disable field with name of player2
-        }
-        else if (target == this.oponentHuman) //else if oponent will be HUMAN
-        {
-            this.computerLevel.setEnabled(false);//disable level of computer abilities
-            this.secondName.setEnabled(true);//enable field with name of player2
-        }
-        else if (target == this.okButton) //if clicked OK button (on finish)
-        {
-            if (this.firstName.getText().length() > 9) //make names short to 10 digits
-            {
-                this.firstName.setText(this.trimString(firstName, 9));
-            }
-            if (this.secondName.getText().length() > 9)  //make names short to 10 digits
-            {
-                this.secondName.setText(this.trimString(secondName, 9));
-            }
-            if (!this.oponentComp.isSelected()
-                    && (this.firstName.getText().length() == 0 || this.secondName.getText().length() == 0))
-            {
-                JOptionPane.showMessageDialog(this, Settings.lang("fill_names"));
-                return;
-            }
-            if ((this.oponentComp.isSelected() && this.firstName.getText().length() == 0))
-            {
-                JOptionPane.showMessageDialog(this, Settings.lang("fill_name"));
-                return;
-            }
-            Game newGUI = JChessApp.getJavaChessView().addNewTab(this.firstName.getText() + " vs " + this.secondName.getText());
-            //newGUI.getChat().setEnabled(false);
-            
-            Settings sett = newGUI.getSettings();//sett local settings variable
-            Player pl1 = sett.getPlayerWhite();//set local player variable
-            Player pl2 = sett.getPlayerBlack();//set local player variable
-            sett.setGameMode(Settings.gameModes.newGame);
-            //if(this.firstName.getText().length() >9 ) this.firstName.setText(this.firstName.getText(0,8));
-            //TODO: investigate and refactor
-            if (this.color.getActionCommand().equals("biały")) //if first player is white
-            {
-                pl1.setName(this.firstName.getText());//set name of player
-                pl2.setName(this.secondName.getText());//set name of player
-            }
-            else //else change names
-            {
-                pl2.setName(this.firstName.getText());//set name of player
-                pl1.setName(this.secondName.getText());//set name of player
-            }
-            pl1.setType(Player.playerTypes.localUser);//set type of player
-            pl2.setType(Player.playerTypes.localUser);//set type of player
-            sett.setGameType(Settings.gameTypes.local);
-            if (this.oponentComp.isSelected()) //if computer oponent is checked
-            {
-                pl2.setType(Player.playerTypes.computer);
-            }
-            sett.setUpsideDown(this.upsideDown.isSelected());
-            if (this.timeGame.isSelected()) //if timeGame is checked
-            {
-                String value = this.times[this.time4Game.getSelectedIndex()];//set time for game
-                Integer val = new Integer(value);
-                sett.setTimeForGame((int) val * 60);//set time for game and mult it to seconds
-                newGUI.getGameClock().setTimes(sett.getTimeForGame(), sett.getTimeForGame());
-                newGUI.getGameClock().start();
-            }
-            LOG.debug("this.time4Game.getActionCommand(): " + this.time4Game.getActionCommand());
-            //this.time4Game.getComponent(this.time4Game.getSelectedIndex());
-            LOG.debug("****************\nStarting new game: " + pl1.getName() + " vs. " + pl2.getName()
-                    + "\ntime 4 game: " + sett.getTimeForGame() + "\ntime limit set: " + sett.isTimeLimitSet()
-                    + "\nwhite on top?: " + sett.isUpsideDown() + "\n****************");//4test
-            
-            newGUI.newGame();//start new Game
-            this.parent.setVisible(false);//hide parent
-            JChessApp.getJavaChessView().getActiveTabGame().repaint();
-            JChessApp.getJavaChessView().setActiveTabGame(JChessApp.getJavaChessView().getNumberOfOpenedTabs()-1);
-        }
-    }
-
-    public DrawLocalSettings(JDialog parent)
-    {
+    public DrawLocalSettings(JDialog parent) {
         super();
         //this.setA//choose oponent
         this.parent = parent;
@@ -282,6 +160,129 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
         this.add(okButton);
         this.oponentComp.setEnabled(false);//for now, becouse not implemented!
 
+    }
+
+    /**
+     * Method witch is checking correction of edit tables
+     * @param e Object where is saving this what contents edit tables
+     */
+    @Override
+    public void textValueChanged(TextEvent e)
+    {
+        Object target = e.getSource();
+        if (target == this.firstName || target == this.secondName)
+        {
+            JTextField temp = new JTextField();
+            if (target == this.firstName)
+            {
+                temp = this.firstName;
+            }
+            else if (target == this.secondName)
+            {
+                temp = this.secondName;
+            }
+
+            int len = temp.getText().length();
+            if (len > 8)
+            {
+                try
+                {
+                    temp.setText(temp.getText(0, 7));
+                }
+                catch (BadLocationException exc)
+                {
+                    LOG.error("BadLocationException: Something wrong in editables, msg: " + exc.getMessage() + " object: " + exc);
+                }
+            }
+        }
+    }
+
+    /** Method responsible for changing the options which can make a player
+     * when he want to start new local game
+     * @param e where is saving data of performed action
+     */
+    @Override
+    public void actionPerformed(ActionEvent e)
+    {
+        Object target = e.getSource();
+        if (target == this.oponentComp) //toggle enabled of controls depends of oponent (if computer)
+        {
+            this.computerLevel.setEnabled(true);//enable level of computer abilities
+            this.secondName.setEnabled(false);//disable field with name of player2
+        }
+        else if (target == this.oponentHuman) //else if oponent will be HUMAN
+        {
+            this.computerLevel.setEnabled(false);//disable level of computer abilities
+            this.secondName.setEnabled(true);//enable field with name of player2
+        }
+        else if (target == this.okButton) //if clicked OK button (on finish)
+        {
+            if (this.firstName.getText().length() > 9) //make names short to 10 digits
+            {
+                this.firstName.setText(this.trimString(firstName, 9));
+            }
+            if (this.secondName.getText().length() > 9)  //make names short to 10 digits
+            {
+                this.secondName.setText(this.trimString(secondName, 9));
+            }
+            if (!this.oponentComp.isSelected()
+                    && (this.firstName.getText().length() == 0 || this.secondName.getText().length() == 0))
+            {
+                JOptionPane.showMessageDialog(this, Settings.lang("fill_names"));
+                return;
+            }
+            if ((this.oponentComp.isSelected() && this.firstName.getText().length() == 0))
+            {
+                JOptionPane.showMessageDialog(this, Settings.lang("fill_name"));
+                return;
+            }
+
+
+            //newGUI.getChat().setEnabled(false);
+
+            Settings sett = new Settings();//sett local settings variable
+            Player pl1 = sett.getPlayerWhite();//set local player variable
+            Player pl2 = sett.getPlayerBlack();//set local player variable
+            sett.setGameMode(Settings.gameModes.newGame);
+            //if(this.firstName.getText().length() >9 ) this.firstName.setText(this.firstName.getText(0,8));
+            //TODO: investigate and refactor
+            if (this.color.getActionCommand().equals("biały")) //if first player is white
+            {
+                pl1.setName(this.firstName.getText());//set name of player
+                pl2.setName(this.secondName.getText());//set name of player
+            }
+            else //else change names
+            {
+                pl2.setName(this.firstName.getText());//set name of player
+                pl1.setName(this.secondName.getText());//set name of player
+            }
+            pl1.setType(Player.playerTypes.localUser);//set type of player
+            pl2.setType(Player.playerTypes.localUser);//set type of player
+            sett.setGameType(Settings.gameTypes.local);
+            if (this.oponentComp.isSelected()) //if computer oponent is checked
+            {
+                pl2.setType(Player.playerTypes.computer);
+            }
+            sett.setUpsideDown(this.upsideDown.isSelected());
+            GameEngine gameEngine = JChessApp.addNewGame(sett, this.firstName.getText() + " vs " + this.secondName.getText());
+            if (this.timeGame.isSelected()) //if timeGame is checked
+            {
+                String value = this.times[this.time4Game.getSelectedIndex()];//set time for game
+                Integer val = new Integer(value);
+                sett.setTimeForGame((int) val * 60);//set time for game and mult it to seconds
+                gameEngine.getjPanelGame().getJPanelGameClock().setTimes(sett.getTimeForGame(), sett.getTimeForGame());
+                gameEngine.getjPanelGame().getJPanelGameClock().start();
+            }
+            LOG.debug("this.time4Game.getActionCommand(): " + this.time4Game.getActionCommand());
+            //this.time4Game.getComponent(this.time4Game.getSelectedIndex());
+            LOG.debug("****************\nStarting new game: " + pl1.getName() + " vs. " + pl2.getName()
+                    + "\ntime 4 game: " + sett.getTimeForGame() + "\ntime limit set: " + sett.isTimeLimitSet()
+                    + "\nwhite on top?: " + sett.isUpsideDown() + "\n****************");//4test
+
+            this.parent.setVisible(false);//hide parent
+            JChessApp.getJavaChessView().getActiveTabGame().repaint();
+            JChessApp.getJavaChessView().setActiveTabGame(JChessApp.getJavaChessView().getNumberOfOpenedTabs()-1);
+        }
     }
 
     /**

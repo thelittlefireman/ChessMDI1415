@@ -1,26 +1,19 @@
 package jchess.test;
 
-import jchess.JChessApp;
 import jchess.core.Chessboard;
 import jchess.core.Colors;
-import jchess.core.Game;
+import jchess.core.GameEngine;
 import jchess.core.Square;
-import jchess.core.moves.Moves;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.Bishop;
 import jchess.core.pieces.implementation.King;
 import jchess.core.pieces.implementation.Pawn;
 import jchess.utils.Settings;
-import org.jdesktop.application.SingleFrameApplication;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.awt.*;
-
 import static junit.framework.TestCase.assertNotNull;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * Created by macher1 on 12/04/2015.
@@ -36,10 +29,11 @@ public class TestPiece {
         //SingleFrameApplication.launch(JChessApp.class, new String[] {});
 
         settings = new Settings();
-        board = new Game().getChessboard(); // new Chessboard(settings, new Moves(new Game()));
+        GameEngine gameEngine = new GameEngine(settings);
+        board = gameEngine.getChessboard(); // new Chessboard(settings, new Moves(new JPanelGame()));
 
 
-        // Game g = new Game();
+        // JPanelGame g = new JPanelGame();
         // #1 bad API design
         // g.newGame(); // fails because coupled to GUI concerns and tabs stuff
         // anyway
