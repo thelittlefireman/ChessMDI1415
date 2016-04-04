@@ -14,10 +14,11 @@
  */
 package jchess.core.pieces.traits.behaviors.implementation;
 
-import java.util.HashSet;
-import java.util.Set;
 import jchess.core.Square;
 import jchess.core.pieces.Piece;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -42,7 +43,8 @@ public class BishopBehavior extends LongRangePieceBehavior
         
         list.addAll(getMovesForDirection(DIRECTION_LEFT,   DIRECTION_UP)); //left-up
         list.addAll(getMovesForDirection(DIRECTION_LEFT,   DIRECTION_BOTTOM)); //left-down
-        //list.addAll(getMovesForDirection(DIRECTION_RIGHT,  DIRECTION_UP)); //right-up
+        //ON AUTORISE LE FOU A BOUGER DANS LE COIN BAS GAUCHE
+        list.addAll(getMovesForDirection(DIRECTION_RIGHT, DIRECTION_UP)); //right-up
         list.addAll(getMovesForDirection(DIRECTION_RIGHT,  DIRECTION_BOTTOM)); //right-down
         
         return list;

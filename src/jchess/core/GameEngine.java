@@ -20,6 +20,7 @@ public class GameEngine {
     static final String AB = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     private static final Logger LOG = org.apache.log4j.Logger.getLogger(GameEngine.class);
     static Random rnd = new Random();
+    protected boolean firstAttempt;
     protected JPanelGame jPanelGame;
     /**
      * Settings object of the current game
@@ -47,7 +48,7 @@ public class GameEngine {
         settings = set;
         this.moves = new Moves(this);
         chessboard = new Chessboard(this.getSettings(), this.moves);
-
+        firstAttempt = true;
     }
 
     /**
@@ -205,6 +206,14 @@ public class GameEngine {
         JChessApp.getJavaChessView().setActiveTabGame(JChessApp.getJavaChessView().getNumberOfOpenedTabs() - 1);
     }
 
+    public void changeTime(int value) {
+
+
+        settings.setTimeForGame((int) value * 60);//set time for game and mult it to seconds
+        getjPanelGame().getJPanelGameClock().setTimes(settings.getTimeForGame(), settings.getTimeForGame());
+        getjPanelGame().getJPanelGameClock().repaint();
+    }
+
     public boolean isBlockedChessboard() {
         return blockedChessboard;
     }
@@ -322,6 +331,14 @@ public class GameEngine {
      * Method to go to next move (checks if game is local/network etc.)
      */
     public void nextMove() {
+        //PremierCoup Jouer
+        if (firstAttempt) {
+            if (settings.getTimeForGame() != 0) {
+                getjPanelGame().getJPanelGameClock().start();
+            }
+            firstAttempt = false;
+            jPanelGame.getJPanelGameClock().getTimeSetGame().setEnabled(false);
+        }
         switchActive();
 
         LOG.debug("next move, active player: " + activePlayer.getName() +

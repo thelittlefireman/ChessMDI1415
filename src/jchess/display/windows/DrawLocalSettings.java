@@ -37,7 +37,10 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
 {
 
     private static final Logger LOG = Logger.getLogger(DrawLocalSettings.class);
-    
+    public static String times[] =
+            {
+                    "0", "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"
+            };
     JDialog parent;//needet to close newGame window
     JComboBox color;//to choose color of player
     JRadioButton oponentComp;//choose oponent
@@ -61,11 +64,6 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
     String colors[] =
     {
         Settings.lang("white"), Settings.lang("black")
-    };
-    
-    String times[] =
-    {
-        "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"
     };
 
     public DrawLocalSettings(JDialog parent) {
@@ -267,11 +265,8 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             GameEngine gameEngine = JChessApp.addNewGame(sett, this.firstName.getText() + " vs " + this.secondName.getText());
             if (this.timeGame.isSelected()) //if timeGame is checked
             {
-                String value = this.times[this.time4Game.getSelectedIndex()];//set time for game
-                Integer val = new Integer(value);
-                sett.setTimeForGame((int) val * 60);//set time for game and mult it to seconds
-                gameEngine.getjPanelGame().getJPanelGameClock().setTimes(sett.getTimeForGame(), sett.getTimeForGame());
-                gameEngine.getjPanelGame().getJPanelGameClock().start();
+                gameEngine.changeTime(Integer.valueOf(this.times[this.time4Game.getSelectedIndex()]));
+                ;//set time for game
             }
             LOG.debug("this.time4Game.getActionCommand(): " + this.time4Game.getActionCommand());
             //this.time4Game.getComponent(this.time4Game.getSelectedIndex());

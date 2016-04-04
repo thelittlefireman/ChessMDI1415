@@ -1,2 +1,15 @@
 GAMe etait un jpanle il gérait et le jeu et la vue donc séparation en GameEngine Et JPanelGame
-le fou ne peut pas se deplacer en diag dans le coin haut droite
+le fou ne peut pas se deplacer en diag dans le coin haut droite ==> décommenter une ligne dans BioBehavior
+le temps commence avant : fonctionNextmove test si c'est le premier coup et déplacer :                 gameEngine.getjPanelGame().getJPanelGameClock().start(); qui est dans le drawLocalSetting (new Game)
+
+cavalier peut pas se deplacer
+        int[][] squaresInRange = {
+                {pozX - 2, pozY - 1}, //1
+                {pozX - 1, pozY - 2}, //2
+                {pozX + 1, pozY - 2}, //3
+                {pozX + 2, pozY - 1}, //4
+                {pozX + 2, pozY + 1}, //5
+                {pozX + 1, pozY + 2}, //6
+                {pozX - 1, pozY + 2}, //7
+                {pozX - 2, pozY + 1}//8
+        };

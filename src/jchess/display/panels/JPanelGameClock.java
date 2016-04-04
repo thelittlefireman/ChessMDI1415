@@ -27,7 +27,11 @@ import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.image.BufferedImage;
+
+import static jchess.display.windows.DrawLocalSettings.times;
 
 /** Class to representing the full JPanelGame time
  * @param game The current JPanelGame
@@ -46,6 +50,7 @@ public class JPanelGameClock extends JPanel implements Runnable
     private String white_clock, black_clock;
     private BufferedImage background;
     private Graphics bufferedGraphics;
+    private JComboBox timeSetGame;
 
     JPanelGameClock(JPanelGame JPanelGame)
     {
@@ -68,7 +73,19 @@ public class JPanelGameClock extends JPanel implements Runnable
             thread.start();
         }
         this.drawBackground();
+        this.timeSetGame = new JComboBox(times);
+        this.add(timeSetGame);
+        this.timeSetGame.addItemListener(new ItemListener() {
+            @Override
+            public void itemStateChanged(ItemEvent e) {
+                JPanelGame.getGameEngine().changeTime(Integer.valueOf(times[timeSetGame.getSelectedIndex()]));
+            }
+        });
         this.setDoubleBuffered(true);
+    }
+
+    public JComboBox getTimeSetGame() {
+        return timeSetGame;
     }
 
     /** Method to init JPanelGame clock
