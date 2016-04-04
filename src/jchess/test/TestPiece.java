@@ -7,6 +7,7 @@ import jchess.core.Square;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.Bishop;
 import jchess.core.pieces.implementation.King;
+import jchess.core.pieces.implementation.Knight;
 import jchess.core.pieces.implementation.Pawn;
 import jchess.utils.Settings;
 import org.junit.Before;
@@ -136,6 +137,23 @@ public class TestPiece {
         // bishop in c1
         Piece b1 = board.getSquare(2, 7).getPiece();
         assertTrue(b1 instanceof Bishop);
+        assertEquals(Colors.WHITE, b1.getPlayer().getColor());
+
+        assertEquals(5, b1.getAllMoves().size());
+
+
+    }
+
+    @Test
+    public void testKnight() throws Exception {
+
+
+        board.move(6, 7, 5, 5);
+
+
+        // bishop in c1
+        Piece b1 = board.getSquare(5, 5).getPiece();
+        assertTrue(b1 instanceof Knight);
         assertEquals(Colors.WHITE, b1.getPlayer().getColor());
 
         assertEquals(5, b1.getAllMoves().size());
