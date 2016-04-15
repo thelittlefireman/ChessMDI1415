@@ -27,11 +27,11 @@ public class GameEngine {
      */
     protected Settings settings;
     /**
-     * if chessboard is blocked - true, false otherwise
+     * if board is blocked - true, false otherwise
      */
     protected boolean blockedChessboard;
     /**
-     * chessboard data object
+     * board data object
      */
     protected Chessboard chessboard;
     /**
@@ -413,19 +413,19 @@ public class GameEngine {
     /**
      * Method to simulate Move to check if it's correct etc. (usable for network game).
      *
-     * @param beginX from which X (on chessboard) move starts
-     * @param beginY from which Y (on chessboard) move starts
-     * @param endX   to   which X (on chessboard) move go
-     * @param endY   to   which Y (on chessboard) move go
+     * @param beginX from which X (on board) move starts
+     * @param beginY from which Y (on board) move starts
+     * @param endX   to   which X (on board) move go
+     * @param endY   to   which Y (on board) move go
      */
     public boolean simulateMove(int beginX, int beginY, int endX, int endY) {
         try {
-            Square begin = getChessboard().getSquare(beginX, beginY);
-            Square end = getChessboard().getSquare(endX, endY);
+            Square begin = getChessboard().getBoard().getSquare(beginX, beginY);
+            Square end = getChessboard().getBoard().getSquare(endX, endY);
             getChessboard().select(begin);
-            if (getChessboard().getActiveSquare().getPiece().getAllMoves().contains(end)) //move
+            if (getChessboard().getBoard().getActiveSquare().getPiece().getAllMoves().contains(end)) //move
             {
-                getChessboard().move(begin, end);
+                getChessboard().getBoard().move(begin, end);
             } else {
                 LOG.debug("Bad move: beginX: " + beginX + " beginY: " + beginY + " endX: " + endX + " endY: " + endY);
                 return false;

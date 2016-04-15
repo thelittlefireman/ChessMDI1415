@@ -50,7 +50,7 @@ public class KnightBehavior extends Behavior {
     @Override
     public Set<Square> getSquaresInRange() {
         Set<Square> list = new HashSet<>();
-        Square[][] squares = piece.getChessboard().getSquares();
+        Square[][] squares = piece.getBoard().getSquares();
 
         int pozX = piece.getSquare().getPozX();
         int pozY = piece.getSquare().getPozY();

@@ -14,13 +14,13 @@
  */
 package jchess.core.pieces.traits.behaviors;
 
-import java.util.HashSet;
-import java.util.Set;
 import jchess.core.Colors;
-import jchess.core.Player;
 import jchess.core.Square;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.King;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -40,7 +40,7 @@ public abstract class Behavior
      * It's useful to check for King's safety - so it's returning all squares<br/>
      * which are in range of given piece and it doesn't looks on King safety.<br/>
      * So method King.isSafe() shouldn't be called within this method. 
-     * @return List of squares in range of piece. 
+     * @return List of squares in range of piece.
      */
     abstract public Set<Square> getSquaresInRange();
     
@@ -52,11 +52,11 @@ public abstract class Behavior
      */
     public Set<Square> getLegalMoves()
     {
-        King ourKing = (piece.getPlayer().getColor() == Colors.WHITE) ? 
-                            piece.getChessboard().getKingWhite() : piece.getChessboard().getKingBlack();
+        King ourKing = (piece.getPlayer().getColor() == Colors.WHITE) ?
+                piece.getBoard().getKingWhite() : piece.getBoard().getKingBlack();
         
-        King oponentsKing = (piece.getPlayer().getColor() == Colors.WHITE) ? 
-                             piece.getChessboard().getKingBlack() : piece.getChessboard().getKingWhite();     
+        King oponentsKing = (piece.getPlayer().getColor() == Colors.WHITE) ?
+                piece.getBoard().getKingBlack() : piece.getBoard().getKingWhite();
         
         Set<Square> result = new HashSet<>();
         for (Square sq : getSquaresInRange())
@@ -71,7 +71,7 @@ public abstract class Behavior
     
     private boolean canMove(Piece piece, Square sq, King ourKing, King oponentsKing)
     {
-        return ourKing.willBeSafeAfterMove(piece.getSquare(), sq) 
+        return ourKing.willBeSafeAfterMove(piece.getSquare(), sq)
                     && (null == sq.getPiece() || piece.getPlayer() != sq.getPiece().getPlayer())
                     && sq.getPiece() != oponentsKing;
     }

@@ -50,8 +50,7 @@ public class GUI
      */
     public GUI(JPanelGame jPanelGame)
     {
-        //TODO
-        System.out.println("lol");
+
         this.JPanelGame = jPanelGame;
     }/*--endOf-GUI--*/
 
@@ -63,7 +62,7 @@ public class GUI
     
     /**
      * Method load image by a given name with extension
-     * @param name : string of image to load for ex. "chessboard.jpg"
+     * @param name : string of image to load for ex. "board.jpg"
      * @returns  : image or null if cannot loadng
      */
     public static Image loadImage(String name)

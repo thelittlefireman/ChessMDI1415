@@ -1,13 +1,13 @@
 == VERSION 1.2 ==
 * totally new default theme,
 * old themes has been deleted,
-* chessboard themes are now provided in few size sets for better scaling quality,
+* board themes are now provided in few size sets for better scaling quality,
 * a lot of refactoring stuff in few places.
 
 == VERSION 1.1 ==
 * small code refactoring in few places,
 * new functionality:
-** user can adjust chessboard display settings during JPanelGame
+** user can adjust board display settings during JPanelGame
 
 == VERSION 1.0.4 ==
 * small code refactoring in few places,
@@ -22,5 +22,5 @@
 * font in chat window during network JPanelGame has been increased.
 
 == VERSION 1.0.2 ==
-* fix for first chessboard render issue
+* fix for first board render issue
 * small refactoring in Chessboard class 

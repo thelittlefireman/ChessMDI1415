@@ -15,9 +15,9 @@
 
 package jchess.core.pieces.implementation;
 
-import jchess.core.pieces.Piece;
-import jchess.core.Chessboard;
+import jchess.core.Board;
 import jchess.core.Player;
+import jchess.core.pieces.Piece;
 import jchess.core.pieces.traits.behaviors.implementation.KnightBehavior;
 
 /**
@@ -29,9 +29,9 @@ public class Knight extends Piece
 {
     protected static final short value = 3;
 
-    public Knight(Chessboard chessboard, Player player)
+    public Knight(Board board, Player player)
     {
-        super(chessboard, player);//call initializer of super type: Piece
+        super(board, player);//call initializer of super type: Piece
         this.symbol = "N";
         this.addBehavior(new KnightBehavior(this));
     }

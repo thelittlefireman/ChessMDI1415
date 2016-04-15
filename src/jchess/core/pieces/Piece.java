@@ -15,23 +15,14 @@
 
 package jchess.core.pieces;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import jchess.core.Chessboard;
+import jchess.core.Board;
 import jchess.core.Colors;
 import jchess.core.Player;
 import jchess.core.Square;
 import jchess.core.pieces.traits.behaviors.Behavior;
 import org.apache.log4j.Logger;
+
+import java.util.*;
 
 /**
  * @author : Mateusz Sławomir Lach ( matlak, msl )
@@ -42,29 +33,22 @@ public abstract class Piece
 {
 
     private static final Logger LOG = Logger.getLogger(Piece.class);
-    
-    protected Chessboard chessboard; // <-- this relations isn't in class diagram, but it's necessary :/
-    
-    protected Square square;
-    
-    protected Player player;
-    
-    protected String name;
-    
-    protected String symbol;
-    
     protected static short value = 0;
-    
+    protected Board board; // <-- this relations isn't in class diagram, but it's necessary :/
+    protected Square square;
+    protected Player player;
+    protected String name;
+    protected String symbol;
     protected Set<Behavior> behaviors = new HashSet<>();
 
-    public Piece(Chessboard chessboard, Player player)
+    public Piece(Board board, Player player)
     {
-        this.chessboard = chessboard;
+        this.board = board;
         this.player = player;
         this.name = this.getClass().getSimpleName();
 
     }
-    /* Method to draw piece on chessboard
+    /* Method to draw piece on board
      * @graph : where to draw
      */
     
@@ -115,20 +99,20 @@ public abstract class Piece
     public boolean canMove(int newX, int newY)
     {
         boolean result = false;
-        
-        Square[][] squares    = chessboard.getSquares();
+
+        Square[][] squares = board.getSquares();
         if (!isOut(newX, newY) && checkPiece(newX, newY))
         {
             if (this.getPlayer().getColor() == Colors.WHITE) //white
             {
-                if (chessboard.getKingWhite().willBeSafeAfterMove(square, squares[newX][newY]))
+                if (board.getKingWhite().willBeSafeAfterMove(square, squares[newX][newY]))
                 {
                     result = true;
                 }
             }
             else //or black
             {
-                if (chessboard.getKingBlack().willBeSafeAfterMove(square, squares[newX][newY]))
+                if (board.getKingBlack().willBeSafeAfterMove(square, squares[newX][newY]))
                 {
                     result = true;
                 }
@@ -162,8 +146,8 @@ public abstract class Piece
     }
 
     /** Method is useful for out of bounds protection
-     * @param x  x position on chessboard
-     * @param y y position on chessboard
+     * @param x  x position on board
+     * @param y y position on board
      * @return true if parameters are out of bounds (array)
      * */
     public boolean isOut(int x, int y)
@@ -178,18 +162,18 @@ public abstract class Piece
     /** 
      * Method to check if piece can move to given field. 
      * Checks if player tries to move on his own piece, or opponents King - if so, returns boolean False.
-     * @param x y position on chessboard
-     * @param y  y position on chessboard
+     * @param x y position on board
+     * @param y  y position on board
      * @return true if can move, false otherwise
      * */
     public boolean checkPiece(int x, int y)
     {
-        if (getChessboard().getSquares()[x][y].piece != null
-                && getChessboard().getSquares()[x][y].getPiece().getName().equals("King"))
+        if (getBoard().getSquare(x, y).piece != null
+                && getBoard().getSquare(x, y).getPiece().getName().equals("King"))
         {
             return false;
         }
-        Piece piece = getChessboard().getSquares()[x][y].piece;
+        Piece piece = getBoard().getSquare(x, y).piece;
         if (piece == null || //if this sqhuare is empty
                 piece.getPlayer() != this.getPlayer()) //or piece is another player
         {
@@ -199,13 +183,13 @@ public abstract class Piece
     }
 
     /** Method check if piece has other owner than calling piece
-     * @param x x position on chessboard
-     * @param y y position on chessboard
+     * @param x x position on board
+     * @param y y position on board
      * @return true if owner(player) is different
      * */
     public boolean otherOwner(int x, int y)
     {
-        Square sq = getChessboard().getSquares()[x][y];
+        Square sq = getBoard().getSquare(x, y);
         if (sq.piece == null)
         {
             return false;
@@ -223,19 +207,19 @@ public abstract class Piece
     }
 
     /**
-     * @return the chessboard
+     * @return the board
      */
-    public Chessboard getChessboard()
+    public Board getBoard()
     {
-        return chessboard;
+        return board;
     }
 
     /**
-     * @param chessboard the chessboard to set
+     * @param board the board to set
      */
-    public void setChessboard(Chessboard chessboard)
+    public void setBoard(Board board)
     {
-        this.chessboard = chessboard;
+        this.board = board;
     }
 
     /**

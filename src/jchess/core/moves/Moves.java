@@ -40,7 +40,7 @@ import java.util.Stack;
 /** Class representing the players moves, it's also checking
  * that the moves taken by player are correct.
  * All moves which was taken by current player are saving as List of Strings
- * The history of moves is printing in a table
+ * The history of moves is printing in a table*
  */
 public class Moves extends AbstractTableModel
 {
@@ -271,12 +271,12 @@ public class Moves extends AbstractTableModel
             locMove += "(e.p)";//pawn take down opponent en passant
             wasEnPassant = true;
         }
-        if ((!this.enterBlack && this.gameEngine.getChessboard().getKingBlack().isChecked())
-                || (this.enterBlack && this.gameEngine.getChessboard().getKingWhite().isChecked()))
+        if ((!this.enterBlack && this.gameEngine.getChessboard().getBoard().getKingBlack().isChecked())
+                || (this.enterBlack && this.gameEngine.getChessboard().getBoard().getKingWhite().isChecked()))
         {//if checked
 
-            if ((!this.enterBlack && this.gameEngine.getChessboard().getKingBlack().isCheckmatedOrStalemated() == 1)
-                    || (this.enterBlack && this.gameEngine.getChessboard().getKingWhite().isCheckmatedOrStalemated() == 1))
+            if ((!this.enterBlack && this.gameEngine.getChessboard().getBoard().getKingBlack().isCheckmatedOrStalemated() == 1)
+                    || (this.enterBlack && this.gameEngine.getChessboard().getBoard().getKingWhite().isCheckmatedOrStalemated() == 1))
             {//check if checkmated
                 locMove += "#";//check mate
             }
@@ -415,24 +415,25 @@ public class Moves extends AbstractTableModel
                 }
                 continue;
             }
+
             from = 0;
             int num = locMove.charAt(from);
             if (num <= 90 && num >= 65)
             {
                 from = 1;
             }
-            int xFrom = 9; //set to higher value than chessboard has fields, to cause error if piece won't be found
+            int xFrom = 9; //set to higher value than board has fields, to cause error if piece won't be found
             int yFrom = 9;
             int xTo = 9;
             int yTo = 9;
             boolean pieceFound = false;
             if(locMove.length() <= 3) {
-                Square[][] squares = this.gameEngine.getChessboard().getSquares();
+                Square[][] squares = this.gameEngine.getChessboard().getBoard().getSquares();
                 xTo = locMove.charAt(from) - 97;//from ASCII
                 yTo = Chessboard.getBottom() - (locMove.charAt(from + 1) - 49);//from ASCII
-                for(int i=0; i<squares.length && !pieceFound; i++)
+                for (int i = 0; i < squares.length && !pieceFound; i++)
                 {
-                    for(int j=0; j<squares[i].length && !pieceFound; j++) {
+                    for (int j = 0; j < squares[i].length && !pieceFound; j++) {
                         if (squares[i][j].piece == null || this.gameEngine.getActivePlayer().getColor() != squares[i][j].getPiece().getPlayer().getColor())
                         {
                             continue;

@@ -18,11 +18,11 @@ cavalier peut pas se deplacer en haut à gauche
             public void testKnight() throws Exception {
 
 
-                board.move(6, 7, 5, 5);
+                square.move(6, 7, 5, 5);
 
 
                 // bishop in c1
-                Piece b1 = board.getSquare(5, 5).getPiece();
+                Piece b1 = square.getSquare(5, 5).getPiece();
                 assertTrue(b1 instanceof Knight);
                 assertEquals(Colors.WHITE, b1.getPlayer().getColor());
 
@@ -30,3 +30,8 @@ cavalier peut pas se deplacer en haut à gauche
 
 
             }
+
+
+  pattern adapter ? genre Board 1,2,,3,3, et un truc converteur depuis e1...
+
+  rename square toboard

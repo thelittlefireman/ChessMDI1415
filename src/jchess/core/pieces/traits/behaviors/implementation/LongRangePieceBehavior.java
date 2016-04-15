@@ -14,11 +14,12 @@
  */
 package jchess.core.pieces.traits.behaviors.implementation;
 
-import java.util.HashSet;
-import java.util.Set;
 import jchess.core.Square;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.traits.behaviors.Behavior;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -59,10 +60,10 @@ abstract class LongRangePieceBehavior extends Behavior
             {
                 continue; //omit same square
             }
-            Square sq = piece.getChessboard().getSquare(h, i);
+            Square sq = piece.getBoard().getSquare(h, i);
             if (null == sq.getPiece() || piece.getPlayer() != sq.getPiece().getPlayer()) //if on this sqhuare isn't piece
             {
-                list.add(piece.getChessboard().getSquare(h, i));
+                list.add(piece.getBoard().getSquare(h, i));
 
                 if (piece.otherOwner(h, i))
                 {

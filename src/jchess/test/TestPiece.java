@@ -1,6 +1,6 @@
 package jchess.test;
 
-import jchess.core.Chessboard;
+import jchess.core.Board;
 import jchess.core.Colors;
 import jchess.core.GameEngine;
 import jchess.core.Square;
@@ -23,7 +23,7 @@ public class TestPiece {
 
     private  Settings settings;
 
-    private  Chessboard board;
+    private Board board;
 
     @Before
     public void setUp() {
@@ -31,7 +31,7 @@ public class TestPiece {
 
         settings = new Settings();
         GameEngine gameEngine = new GameEngine(settings);
-        board = gameEngine.getChessboard(); // new Chessboard(settings, new Moves(new JPanelGame()));
+        board = gameEngine.getChessboard().getBoard(); // new Chessboard(settings, new Moves(new JPanelGame()));
 
 
         // JPanelGame g = new JPanelGame();
@@ -43,9 +43,9 @@ public class TestPiece {
 
         // #2 bad API design
         //  Moves moves = new Moves(g);
-        // Chessboard board = new Chessboard(settings, moves);
-        // g.getChessboard() != board :(
-        // board.getMoves() != moves :(
+        // Chessboard square = new Chessboard(settings, moves);
+        // g.getBoard() != square :(
+        // square.getMoves() != moves :(
 
 
     }
@@ -55,7 +55,7 @@ public class TestPiece {
         assertEquals(16, board.getAllPieces(Colors.WHITE).size());
         assertEquals(16, board.getAllPieces(Colors.BLACK).size());
         // #3 bad API design
-        // assertNotNull(board.getMoves());
+        // assertNotNull(square.getMoves());
     }
 
     @Test
@@ -87,7 +87,7 @@ public class TestPiece {
         board.move(4, 6, 4, 4);
 
         // #4 bad API design
-        //assertEquals(1, board.getMoves().size());
+        //assertEquals(1, square.getMoves().size());
 
         assertNull(board.getSquare(4, 6).getPiece()); // now the pawn is not present in e2
         Piece p4 = board.getSquare(4, 4).getPiece(); // and there is a pawn in e4

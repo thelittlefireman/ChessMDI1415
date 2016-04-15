@@ -53,7 +53,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
     JTextField secondName;//editable field 4 nickname
     JLabel firstNameLab;
     JLabel secondNameLab;
-    JCheckBox upsideDown;//if true draw chessboard upsideDown(white on top)
+    JCheckBox upsideDown;//if true draw board upsideDown(white on top)
     GridBagLayout gbl;
     GridBagConstraints gbc;
     Container cont;

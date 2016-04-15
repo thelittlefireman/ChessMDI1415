@@ -18,9 +18,9 @@
 
 package jchess.core.pieces.implementation;
 
-import jchess.core.pieces.Piece;
-import jchess.core.Chessboard;
+import jchess.core.Board;
 import jchess.core.Player;
+import jchess.core.pieces.Piece;
 import jchess.core.pieces.traits.behaviors.implementation.RookBehavior;
 
 
@@ -44,13 +44,12 @@ import jchess.core.pieces.traits.behaviors.implementation.RookBehavior;
 public class Rook extends Piece
 {
 
-    protected boolean wasMotioned = false;
-    
     protected static final short value = 5;
+    protected boolean wasMotioned = false;
 
-    public Rook(Chessboard chessboard, Player player)
+    public Rook(Board board, Player player)
     {
-        super(chessboard, player);//call initializer of super type: Piece
+        super(board, player);//call initializer of super type: Piece
         this.symbol = "R";
         this.addBehavior(new RookBehavior(this));
     }

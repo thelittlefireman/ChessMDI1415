@@ -15,15 +15,15 @@
 package jchess.core.pieces.traits.behaviors.implementation;
 
 
-import java.util.HashSet;
-import java.util.Set;
-import jchess.core.Chessboard;
+import jchess.core.Board;
 import jchess.core.Colors;
-import jchess.core.Player;
 import jchess.core.Square;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.King;
 import jchess.core.pieces.traits.behaviors.Behavior;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -45,7 +45,7 @@ public class PawnBehavior extends Behavior
         Square sq1;
         int first = piece.getSquare().getPozY() - 1;//number where to move
         int second = piece.getSquare().getPozY() - 2;//number where to move (only in first move)
-        Chessboard chessboard = piece.getChessboard();     
+        Board board = piece.getBoard();
         
         if (piece.getPlayer().isGoDown()) //check if player "go" down or up
         {
@@ -56,60 +56,60 @@ public class PawnBehavior extends Behavior
         {
             return list;//return empty list
         }
-        sq = chessboard.getSquare(piece.getSquare().getPozX(), first);
+        sq = board.getSquare(piece.getSquare().getPozX(), first);
         if (sq.getPiece() == null) //if next is free
         {
-            King kingWhite = chessboard.getKingWhite();
-            King kingBlack = chessboard.getKingBlack();
+            King kingWhite = board.getKingWhite();
+            King kingBlack = board.getKingBlack();
 
-            list.add(chessboard.getSquares()[piece.getSquare().getPozX()][first]);
+            list.add(board.getSquares()[piece.getSquare().getPozX()][first]);
 
             if ((piece.getPlayer().isGoDown() && piece.getSquare().getPozY() == 1) || (!piece.getPlayer().isGoDown() && piece.getSquare().getPozY() == 6))
             {
-                sq1 = chessboard.getSquare(piece.getSquare().getPozX(), second);
+                sq1 = board.getSquare(piece.getSquare().getPozX(), second);
                 if (sq1.getPiece() == null)
                 {
-                    list.add(chessboard.getSquare(piece.getSquare().getPozX(), second));
+                    list.add(board.getSquare(piece.getSquare().getPozX(), second));
                 }
             }
         }
         if (!piece.isOut(piece.getSquare().getPozX() - 1, piece.getSquare().getPozY())) //out of bounds protection
         {
             //capture
-            sq = chessboard.getSquares()[piece.getSquare().getPozX() - 1][first];
+            sq = board.getSquares()[piece.getSquare().getPozX() - 1][first];
             if (sq.getPiece() != null) //check if can hit left
             {
                 if (piece.getPlayer() != sq.getPiece().getPlayer())
                 {
-                    list.add(chessboard.getSquares()[piece.getSquare().getPozX() - 1][first]);
+                    list.add(board.getSquares()[piece.getSquare().getPozX() - 1][first]);
                 }
             }
 
             //En passant
-            sq = chessboard.getSquares()[piece.getSquare().getPozX() - 1][piece.getSquare().getPozY()];
-            if (Chessboard.wasEnPassant(sq)) //check if can hit left
+            sq = board.getSquares()[piece.getSquare().getPozX() - 1][piece.getSquare().getPozY()];
+            if (Board.wasEnPassant(sq)) //check if can hit left
             {
                 if (piece.getPlayer() != sq.getPiece().getPlayer()) // unnecessary
                 {
-                    list.add(chessboard.getSquares()[piece.getSquare().getPozX() - 1][first]);
+                    list.add(board.getSquares()[piece.getSquare().getPozX() - 1][first]);
                 }
             }
         }
         if (!piece.isOut(piece.getSquare().getPozX() + 1, piece.getSquare().getPozY())) //out of bounds protection
         {
             //capture
-            sq = chessboard.getSquares()[piece.getSquare().getPozX() + 1][first];
+            sq = board.getSquares()[piece.getSquare().getPozX() + 1][first];
             if (sq.getPiece() != null) //check if can hit right
             {
                 if (piece.getPlayer() != sq.getPiece().getPlayer())
                 {
-                    list.add(chessboard.getSquares()[piece.getSquare().getPozX() + 1][first]);
+                    list.add(board.getSquares()[piece.getSquare().getPozX() + 1][first]);
                 }
             }
 
             //En passant
-            sq = chessboard.getSquares()[piece.getSquare().getPozX() + 1][piece.getSquare().getPozY()];
-            if (Chessboard.wasEnPassant(sq)) //check if can hit left
+            sq = board.getSquares()[piece.getSquare().getPozX() + 1][piece.getSquare().getPozY()];
+            if (Board.wasEnPassant(sq)) //check if can hit left
             {
                 if (piece.getPlayer() != sq.getPiece().getPlayer()) // unnecessary
                 {
@@ -117,11 +117,11 @@ public class PawnBehavior extends Behavior
                     //list.add(sq);
                     if (piece.getPlayer().getColor() == Colors.WHITE) //white
                     {
-                        list.add(chessboard.getSquares()[piece.getSquare().getPozX() + 1][first]);
+                        list.add(board.getSquares()[piece.getSquare().getPozX() + 1][first]);
                     }
                     else //or black
                     {
-                        list.add(chessboard.getSquares()[piece.getSquare().getPozX() + 1][first]);
+                        list.add(board.getSquares()[piece.getSquare().getPozX() + 1][first]);
                     }
                 }
             }

@@ -15,9 +15,9 @@
 
 package jchess.core.pieces.implementation;
 
-import jchess.core.pieces.Piece;
-import jchess.core.Chessboard;
+import jchess.core.Board;
 import jchess.core.Player;
+import jchess.core.pieces.Piece;
 import jchess.core.pieces.traits.behaviors.implementation.PawnBehavior;
 
 /**
@@ -62,13 +62,12 @@ import jchess.core.pieces.traits.behaviors.implementation.PawnBehavior;
  */
 public class Pawn extends Piece
 {
-    protected boolean down;
-    
     protected static short value = 1;
-    
-    public Pawn(Chessboard chessboard, Player player)
+    protected boolean down;
+
+    public Pawn(Board board, Player player)
     {
-        super(chessboard, player);
+        super(board, player);
         this.symbol = "";
         this.behaviors.add(new PawnBehavior(this));
     }

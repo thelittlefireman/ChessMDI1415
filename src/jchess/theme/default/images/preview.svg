@@ -2,22 +2,21 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://creativecommons.org/ns#"
-   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-   xmlns:svg="http://www.w3.org/2000/svg"
-   xmlns="http://www.w3.org/2000/svg"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
-   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   width="744.09448819"
-   height="1052.3622047"
-   id="svg2"
-   sodipodi:version="0.32"
-   inkscape:version="0.48.4 r9939"
-   sodipodi:docname="preview.svg"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   version="1.1">
+        xmlns:dc="http://purl.org/dc/elements/1.1/"
+        xmlns:cc="http://creativecommons.org/ns#"
+        xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        xmlns="http://www.w3.org/2000/svg"
+        width="744.09448819"
+        height="1052.3622047"
+        id="svg2"
+        sodipodi:version="0.32"
+        inkscape:version="0.48.4 r9939"
+        sodipodi:docname="preview.svg"
+        inkscape:output_extension="org.inkscape.output.svg.inkscape"
+        version="1.1">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -174,13 +173,13 @@
        inkscape:export-xdpi="89.999954"
        inkscape:export-ydpi="89.999954" />
     <image
-       sodipodi:absref="/home/matis/Projects/NetBeansProjects/javaopenchess/src/jchess/theme/default/images/chessboard.png"
-       xlink:href="chessboard.png"
-       width="480"
-       height="480"
-       id="image2466"
-       x="-2.6157924e-05"
-       y="3.7907672" />
+            sodipodi:absref="/home/matis/Projects/NetBeansProjects/javaopenchess/src/jchess/theme/default/images/board.png"
+            xlink:href="board.png"
+            width="480"
+            height="480"
+            id="image2466"
+            x="-2.6157924e-05"
+            y="3.7907672" />
     <image
        sodipodi:absref="/home/matis/Projects/NetBeansProjects/javaopenchess/src/jchess/theme/default/images/able_square.png"
        xlink:href="able_square.png"

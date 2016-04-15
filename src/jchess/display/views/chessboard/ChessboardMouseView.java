@@ -4,9 +4,10 @@
  */
 package jchess.display.views.chessboard;
 
-import java.awt.event.MouseListener;
 import jchess.core.Chessboard;
 import jchess.core.Square;
+
+import java.awt.event.MouseListener;
 
 /*
  * Authors:

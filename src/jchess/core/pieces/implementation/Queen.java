@@ -20,9 +20,9 @@
  */
 package jchess.core.pieces.implementation;
 
-import jchess.core.pieces.Piece;
-import jchess.core.Chessboard;
+import jchess.core.Board;
 import jchess.core.Player;
+import jchess.core.pieces.Piece;
 import jchess.core.pieces.traits.behaviors.implementation.BishopBehavior;
 import jchess.core.pieces.traits.behaviors.implementation.RookBehavior;
 
@@ -43,9 +43,9 @@ public class Queen extends Piece
 {
     protected static final short value = 9;
 
-    public Queen(Chessboard chessboard, Player player)
+    public Queen(Board board, Player player)
     {
-        super(chessboard, player);//call initializer of super type: Piece
+        super(board, player);//call initializer of super type: Piece
         this.symbol = "Q";
         this.addBehavior(new RookBehavior(this));
         this.addBehavior(new BishopBehavior(this));

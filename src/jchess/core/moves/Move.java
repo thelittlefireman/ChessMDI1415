@@ -19,9 +19,8 @@
 package jchess.core.moves;
 
 import jchess.core.Chessboard;
-import jchess.core.pieces.Piece;
-import jchess.core.moves.Castling;
 import jchess.core.Square;
+import jchess.core.pieces.Piece;
 
 public class Move
 {

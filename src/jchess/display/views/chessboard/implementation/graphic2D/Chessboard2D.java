@@ -4,21 +4,16 @@
  */
 package jchess.display.views.chessboard.implementation.graphic2D;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.util.Iterator;
-import java.util.Set;
 import jchess.core.Chessboard;
 import jchess.core.Square;
 import jchess.core.pieces.Piece;
 import jchess.display.views.chessboard.ChessboardView;
 import org.apache.log4j.Logger;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.Iterator;
+import java.util.Set;
 
 /*
  * Authors:
@@ -94,9 +89,9 @@ public class Chessboard2D extends ChessboardView
     @Override
     public Square getSquare(int clickedX, int clickedY)
     {
-        if ((clickedX > this.getChessboardHeight()) || (clickedY > this.getChessboardWidht())) //test if click is out of chessboard
+        if ((clickedX > this.getChessboardHeight()) || (clickedY > this.getChessboardWidht())) //test if click is out of board
         {
-            LOG.debug("click out of chessboard.");
+            LOG.debug("click out of board.");
             return null;
         }
         if (getChessboard().getSettings().isRenderLabels())
@@ -117,15 +112,15 @@ public class Chessboard2D extends ChessboardView
         }
         //Square newActiveSquare = this.squares[(int)square_x-1][(int)square_y-1];//4test
         LOG.debug("square_x: " + squareX + " square_y: " + squareY); //4tests
-        Square result = null; 
+        Square result = null;
         try
         {
-            result = this.getChessboard().getSquare((int)squareX - 1, (int)squareY - 1);
+            result = this.getChessboard().getBoard().getSquare((int) squareX - 1, (int) squareY - 1);
             if (getChessboard().getSettings().isUpsideDown())
             {
                 int x = transposePosition(result.getPozX());
                 int y = transposePosition(result.getPozY());
-                result = getChessboard().getSquare(x, y);
+                result = getChessboard().getBoard().getSquare(x, y);
             }
         }
         catch (ArrayIndexOutOfBoundsException exc)
@@ -142,7 +137,7 @@ public class Chessboard2D extends ChessboardView
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         Point topLeftPoint = this.getTopLeftPoint();
-        Square[][] squares = getChessboard().getSquares();
+        Square[][] squares = getChessboard().getBoard().getSquares();
         if (getChessboard().getSettings().isRenderLabels())
         {
             this.drawLabels();
@@ -151,10 +146,10 @@ public class Chessboard2D extends ChessboardView
             g2d.drawImage(this.leftRightLabel, 0, 0, null);
             g2d.drawImage(this.leftRightLabel, image.getHeight(null) + topLeftPoint.x, 0, null);
         }
-        g2d.drawImage(image, topLeftPoint.x, topLeftPoint.y, null);//draw an Image of chessboard
+        g2d.drawImage(image, topLeftPoint.x, topLeftPoint.y, null);//draw an Image of board
         drawPieces(squares, g2d);
-        
-        Square activeSquare = getChessboard().getActiveSquare();
+
+        Square activeSquare = getChessboard().getBoard().getActiveSquare();
 
         if (null != activeSquare) //if some square is active
         {
@@ -184,7 +179,7 @@ public class Chessboard2D extends ChessboardView
             g.dispose();
             if (!getChessboard().getSettings().isRenderLabels()) 
             {
-                /*if no labels, make chessboard larger
+                /*if no labels, make board larger
                  * call before fetching scaled instance
                  */
                 height += 2 * (this.getUpDownLabel().getHeight(null));
@@ -303,7 +298,7 @@ public class Chessboard2D extends ChessboardView
     {
         if (getChessboard().getSettings().isDisplayLegalMovesEnabled())
         {
-            Set<Square> moves = getChessboard().getMoves();
+            Set<Square> moves = getChessboard().getBoard().getMoves();
             if (null != moves)
             {
                 for (Iterator it = moves.iterator(); it.hasNext();)
@@ -343,7 +338,7 @@ public class Chessboard2D extends ChessboardView
         if (null != tmpSquare.piece)
         {
             Set<Square> moves = tmpSquare.getPiece().getAllMoves();
-            this.getChessboard().setMoves(moves);
+            this.getChessboard().getBoard().setMoves(moves);
         }
     }
 

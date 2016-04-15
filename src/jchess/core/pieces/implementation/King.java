@@ -34,22 +34,22 @@ package jchess.core.pieces.implementation;
         |_|_|_|_|_|_|_|_|0
         0 1 2 3 4 5 6 7
  */
-import jchess.core.pieces.Piece;
-import jchess.core.Chessboard;
+
+import jchess.core.Board;
 import jchess.core.Player;
 import jchess.core.Square;
+import jchess.core.pieces.Piece;
 import jchess.core.pieces.traits.behaviors.implementation.KingBehavior;
 
 public class King extends Piece
 {
 
-    protected boolean wasMotioned = false;
-    
     protected static final short value = 99;
+    protected boolean wasMotioned = false;
 
-    public King(Chessboard chessboard, Player player)
+    public King(Board board, Player player)
     {
-        super(chessboard, player);
+        super(board, player);
         this.symbol = "K";
         this.addBehavior(new KingBehavior(this));
     }
@@ -75,7 +75,7 @@ public class King extends Piece
             {
                 for (int j = 0; j < 8; ++j)
                 {
-                    Piece piece = getChessboard().getSquare(i, j).getPiece();
+                    Piece piece = getBoard().getSquare(i, j).getPiece();
                     if (null != piece && piece.getPlayer() == this.getPlayer() && !piece.getAllMoves().isEmpty())
                     {
                         return 0;
@@ -113,10 +113,10 @@ public class King extends Piece
      */
     public boolean isSafe(Square s)
     {
-        Square[][] squares = chessboard.getSquares();
-        for(int i=0; i<squares.length; i++)
+        Square[][] squares = board.getSquares();
+        for (int i = 0; i < squares.length; i++)
         {
-            for(int j=0; j<squares[i].length; j++)
+            for (int j = 0; j < squares[i].length; j++)
             {
                 Square sq = squares[i][j];
                 Piece piece = sq.getPiece();

@@ -34,9 +34,9 @@ public abstract class ChessboardView extends JPanel
      */
     public static final int imgHeight = imgWidht;
     /*
-     * image of chessboard
+     * image of board
      */
-    protected static final Image orgImage = GUI.loadImage("chessboard.png");
+    protected static final Image orgImage = GUI.loadImage("board.png");
     /*
      * image of highlited square
      */
@@ -55,7 +55,7 @@ public abstract class ChessboardView extends JPanel
      */
     protected static Image ableSquare = orgAbleSquare;
     /*
-     * image of chessboard
+     * image of board
      */
     protected Image image = ChessboardView.orgImage;
     protected Image leftRightLabel = null;
@@ -95,7 +95,7 @@ public abstract class ChessboardView extends JPanel
     }
 
     /**
-     * @return the chessboard
+     * @return the board
      */
     public Chessboard getChessboard()
     {
@@ -103,7 +103,7 @@ public abstract class ChessboardView extends JPanel
     }
 
     /**
-     * @param chessboard the chessboard to set
+     * @param chessboard the board to set
      */
     public void setChessboard(Chessboard chessboard)
     {

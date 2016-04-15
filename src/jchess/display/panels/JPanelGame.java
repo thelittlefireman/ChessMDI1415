@@ -19,18 +19,14 @@ import jchess.JChessApp;
 import jchess.core.Chessboard;
 import jchess.core.GameEngine;
 import jchess.core.Player;
-import jchess.core.Square;
-import jchess.core.pieces.implementation.King;
+import jchess.display.listeners.CompomentListener;
+import jchess.display.listeners.MouseClickListener;
 import jchess.display.views.chessboard.ChessboardView;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 
 /**
@@ -41,7 +37,7 @@ import java.awt.event.MouseListener;
  * This class is also responsible for appoing player with have
  * a move at the moment
  */
-public class JPanelGame extends JPanel implements ComponentListener, MouseListener {
+public class JPanelGame extends JPanel {
 
     private static final Logger LOG = org.apache.log4j.Logger.getLogger(JPanelGame.class);
     protected LocalSettingsView localSettingsView;
@@ -60,7 +56,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
         int chessboardWidth = chessboardView.getChessboardWidht(true);
         this.add(chessboardView);
 
-        //this.chessboard.
+        //this.board.
         JPanelGameClock = new JPanelGameClock(this);
         JPanelGameClock.setSize(new Dimension(200, 100));
         JPanelGameClock.setLocation(new Point(500, 0));
@@ -84,8 +80,8 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
 
         this.setLayout(null);
         this.setDoubleBuffered(true);
-        chessboardView.addMouseListener(this);
-        this.addComponentListener(this);
+        chessboardView.addMouseListener(new MouseClickListener(this.getGameEngine()));
+        this.addComponentListener(new CompomentListener(this));
     }
 
     public GameEngine getGameEngine() {
@@ -93,7 +89,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
     }
 
     public void newGame() {
-        gameEngine.getChessboard().setPieces("", gameEngine.getSettings().getPlayerWhite(), gameEngine.getSettings().getPlayerBlack());
+        gameEngine.getChessboard().getBoard().setPieces("", gameEngine.getSettings().getPlayerWhite(), gameEngine.getSettings().getPlayerBlack());
 
         gameEngine.setActivePlayer(gameEngine.getSettings().getPlayerWhite());
         if (gameEngine.getActivePlayer().getPlayerType() != Player.playerTypes.localUser) {
@@ -117,112 +113,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
     }
 
 
-    @Override
-    public void mouseClicked(MouseEvent arg0) {
-    }
 
-
-    @Override
-    public void mousePressed(MouseEvent event) {
-        if (event.getButton() == MouseEvent.BUTTON3) //right button
-        {
-            this.gameEngine.undo();
-        } else if (event.getButton() == MouseEvent.BUTTON2 && gameEngine.getSettings().getGameType() == Settings.gameTypes.local) {
-            this.gameEngine.redo();
-        } else if (event.getButton() == MouseEvent.BUTTON1) //left button
-        {
-
-            if (!this.gameEngine.isBlockedChessboard()) {
-                try {
-                    int x = event.getX();//get X position of mouse
-                    int y = event.getY();//get Y position of mouse
-
-                    Square sq = this.gameEngine.getChessboard().getChessboardView().getSquare(x, y);
-                    if ((sq == null && sq.piece == null && this.gameEngine.getChessboard().getActiveSquare() == null)
-                            || (this.gameEngine.getChessboard().getActiveSquare() == null && sq.piece != null && sq.getPiece().getPlayer() != gameEngine.getActivePlayer())) {
-                        return;
-                    }
-
-                    if (sq.piece != null && sq.getPiece().getPlayer() == this.gameEngine.getActivePlayer() && sq != this.gameEngine.getChessboard().getActiveSquare()) {
-                        this.gameEngine.getChessboard().unselect();
-                        this.gameEngine.getChessboard().select(sq);
-                    } else if (this.gameEngine.getChessboard().getActiveSquare() == sq) //unselect
-                    {
-                        this.gameEngine.getChessboard().unselect();
-                    } else if (this.gameEngine.getChessboard().getActiveSquare() != null && this.gameEngine.getChessboard().getActiveSquare().piece != null
-                            && this.gameEngine.getChessboard().getActiveSquare().getPiece().getAllMoves().contains(sq)) //move
-                    {
-                        if (gameEngine.getSettings().getGameType() == Settings.gameTypes.local) {
-                            this.gameEngine.getChessboard().move(this.gameEngine.getChessboard().getActiveSquare(), sq);
-                        }
-
-
-                        this.gameEngine.getChessboard().unselect();
-
-                        //switch player
-                        gameEngine.nextMove();
-
-                        //checkmate or stalemate
-                        King king;
-                        if (gameEngine.getActivePlayer() == gameEngine.getSettings().getPlayerWhite()) {
-                            king = this.gameEngine.getChessboard().getKingWhite();
-                        } else {
-                            king = this.gameEngine.getChessboard().getKingBlack();
-                        }
-
-                        switch (king.isCheckmatedOrStalemated()) {
-                            case 1:
-                                gameEngine.endGame("Checkmate! " + king.getPlayer().getColor().toString() + " player lose!");
-                                break;
-                            case 2:
-                                gameEngine.endGame("Stalemate! Draw!");
-                                break;
-                        }
-                    }
-
-                } catch (Exception exc) {
-                    LOG.error("NullPointerException: " + exc.getMessage() + " stack: " + exc.getStackTrace());
-                    gameEngine.getChessboard().repaint();
-                    return;
-                }
-            } else if (gameEngine.isBlockedChessboard()) {
-                LOG.debug("Chessboard is blocked");
-            }
-        }
-        //chessboard.repaint();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent arg0) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent arg0) {
-    }
-
-    @Override
-    public void componentResized(ComponentEvent e) {
-        resizeGame();
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e) {
-        componentResized(e);
-        repaint();
-    }
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-        componentResized(e);
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent e) {
-    }
 
 
     /**
@@ -242,7 +133,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
         if (null != this.localSettingsView) {
             this.localSettingsView.repaint();
         }
-        if (gameEngine != null && null != gameEngine.getChessboard()) {
+        if (gameEngine != null && null != gameEngine.getChessboard().getBoard()) {
             gameEngine.getChessboard().repaint();
         }
     }

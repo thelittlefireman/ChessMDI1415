@@ -20,26 +20,24 @@ import jchess.core.pieces.Piece;
 /**
  * @author: Mateusz Sławomir Lach ( matlak, msl )
  * @author: Damian Marciniak
- * Class to represent a chessboard square
+ * Class to represent a board square
  */
 public class Square
 {
     /**
-     * X position of square 
+     * object Piece on square (and extending Piecie)
+     */
+    public Piece piece = null;
+    /**
+     * X position of square
      * 0-7, because 8 squares for row/column
      */
-    protected int pozX; 
-
+    protected int pozX;
     /**
      * Y position of square
      * 0-7, because 8 squares for row/column
      */
     protected int pozY; // 0-7, becouse 8 squares for row/column
-    
-    /**
-     * object Piece on square (and extending Piecie)
-     */
-    public Piece piece = null;
 
     public Square(int pozX, int pozY, Piece piece)
     {
@@ -59,12 +57,6 @@ public class Square
     public Square clone(Square square)
     {
         return new Square(square);
-    }
-
-    void setPiece(Piece piece)
-    {
-        this.piece = piece;
-        this.piece.setSquare(this);
     }
 
     /**
@@ -98,9 +90,14 @@ public class Square
     {
         this.pozY = pozY;
     }
-    
+
     public Piece getPiece() {
         return piece;
+    }
+
+    void setPiece(Piece piece) {
+        this.piece = piece;
+        this.piece.setSquare(this);
     }
     
     public boolean isEmptyOrSamePiece(Piece piece)
