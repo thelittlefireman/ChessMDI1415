@@ -25,6 +25,7 @@ import jchess.core.Chessboard;
 import jchess.core.Player;
 import jchess.core.pieces.traits.behaviors.implementation.BishopBehavior;
 import jchess.core.pieces.traits.behaviors.implementation.RookBehavior;
+import jchess.core.visitorsPieces.VisitorPieceInterface;
 
 /**
  * Class to represent a queen piece
@@ -50,5 +51,8 @@ public class Queen extends Piece
         this.addBehavior(new RookBehavior(this));
         this.addBehavior(new BishopBehavior(this));
     }
-    
+    @Override
+    public void accept(VisitorPieceInterface visitorPieceInterface) {
+        visitorPieceInterface.visit(this);
+    }
 }

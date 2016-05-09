@@ -47,7 +47,7 @@ public class GameEngine {
         this.blockedChessboard = false;
         settings = set;
         this.moves = new Moves(this);
-        chessboard = new Chessboard(this.getSettings(), this.moves);
+        chessboard = new Chessboard(this.settings, this.moves);
         firstAttempt = true;
     }
 

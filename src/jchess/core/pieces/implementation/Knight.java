@@ -19,6 +19,7 @@ import jchess.core.pieces.Piece;
 import jchess.core.Chessboard;
 import jchess.core.Player;
 import jchess.core.pieces.traits.behaviors.implementation.KnightBehavior;
+import jchess.core.visitorsPieces.VisitorPieceInterface;
 
 /**
  * @author: Mateusz Sławomir Lach ( matlak, msl )
@@ -35,5 +36,8 @@ public class Knight extends Piece
         this.symbol = "N";
         this.addBehavior(new KnightBehavior(this));
     }
-    
+    @Override
+    public void accept(VisitorPieceInterface visitorPieceInterface) {
+        visitorPieceInterface.visit(this);
+    }
 }

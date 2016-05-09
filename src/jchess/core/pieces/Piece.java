@@ -26,11 +26,10 @@ import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import jchess.core.Chessboard;
-import jchess.core.Colors;
-import jchess.core.Player;
-import jchess.core.Square;
+
+import jchess.core.*;
 import jchess.core.pieces.traits.behaviors.Behavior;
+import jchess.core.visitorsPieces.VisitorPieceInterface;
 import org.apache.log4j.Logger;
 
 /**
@@ -38,7 +37,7 @@ import org.apache.log4j.Logger;
  * @author : Damian Marciniak
    Class to represent a piece (any kind) - this class should be extended to represent pawn, bishop etc.
  */
-public abstract class Piece
+public abstract class Piece implements ChessboardParts
 {
 
     private static final Logger LOG = Logger.getLogger(Piece.class);
@@ -285,4 +284,6 @@ public abstract class Piece
     {
         this.name = name;
     }
+
+
 }

@@ -39,7 +39,11 @@ public class Player implements Serializable
     }
     
     protected playerTypes playerType;
-    
+
+    public void setGoDown(boolean goDown) {
+        this.goDown = goDown;
+    }
+
     protected boolean goDown;
 
     /**

@@ -24,6 +24,7 @@ import jchess.core.pieces.Piece;
 import jchess.core.Chessboard;
 import jchess.core.Player;
 import jchess.core.pieces.traits.behaviors.implementation.BishopBehavior;
+import jchess.core.visitorsPieces.VisitorPieceInterface;
 
 /**
  * Class to represent a chess pawn bishop
@@ -48,5 +49,10 @@ public class Bishop extends Piece
         super(chessboard, player); //call initializer of super type: Piece
         this.symbol = "B";
         this.addBehavior(new BishopBehavior(this));
+    }
+
+    @Override
+    public void accept(VisitorPieceInterface visitorPieceInterface) {
+        visitorPieceInterface.visit(this);
     }
 }

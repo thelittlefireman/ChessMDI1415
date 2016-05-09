@@ -19,6 +19,7 @@ import jchess.core.pieces.Piece;
 import jchess.core.Chessboard;
 import jchess.core.Player;
 import jchess.core.pieces.traits.behaviors.implementation.PawnBehavior;
+import jchess.core.visitorsPieces.VisitorPieceInterface;
 
 /**
  * @author : Mateusz Sławomir Lach ( matlak, msl )
@@ -84,5 +85,9 @@ public class Pawn extends Piece
     public boolean isDown()
     {
         return down;
+    }
+    @Override
+    public void accept(VisitorPieceInterface visitorPieceInterface) {
+        visitorPieceInterface.visit(this);
     }
 }

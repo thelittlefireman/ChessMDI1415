@@ -38,7 +38,7 @@ public class TestPiece {
         // #1 bad API design
         // g.newGame(); // fails because coupled to GUI concerns and tabs stuff
         // anyway
-        board.setPieces("", settings.getPlayerWhite(), settings.getPlayerBlack());
+        board.getInitialPlaceStrategy().setPieces("");
 
 
         // #2 bad API design

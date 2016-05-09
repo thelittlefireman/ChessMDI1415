@@ -36,6 +36,26 @@ public class Settings implements Serializable
     private static final Logger LOG = Logger.getLogger(Settings.class);
     
     private static ResourceBundle loc = null;
+
+    private int sizeN;
+
+    public int getSizeN() {
+        return sizeN;
+    }
+
+    public void setSizeN(int sizeN) {
+        this.sizeN = sizeN;
+    }
+
+    public int getSizeM() {
+        return sizeM;
+    }
+
+    public void setSizeM(int sizeM) {
+        this.sizeM = sizeM;
+    }
+
+    private int sizeM; //TODO échequier généraliser en N*M
     
     protected int timeForGame;
     
@@ -168,7 +188,7 @@ public class Settings implements Serializable
     }
 
     /**
-     * @param isDisplayLegalMovesEnabled the isDisplayLegalMovesEnabled to set
+     * @param displayLegalMovesEnabled the isDisplayLegalMovesEnabled to set
      */
     public void setDisplayLegalMovesEnabled(boolean displayLegalMovesEnabled)
     {
@@ -196,6 +216,8 @@ public class Settings implements Serializable
         //temporally
         this.playerWhite = new Player("", Colors.WHITE.getColorName());
         this.playerBlack = new Player("", Colors.BLACK.getColorName());
+        this.setSizeM(8);
+        this.setSizeN(8);
         this.timeLimitSet = false;
 
         gameMode = gameModes.newGame;

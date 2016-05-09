@@ -22,6 +22,7 @@ import jchess.core.pieces.Piece;
 import jchess.core.Chessboard;
 import jchess.core.Player;
 import jchess.core.pieces.traits.behaviors.implementation.RookBehavior;
+import jchess.core.visitorsPieces.VisitorPieceInterface;
 
 
 /**
@@ -69,5 +70,10 @@ public class Rook extends Piece
     public void setWasMotioned(boolean wasMotioned)
     {
         this.wasMotioned = wasMotioned;
+    }
+
+    @Override
+    public void accept(VisitorPieceInterface visitorPieceInterface) {
+        visitorPieceInterface.visit(this);
     }
 }

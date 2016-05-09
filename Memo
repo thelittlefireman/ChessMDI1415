@@ -30,3 +30,11 @@ cavalier peut pas se deplacer en haut à gauche
 
 
             }
+
+
+ move == design patern commands (undo redo)
+
+ move enchainement de méthode = builder ?
+ e4 ... adapter ?
+
+ exercice 6 : ==> patern visitor methode accept dans chessboard parts et création des visitiors

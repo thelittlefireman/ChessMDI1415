@@ -39,6 +39,7 @@ import jchess.core.Chessboard;
 import jchess.core.Player;
 import jchess.core.Square;
 import jchess.core.pieces.traits.behaviors.implementation.KingBehavior;
+import jchess.core.visitorsPieces.VisitorPieceInterface;
 
 public class King extends Piece
 {
@@ -166,5 +167,9 @@ public class King extends Piece
     public void setWasMotioned(boolean wasMotioned)
     {
         this.wasMotioned = wasMotioned;
+    }
+    @Override
+    public void accept(VisitorPieceInterface visitorPieceInterface) {
+        visitorPieceInterface.visit(this);
     }
 }

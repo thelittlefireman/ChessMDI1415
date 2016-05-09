@@ -93,7 +93,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
     }
 
     public void newGame() {
-        gameEngine.getChessboard().setPieces("", gameEngine.getSettings().getPlayerWhite(), gameEngine.getSettings().getPlayerBlack());
+        gameEngine.getChessboard().getInitialPlaceStrategy().setPieces("", gameEngine.getSettings().getPlayerWhite(), gameEngine.getSettings().getPlayerBlack());
 
         gameEngine.setActivePlayer(gameEngine.getSettings().getPlayerWhite());
         if (gameEngine.getActivePlayer().getPlayerType() != Player.playerTypes.localUser) {

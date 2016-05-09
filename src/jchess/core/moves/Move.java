@@ -55,6 +55,10 @@ public class Move
             this.promotedTo = promotedPiece;
         }
     }
+    public Move from (Square from){
+        this.from = from;
+        return this;
+    }
 
     public Square getFrom()
     {
