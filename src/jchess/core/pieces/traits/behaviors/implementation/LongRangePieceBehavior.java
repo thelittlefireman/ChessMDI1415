@@ -43,11 +43,11 @@ abstract class LongRangePieceBehavior extends Behavior
     }
     
     /**
-     * Helper method to fetch all moves for given direction.
+     * Helper method to fetch all movesManager for given direction.
      * Useful for Bishop, Rook and Queen.
      * @param moveX X direction to move in
      * @param moveY Y diretion to move in
-     * @return ArrayList with possible moves
+     * @return ArrayList with possible movesManager
      */
     protected Set<Square> getMovesForDirection(int moveX, int moveY)
     {

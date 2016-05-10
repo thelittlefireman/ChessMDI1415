@@ -42,26 +42,26 @@ import java.util.Stack;
  * All moves which was taken by current player are saving as List of Strings
  * The history of moves is printing in a table
  */
-public class Moves extends AbstractTableModel
+public class MovesHistoryView extends AbstractTableModel
 {
-    private static final Logger LOG = Logger.getLogger(Moves.class);
+    private static final Logger LOG = Logger.getLogger(MovesHistoryView.class);
     protected Stack<Move> moveBackStack = new Stack<Move>();
     protected Stack<Move> moveForwardStack = new Stack<Move>();
     private ArrayList<String> move = new ArrayList<String>();
     private int columnsNum = 3;
     private int rowsNum = 0;
     private String[] names = new String[]
-    {
-        Settings.lang("white"), Settings.lang("black")
-    };
+            {
+                    Settings.lang("white"), Settings.lang("black")
+            };
     private MyDefaultTableModel tableModel;
     private JScrollPane scrollPane;
     private JTable table;
     private boolean enterBlack = false;
     private GameEngine gameEngine;
 
-    public Moves(GameEngine gameEngine)
-    { 
+    public MovesHistoryView(GameEngine gameEngine)
+    {
         super();
         this.tableModel = new MyDefaultTableModel();
         this.table = new JTable(this.tableModel);
@@ -361,7 +361,7 @@ public class Moves extends AbstractTableModel
         }
         for (String locMove : tempArray) //test if moves are written correctly
         {
-            if (!Moves.isMoveCorrect(locMove.trim())) //if not
+            if (!MovesHistoryView.isMoveCorrect(locMove.trim())) //if not
             {
                 JOptionPane.showMessageDialog(this.gameEngine.getjPanelGame(), Settings.lang("invalid_file_to_load") + move);
                 return;//show message and finish reading gameEngine
@@ -377,16 +377,16 @@ public class Moves extends AbstractTableModel
                     if (this.gameEngine.getActivePlayer().getColor() == Colors.BLACK) //if black turn
                     {
                         values = new int[]
-                        {
-                            4, 0, 2, 0
-                        };//move value for castling (King move)
+                                {
+                                        4, 0, 2, 0
+                                };//move value for castling (King move)
                     }
                     else
                     {
                         values = new int[]
-                        {
-                            4, 7, 2, 7
-                        };//move value for castling (King move)
+                                {
+                                        4, 7, 2, 7
+                                };//move value for castling (King move)
                     }
                 }
                 else if (locMove.equals(Castling.SHORT_CASTLING.getSymbol())) //if short castling
@@ -394,16 +394,16 @@ public class Moves extends AbstractTableModel
                     if (this.gameEngine.getActivePlayer().getColor() == Colors.BLACK) //if black turn
                     {
                         values = new int[]
-                        {
-                            4, 0, 6, 0
-                        };//move value for castling (King move)
+                                {
+                                        4, 0, 6, 0
+                                };//move value for castling (King move)
                     }
                     else
                     {
                         values = new int[]
-                        {
-                            4, 7, 6, 7
-                        };//move value for castling (King move)
+                                {
+                                        4, 7, 6, 7
+                                };//move value for castling (King move)
                     }
                 }
                 canMove = this.gameEngine.simulateMove(values[0], values[1], values[2], values[3]);

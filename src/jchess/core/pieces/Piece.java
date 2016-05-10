@@ -89,7 +89,7 @@ public abstract class Piece implements ChessboardParts
 
     /** method check if Piece can move to given square
      * @param square square where piece want to move (Square object)
-     * @param allmoves  all moves which can piece do
+     * @param allmoves  all movesManager which can piece do
      * */
     boolean canMove(Square square, ArrayList allmoves)
     {

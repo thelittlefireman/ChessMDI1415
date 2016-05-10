@@ -1,49 +1,53 @@
 package jchess.core.commands;
 
 import jchess.JChessApp;
+import jchess.core.Chessboard;
 import jchess.core.Square;
 import jchess.core.moves.Castling;
 import jchess.core.moves.Move;
+import jchess.core.moves.MovesHistoryView;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.*;
 import jchess.utils.Settings;
+import org.apache.log4j.Logger;
 
 /**
  * Created by thoma on 09/05/2016.
  */
 public class MoveCommands implements CommandInterface {
-    public void move(Square begin, Square end) {
-        move(begin, end, true);
+
+    private static final Logger LOG = Logger.getLogger(MoveCommands.class);
+    private Chessboard chessboard;
+
+    public void setChessboard(Chessboard chessboard) {
+        this.chessboard = chessboard;
+    }
+
+    private MovesHistoryView movesHistoryView;
+    private boolean refresh,clearForwardHistory;
+    private Square begin,end;
+
+    public void setMovesHistoryView(MovesHistoryView movesHistoryView) {
+        this.movesHistoryView = movesHistoryView;
+    }
+
+    public MoveCommands(Square begin, Square end, boolean refresh, boolean clearForwardHistory) {
+        this.begin =begin;
+        this.end =end;
+        this.refresh =refresh;
+        this.clearForwardHistory =clearForwardHistory;
+    }
+
+    public MoveCommands(Square begin, Square end) {
+        this(begin, end, true);
+    }
+
+
+    public MoveCommands(Square begin, Square end, boolean refresh) {
+        this(begin, end, refresh, true);
     }
 
     /**
-     * Method to move piece over chessboard
-     *
-     * @param xFrom from which x move piece
-     * @param yFrom from which y move piece
-     * @param xTo   to which x move piece
-     * @param yTo   to which y move piece
-     */
-    public void move(int xFrom, int yFrom, int xTo, int yTo) {
-        Square fromSQ = null;
-        Square toSQ = null;
-        try {
-            fromSQ = this.getSquares()[xFrom][yFrom];
-            toSQ = this.getSquares()[xTo][yTo];
-        } catch (java.lang.IndexOutOfBoundsException exc) {
-            LOG.error("error moving piece: " + exc.getMessage());
-            return;
-        }
-        this.move(fromSQ, toSQ, true);
-    }
-
-    public void move(Square begin, Square end, boolean refresh) {
-        this.move(begin, end, refresh, true);
-    }
-
-    /**
-     * Method move piece from square to square
-     * //TODO EXERCICE 4
      *
      * @param begin   square from which move piece
      * @param end     square where we want to move piece         *
@@ -57,8 +61,8 @@ public class MoveCommands implements CommandInterface {
             end.getPiece().setSquare(null);
         }
 
-        Square tempBegin = new Square(begin);//4 moves history
-        Square tempEnd = new Square(end);  //4 moves history
+        Square tempBegin = new Square(begin);//4 movesHistoryView history
+        Square tempEnd = new Square(end);  //4 movesHistoryView history
 
         begin.getPiece().setSquare(end);//set square of piece to ending
         end.piece = begin.piece;//for ending square set piece from beginin square
@@ -71,10 +75,10 @@ public class MoveCommands implements CommandInterface {
 
             //Castling
             if (begin.getPozX() + 2 == end.getPozX()) {
-                move(getSquare(7, begin.getPozY()), getSquare(end.getPozX() - 1, begin.getPozY()), false, false);
+                move(this.chessboard.getSquare(7, begin.getPozY()), this.chessboard.getSquare(end.getPozX() - 1, begin.getPozY()), false, false);
                 wasCastling = Castling.SHORT_CASTLING;
             } else if (begin.getPozX() - 2 == end.getPozX()) {
-                move(getSquare(0, begin.getPozY()), getSquare(end.getPozX() + 1, begin.getPozY()), false, false);
+                move(this.chessboard.getSquare(0, begin.getPozY()), this.chessboard.getSquare(end.getPozX() + 1, begin.getPozY()), false, false);
                 wasCastling = Castling.LONG_CASTLING;
             }
             //endOf Castling
@@ -83,19 +87,19 @@ public class MoveCommands implements CommandInterface {
                 ((Rook) end.piece).setWasMotioned(true);
             }
         } else if (end.getPiece().getName().equals("Pawn")) {
-            if (getTwoSquareMovedPawn() != null && getSquares()[end.getPozX()][begin.getPozY()] == getTwoSquareMovedPawn().getSquare()) //en passant
+            if (this.chessboard.getTwoSquareMovedPawn() != null && this.chessboard.getSquares()[end.getPozX()][begin.getPozY()] == this.chessboard.getTwoSquareMovedPawn().getSquare()) //en passant
             {
-                tempEnd.piece = getSquares()[end.getPozX()][begin.getPozY()].piece; //ugly hack - put taken pawn in en passant plasty do end square
+                tempEnd.piece = this.chessboard.getSquares()[end.getPozX()][begin.getPozY()].piece; //ugly hack - put taken pawn in en passant plasty do end square
 
-                squares[end.pozX][begin.pozY].piece = null;
+                this.chessboard.getSquare(end.getPozX(),begin.getPozY()).piece = null;
                 wasEnPassant = true;
             }
 
             if (begin.getPozY() - end.getPozY() == 2 || end.getPozY() - begin.getPozY() == 2) //moved two square
             {
-                twoSquareMovedPawn = (Pawn) end.piece;
+                this.chessboard.setTwoSquareMovedPawn((Pawn) end.piece);
             } else {
-                twoSquareMovedPawn = null; //erase last saved move (for En passant)
+                this.chessboard.setTwoSquareMovedPawn(null); //erase last saved move (for En passant)
             }
 
             if (end.getPiece().getSquare().getPozY() == 0 || end.getPiece().getSquare().getPozY() == 7) //promote Pawn
@@ -107,19 +111,19 @@ public class MoveCommands implements CommandInterface {
                     Piece piece;
                     switch (newPiece) {
                         case "Queen":
-                            piece = new Queen(this, end.getPiece().getPlayer());
+                            piece = new Queen(this.chessboard, end.getPiece().getPlayer());
                             break;
                         case "Rook":
-                            piece = new Rook(this, end.getPiece().getPlayer());
+                            piece = new Rook(this.chessboard, end.getPiece().getPlayer());
                             break;
                         case "Bishop":
-                            piece = new Bishop(this, end.getPiece().getPlayer());
+                            piece = new Bishop(this.chessboard, end.getPiece().getPlayer());
                             break;
                         case "Valet":
-                            piece = new Valet(this, end.getPiece().getPlayer());
+                            piece = new Valet(this.chessboard, end.getPiece().getPlayer());
                             break;
                         default:
-                            piece = new Knight(this, end.getPiece().getPlayer());
+                            piece = new Knight(this.chessboard, end.getPiece().getPlayer());
                             break;
                     }
                     piece.setChessboard(end.getPiece().getChessboard());
@@ -130,137 +134,27 @@ public class MoveCommands implements CommandInterface {
                 }
             }
         } else if (!end.getPiece().getName().equals("Pawn")) {
-            twoSquareMovedPawn = null; //erase last saved move (for En passant)
+            this.chessboard.setTwoSquareMovedPawn(null); //erase last saved move (for En passant)
         }
 
         if (refresh) {
-            this.unselect();//unselect square
-            repaint();
+            this.chessboard.unselect();//unselect square
+            this.chessboard.repaint();
         }
 
         if (clearForwardHistory) {
-            this.Moves.clearMoveForwardStack();
-            this.Moves.addMove(tempBegin, tempEnd, true, wasCastling, wasEnPassant, promotedPiece);
+            this.movesHistoryView.clearMoveForwardStack();
+            this.movesHistoryView.addMove(tempBegin, tempEnd, true, wasCastling, wasEnPassant, promotedPiece);
         } else {
-            this.Moves.addMove(tempBegin, tempEnd, false, wasCastling, wasEnPassant, promotedPiece);
+            this.movesHistoryView.addMove(tempBegin, tempEnd, false, wasCastling, wasEnPassant, promotedPiece);
         }
     }/*endOf-move()-*/
 
 
     @Override
     public void execute() {
-
+        move(this.begin, this.end, this.refresh, this.clearForwardHistory);
     }
 
-    @Override
-    public void undo() {
 
-    }
-
-    @Override
-    public void redo() {
-
-    }
-
-    public boolean redo(boolean refresh) {
-        if (this.getSettings().getGameType() == Settings.gameTypes.local) //redo only for local game
-        {
-            Move first = this.Moves.redo();
-
-            Square from = null;
-            Square to = null;
-
-            if (first != null) {
-                from = first.getFrom();
-                to = first.getTo();
-
-                this.move(this.getSquares()[from.getPozX()][from.getPozY()], this.getSquares()[to.getPozX()][to.getPozY()], true, false);
-                if (first.getPromotedPiece() != null) {
-                    Pawn pawn = (Pawn) this.getSquares()[to.getPozX()][to.getPozY()].piece;
-                    pawn.setSquare(null);
-
-                    this.squares[to.pozX][to.pozY].piece = first.getPromotedPiece();
-                    Piece promoted = this.getSquares()[to.getPozX()][to.getPozY()].piece;
-                    promoted.setSquare(this.getSquares()[to.getPozX()][to.getPozY()]);
-                }
-                return true;
-            }
-
-        }
-        return false;
-    }
-
-    public synchronized boolean undo(boolean refresh) //undo last move
-    {
-        Move last = this.Moves.undo();
-
-        if (last != null && last.getFrom() != null) {
-            Square begin = last.getFrom();
-            Square end = last.getTo();
-            try {
-                Piece moved = last.getMovedPiece();
-                this.squares[begin.pozX][begin.pozY].piece = moved;
-
-                moved.setSquare(this.getSquares()[begin.getPozX()][begin.getPozY()]);
-
-                Piece taken = last.getTakenPiece();
-                if (last.getCastlingMove() != Castling.NONE) {
-                    Piece rook = null;
-                    if (last.getCastlingMove() == Castling.SHORT_CASTLING) {
-                        rook = this.getSquares()[end.getPozX() - 1][end.getPozY()].piece;
-                        this.squares[7][begin.pozY].piece = rook;
-                        rook.setSquare(this.getSquares()[7][begin.getPozY()]);
-                        this.squares[end.pozX - 1][end.pozY].piece = null;
-                    } else {
-                        rook = this.getSquares()[end.getPozX() + 1][end.getPozY()].piece;
-                        this.squares[0][begin.pozY].piece = rook;
-                        rook.setSquare(this.getSquares()[0][begin.getPozY()]);
-                        this.squares[end.pozX + 1][end.pozY].piece = null;
-                    }
-                    ((King) moved).setWasMotioned(false);
-                    ((Rook) rook).setWasMotioned(false);
-                } else if (moved.getName().equals("Rook")) {
-                    ((Rook) moved).setWasMotioned(false);
-                } else if (moved.getName().equals("Pawn") && last.wasEnPassant()) {
-                    Pawn pawn = (Pawn) last.getTakenPiece();
-                    this.squares[end.pozX][begin.pozY].piece = pawn;
-                    pawn.setSquare(this.getSquares()[end.getPozX()][begin.getPozY()]);
-
-                } else if (moved.getName().equals("Pawn") && last.getPromotedPiece() != null) {
-                    Piece promoted = this.getSquares()[end.getPozX()][end.getPozY()].piece;
-                    promoted.setSquare(null);
-                    this.squares[end.pozX][end.pozY].piece = null;
-                }
-
-                //check one more move back for en passant
-                Move oneMoveEarlier = this.Moves.getLastMoveFromHistory();
-                if (oneMoveEarlier != null && oneMoveEarlier.wasPawnTwoFieldsMove()) {
-                    Piece canBeTakenEnPassant = this.getSquare(oneMoveEarlier.getTo().getPozX(), oneMoveEarlier.getTo().getPozY()).getPiece();
-                    if (canBeTakenEnPassant.getName().equals("Pawn")) {
-                        this.twoSquareMovedPawn = (Pawn) canBeTakenEnPassant;
-                    }
-                }
-
-                if (taken != null && !last.wasEnPassant()) {
-                    this.squares[end.pozX][end.pozY].piece = taken;
-                    taken.setSquare(this.getSquares()[end.getPozX()][end.getPozY()]);
-                } else {
-                    this.squares[end.pozX][end.pozY].piece = null;
-                }
-
-                if (refresh) {
-                    this.unselect();//unselect square
-                    repaint();
-                }
-
-            } catch (ArrayIndexOutOfBoundsException | NullPointerException exc) {
-                LOG.error("error: " + exc.getClass() + " exc object: " + exc);
-                return false;
-            }
-
-            return true;
-        } else {
-            return false;
-        }
-    }
 }

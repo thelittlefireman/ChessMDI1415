@@ -29,7 +29,8 @@ public class Chessboard2D extends ChessboardView
     private static final Logger LOG = Logger.getLogger(Chessboard2D.class);
     
     protected Pieces2D pieces2D = Pieces2D.getInstance();
-    
+
+
     public Chessboard2D(Chessboard chessboard)
     {
         this.setChessboard(chessboard);
@@ -303,10 +304,9 @@ public class Chessboard2D extends ChessboardView
     {
         if (getChessboard().getSettings().isDisplayLegalMovesEnabled())
         {
-            Set<Square> moves = getChessboard().getMoves();
-            if (null != moves)
+            if (null != getMoves())
             {
-                for (Iterator it = moves.iterator(); it.hasNext();)
+                for (Iterator it = getMoves().iterator(); it.hasNext();)
                 {
                     Square sq = (Square) it.next();
                     int ableSquarePosX = sq.getPozX();
@@ -342,8 +342,8 @@ public class Chessboard2D extends ChessboardView
         
         if (null != tmpSquare.piece)
         {
-            Set<Square> moves = tmpSquare.getPiece().getAllMoves();
-            this.getChessboard().setMoves(moves);
+           setMoves(tmpSquare.getPiece().getAllMoves());
+
         }
     }
 

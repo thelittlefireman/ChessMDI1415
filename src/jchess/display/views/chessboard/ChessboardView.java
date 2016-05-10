@@ -10,6 +10,7 @@ import jchess.utils.GUI;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Set;
 
 /*
  * Authors:
@@ -17,9 +18,19 @@ import java.awt.*;
  */
 public abstract class ChessboardView extends JPanel
 {
+    public Set<Square> getMoves() {
+        return moves;
+    }
+
+    private Set<Square> moves;
+
+    public void setMoves(Set<Square> moves) {
+        this.moves = moves;
+    }
+
     /*
-     * image x position (used in JChessView class!)
-     */
+         * image x position (used in JChessView class!)
+         */
     public static final int imgX = 5;
     /*
      * image y position (used in JChessView class!)

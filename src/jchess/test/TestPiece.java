@@ -4,6 +4,8 @@ import jchess.core.Chessboard;
 import jchess.core.Colors;
 import jchess.core.GameEngine;
 import jchess.core.Square;
+import jchess.core.commands.MoveCommands;
+import jchess.core.commands.MoveCommandsAdapter;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.Bishop;
 import jchess.core.pieces.implementation.King;
@@ -24,14 +26,15 @@ public class TestPiece {
     private  Settings settings;
 
     private  Chessboard board;
+    private  GameEngine gameEngine;
 
     @Before
     public void setUp() {
         //SingleFrameApplication.launch(JChessApp.class, new String[] {});
 
         settings = new Settings();
-        GameEngine gameEngine = new GameEngine(settings);
-        board = gameEngine.getChessboard(); // new Chessboard(settings, new Moves(new JPanelGame()));
+        gameEngine = new GameEngine(settings);
+        board = gameEngine.getChessboard(); // new Chessboard(settings, new MovesHistoryView(new JPanelGame()));
 
 
         // JPanelGame g = new JPanelGame();
@@ -42,10 +45,10 @@ public class TestPiece {
 
 
         // #2 bad API design
-        //  Moves moves = new Moves(g);
-        // Chessboard board = new Chessboard(settings, moves);
+        //  MovesHistoryView movesManager = new MovesHistoryView(g);
+        // Chessboard board = new Chessboard(settings, movesManager);
         // g.getChessboard() != board :(
-        // board.getMoves() != moves :(
+        // board.getMovesHistoryView() != movesManager :(
 
 
     }
@@ -55,7 +58,7 @@ public class TestPiece {
         assertEquals(16, board.getAllPieces(Colors.WHITE).size());
         assertEquals(16, board.getAllPieces(Colors.BLACK).size());
         // #3 bad API design
-        // assertNotNull(board.getMoves());
+        // assertNotNull(board.getMovesHistoryView());
     }
 
     @Test
@@ -84,10 +87,10 @@ public class TestPiece {
 
         assertNull(board.getSquare(4, 4).getPiece()); // nothing there
         // e2 (4, 6) e4 (4, 4)
-        board.move(4, 6, 4, 4);
+        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,4, 6, 4, 4));
 
         // #4 bad API design
-        //assertEquals(1, board.getMoves().size());
+        //assertEquals(1, board.getMovesHistoryView().size());
 
         assertNull(board.getSquare(4, 6).getPiece()); // now the pawn is not present in e2
         Piece p4 = board.getSquare(4, 4).getPiece(); // and there is a pawn in e4
@@ -104,10 +107,10 @@ public class TestPiece {
     public void testBishop1() throws Exception {
 
         // e2 (4, 6) e4 (5, 4)
-        board.move(4, 6, 4, 4);
+        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,4, 6, 4, 4));
 
         // e7 (4, 1) e5 (4, 3)
-        board.move(4, 1, 4, 3);
+        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,4, 1, 4, 3));
 
 
         assertNull(board.getSquare(4, 1).getPiece()); // now the pawn is not present in e7
@@ -129,10 +132,10 @@ public class TestPiece {
     public void testBishop2() throws Exception {
 
         // d2 (3, 6) d4 (3, 4)
-        board.move(3, 6, 3, 4);
+        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,3, 6, 3, 4));
 
         // e7 (4, 1) e5 (4, 3)
-        board.move(4, 1, 4, 3);
+        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,4, 1, 4, 3));
 
         // bishop in c1
         Piece b1 = board.getSquare(2, 7).getPiece();
@@ -148,7 +151,7 @@ public class TestPiece {
     public void testKnight() throws Exception {
 
 
-        board.move(6, 7, 5, 5);
+        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,6, 7, 5, 5));
 
 
         // bishop in c1

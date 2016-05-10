@@ -1,8 +1,9 @@
 package jchess.core;
 
 import jchess.JChessApp;
+import jchess.core.commands.CommandsManager;
+import jchess.core.commands.MoveCommands;
 import jchess.core.errors.ReadGameError;
-import jchess.core.moves.Moves;
 import jchess.display.panels.JPanelGame;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
@@ -39,15 +40,19 @@ public class GameEngine {
      */
     protected Player activePlayer;
     /**
-     * History of moves object
+     * History of movesManager object
      */
-    protected Moves moves;
+    protected CommandsManager commandsManager;
+
+    public CommandsManager getCommandsManager() {
+        return commandsManager;
+    }
 
     public GameEngine(Settings set) {
         this.blockedChessboard = false;
         settings = set;
-        this.moves = new Moves(this);
-        chessboard = new Chessboard(this.settings, this.moves);
+        this.commandsManager = new CommandsManager(this);
+        chessboard = new Chessboard(this);
         firstAttempt = true;
     }
 
@@ -97,7 +102,7 @@ public class GameEngine {
 
         gameEngine.setBlockedChessboard(true);
         JChessApp.getJavaChessView().setLastTabAsActive();
-        gameEngine.getMoves().setMoves(tempStr);
+        gameEngine.getCommandsManager().getMovesHistoryView().setMoves(tempStr);
         gameEngine.setBlockedChessboard(false);
         gameEngine.getChessboard().repaint();
         //newGUI.getChat().setEnabled(false);
@@ -258,14 +263,6 @@ public class GameEngine {
         this.settings = settings;
     }
 
-    public Moves getMoves() {
-        return moves;
-    }
-
-    public void setMoves(Moves moves) {
-        this.moves = moves;
-    }
-
     /**
      * Method to save actual state of game
      *
@@ -286,7 +283,7 @@ public class GameEngine {
         String info = "[Event \"JPanelGame\"]\n[Date \"" + cal.get(Calendar.YEAR) + "." + (cal.get(Calendar.MONTH) + 1) + "." + cal.get(Calendar.DAY_OF_MONTH) + "\"]\n"
                 + "[White \"" + this.getSettings().getPlayerWhite().getName() + "\"]\n[Black \"" + this.getSettings().getPlayerBlack().getName() + "\"]\n\n";
         str += info;
-        str += this.getMoves().getMovesInString();
+        str += this.getCommandsManager().getMovesHistoryView().getMovesInString();
         try {
             fileW.write(str);
             fileW.flush();
@@ -357,7 +354,7 @@ public class GameEngine {
         boolean status = false;
 
         if (this.getSettings().getGameType() == Settings.gameTypes.local) {
-            status = getChessboard().undo();
+            status = commandsManager.undo(true);
             if (status) {
                 this.switchActive();
             } else {
@@ -372,7 +369,7 @@ public class GameEngine {
         boolean result = false;
 
         if (this.getSettings().getGameType() == Settings.gameTypes.local) {
-            while (getChessboard().undo()) {
+            while (commandsManager.undo(true)) {
                 result = true;
             }
         } else {
@@ -386,7 +383,7 @@ public class GameEngine {
         boolean result = false;
 
         if (this.getSettings().getGameType() == Settings.gameTypes.local) {
-            while (getChessboard().redo()) {
+            while (commandsManager.redo(true)) {
                 result = true;
             }
         } else {
@@ -397,7 +394,7 @@ public class GameEngine {
     }
 
     public boolean redo() {
-        boolean status = getChessboard().redo();
+        boolean status = commandsManager.redo(true);
         if (this.getSettings().getGameType() == Settings.gameTypes.local) {
             if (status) {
                 this.nextMove();
@@ -425,7 +422,7 @@ public class GameEngine {
             getChessboard().select(begin);
             if (getChessboard().getActiveSquare().getPiece().getAllMoves().contains(end)) //move
             {
-                getChessboard().move(begin, end);
+               this.getCommandsManager().execute(new MoveCommands(begin, end));
             } else {
                 LOG.debug("Bad move: beginX: " + beginX + " beginY: " + beginY + " endX: " + endX + " endY: " + endY);
                 return false;

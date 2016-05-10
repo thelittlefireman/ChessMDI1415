@@ -18,24 +18,17 @@
  */
 package jchess.core;
 
-import jchess.JChessApp;
 import jchess.core.initialPlaceStrategy.BasePlacement;
 import jchess.core.initialPlaceStrategy.InitialPlaceStrategy;
-import jchess.core.moves.Castling;
-import jchess.core.moves.Move;
-import jchess.core.moves.Moves;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.*;
 import jchess.core.visitorsPieces.VisitorPieceInterface;
-import jchess.core.visitorsPieces.VisitorPieces;
 import jchess.display.views.chessboard.ChessboardView;
 import jchess.display.views.chessboard.implementation.graphic2D.Chessboard2D;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
 
-import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
-import java.util.Set;
 
 /**
  * @author: Mateusz Sławomir Lach ( matlak, msl )
@@ -70,13 +63,17 @@ public class Chessboard implements ChessboardParts {
     }
 
     protected int activeSquareY;
-    private Set<Square> moves;
     private Settings settings;
-    private Moves Moves;
+
     /**
      * chessboard view data object
      */
     private ChessboardView chessboardView;
+private GameEngine gameEngine;
+
+    public GameEngine getGameEngine() {
+        return gameEngine;
+    }
 
     public InitialPlaceStrategy getInitialPlaceStrategy() {
         return initialPlaceStrategy;
@@ -85,12 +82,12 @@ public class Chessboard implements ChessboardParts {
     /**
      * Chessboard class constructor
      *
-     * @param settings      reference to Settings class object for this chessboard
-     * @param moves_history reference to Moves class object for this chessboard
+     * @param gameEngine      reference to Settings class object for this chessboard
      */
-    public Chessboard(Settings settings, Moves moves_history) {
-        this.settings = settings;
+    public Chessboard(GameEngine gameEngine) {
+        this.settings = gameEngine.getSettings();
         this.chessboardView = new Chessboard2D(this);
+        this.gameEngine =gameEngine;
 
         this.activeSquareX = 0;
         this.activeSquareY = 0;
@@ -105,7 +102,6 @@ public class Chessboard implements ChessboardParts {
                 this.squares[i][y] = new Square(i, y, null);
             }
         }//--endOf--create object for each square
-        this.Moves = moves_history;
         this.initialPlaceStrategy = new BasePlacement(this);
     }/*--endOf-Chessboard--*/
 
@@ -167,29 +163,6 @@ public class Chessboard implements ChessboardParts {
         }
     }
 
-
-    public boolean redo() {
-        return redo(true);
-    }
-
-
-    public boolean undo() {
-        return undo(true);
-    }
-
-
-    public void componentMoved(ComponentEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void componentShown(ComponentEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public void componentHidden(ComponentEvent e) {
-        //throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     /**
      * @return the squares
      */
@@ -197,10 +170,15 @@ public class Chessboard implements ChessboardParts {
         return squares;
     }
 
+    public void setTwoSquareMovedPawn(Pawn twoSquareMovedPawn) {
+        this.twoSquareMovedPawn = twoSquareMovedPawn;
+    }
+
     public Square getSquare(int x, int y) {
         try {
             return squares[x][y];
         } catch (ArrayIndexOutOfBoundsException exc) {
+
             return null;
         }
     }
@@ -283,20 +261,6 @@ public class Chessboard implements ChessboardParts {
      */
     public void setSettings(Settings settings) {
         this.settings = settings;
-    }
-
-    /**
-     * @return the moves
-     */
-    public Set<Square> getMoves() {
-        return moves;
-    }
-
-    /**
-     * @param moves the moves to set
-     */
-    public void setMoves(Set<Square> moves) {
-        this.moves = moves;
     }
 
     /**

@@ -35,7 +35,7 @@ public class KingBehavior extends Behavior
     
     /**
      * 
-     *   // King all moves<br/>
+     *   // King all movesManager<br/>
      *   |_|_|_|_|_|_|_|_|7<br/>
      *   |_|_|_|_|_|_|_|_|6<br/>
      *   |_|_|_|_|_|_|_|_|5<br/>
@@ -107,7 +107,7 @@ public class KingBehavior extends Behavior
             {
                 boolean canCastling = true;
                 Rook rook = (Rook) king.getChessboard().getSquares()[7][king.getSquare().getPozY()].getPiece();
-                if (!rook.getWasMotioned()) //if king was not moves before and is not checked
+                if (!rook.getWasMotioned()) //if king was not movesManager before and is not checked
                 {
                     for (int i = king.getSquare().getPozX() + 1; i < 7; i++) //go right
                     {

@@ -45,9 +45,9 @@ public abstract class Behavior
     abstract public Set<Square> getSquaresInRange();
     
     /**
-     * This method is returning all legal moves of piece. It looks for King safety.
+     * This method is returning all legal movesManager of piece. It looks for King safety.
      * In ususal case it should return filtered result of getSquaresInRange() method.
-     * @return list of legal moves. 
+     * @return list of legal movesManager.
      * @see Behavior.getSquaresInRange.
      */
     public Set<Square> getLegalMoves()

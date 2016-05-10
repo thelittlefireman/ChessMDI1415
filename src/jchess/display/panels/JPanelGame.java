@@ -20,6 +20,7 @@ import jchess.core.Chessboard;
 import jchess.core.GameEngine;
 import jchess.core.Player;
 import jchess.core.Square;
+import jchess.core.commands.MoveCommands;
 import jchess.core.pieces.implementation.King;
 import jchess.display.views.chessboard.ChessboardView;
 import jchess.utils.Settings;
@@ -66,7 +67,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
         JPanelGameClock.setLocation(new Point(500, 0));
         this.add(JPanelGameClock);
 
-        JScrollPane Moves = gameEngine.getMoves().getScrollPane();
+        JScrollPane Moves = gameEngine.getCommandsManager().getMovesHistoryView().getScrollPane();
         Moves.setSize(new Dimension(180, 350));
         Moves.setLocation(new Point(500, 121));
         this.add(Moves);
@@ -93,7 +94,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
     }
 
     public void newGame() {
-        gameEngine.getChessboard().getInitialPlaceStrategy().setPieces("", gameEngine.getSettings().getPlayerWhite(), gameEngine.getSettings().getPlayerBlack());
+        gameEngine.getChessboard().getInitialPlaceStrategy().setPieces("");
 
         gameEngine.setActivePlayer(gameEngine.getSettings().getPlayerWhite());
         if (gameEngine.getActivePlayer().getPlayerType() != Player.playerTypes.localUser) {
@@ -153,7 +154,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
                             && this.gameEngine.getChessboard().getActiveSquare().getPiece().getAllMoves().contains(sq)) //move
                     {
                         if (gameEngine.getSettings().getGameType() == Settings.gameTypes.local) {
-                            this.gameEngine.getChessboard().move(this.gameEngine.getChessboard().getActiveSquare(), sq);
+                            this.gameEngine.getCommandsManager().execute(new MoveCommands(this.gameEngine.getChessboard().getActiveSquare(), sq));
                         }
 
 
@@ -252,7 +253,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
 
         int chessHeight = (int) Math.round((height * 0.88) / 8) * 8;
         int chessWidthWithLabels;
-        JScrollPane movesScrollPane = gameEngine.getMoves().getScrollPane();
+        JScrollPane movesScrollPane = gameEngine.getCommandsManager().getMovesHistoryView().getScrollPane();
         ChessboardView chessboardView = gameEngine.getChessboard().getChessboardView();
         chessboardView.resizeChessboard((int) chessHeight);
         chessHeight = chessboardView.getHeight();

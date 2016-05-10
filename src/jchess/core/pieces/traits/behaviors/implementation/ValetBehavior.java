@@ -17,7 +17,7 @@ public class ValetBehavior extends Behavior {
 
     /**
      * Annotation to superclass Piece changing pawns location
-     * // knight all moves<br/>
+     * // knight all movesManager<br/>
      * //  _______________ Y:<br/>
      * // |_|_|_|_|_|_|_|_|0<br/>
      * // |_|_|_|_|_|_|_|_|1<br/>
