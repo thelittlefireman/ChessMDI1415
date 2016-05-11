@@ -31,6 +31,9 @@ public class MoveCommands implements CommandInterface {
         this.movesHistoryView = movesHistoryView;
     }
 
+    public MoveCommands(Chessboard chessboard){
+        this.chessboard = chessboard;
+    }
     public MoveCommands(Square begin, Square end, boolean refresh, boolean clearForwardHistory) {
         this.begin =begin;
         this.end =end;

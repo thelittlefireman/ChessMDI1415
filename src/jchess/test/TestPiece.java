@@ -4,8 +4,7 @@ import jchess.core.Chessboard;
 import jchess.core.Colors;
 import jchess.core.GameEngine;
 import jchess.core.Square;
-import jchess.core.commands.MoveCommands;
-import jchess.core.commands.MoveCommandsAdapter;
+import jchess.core.commands.MoveCommandsBuilder;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.Bishop;
 import jchess.core.pieces.implementation.King;
@@ -87,7 +86,7 @@ public class TestPiece {
 
         assertNull(board.getSquare(4, 4).getPiece()); // nothing there
         // e2 (4, 6) e4 (4, 4)
-        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,4, 6, 4, 4));
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(4).yFrom(6).xTo(4).yTo(4).buildMoveCommands());
 
         // #4 bad API design
         //assertEquals(1, board.getMovesHistoryView().size());
@@ -107,10 +106,10 @@ public class TestPiece {
     public void testBishop1() throws Exception {
 
         // e2 (4, 6) e4 (5, 4)
-        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,4, 6, 4, 4));
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(4).yFrom(6).xTo(4).yTo(4).buildMoveCommands());
 
         // e7 (4, 1) e5 (4, 3)
-        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,4, 1, 4, 3));
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(4).yFrom(1).xTo(4).yTo(3).buildMoveCommands());
 
 
         assertNull(board.getSquare(4, 1).getPiece()); // now the pawn is not present in e7
@@ -132,10 +131,10 @@ public class TestPiece {
     public void testBishop2() throws Exception {
 
         // d2 (3, 6) d4 (3, 4)
-        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,3, 6, 3, 4));
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(3).yFrom(6).xTo(3).yTo(4).buildMoveCommands());
 
         // e7 (4, 1) e5 (4, 3)
-        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,4, 1, 4, 3));
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(4).yFrom(1).xTo(4).yTo(3).buildMoveCommands());
 
         // bishop in c1
         Piece b1 = board.getSquare(2, 7).getPiece();
@@ -150,9 +149,7 @@ public class TestPiece {
     @Test
     public void testKnight() throws Exception {
 
-
-        gameEngine.getCommandsManager().execute(MoveCommandsAdapter.BuildMoveCommands(board,6, 7, 5, 5));
-
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(6).yFrom(7).xTo(5).yTo(5).buildMoveCommands());
 
         // bishop in c1
         Piece b1 = board.getSquare(5, 5).getPiece();
