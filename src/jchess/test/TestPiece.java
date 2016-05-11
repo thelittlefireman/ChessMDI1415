@@ -35,7 +35,6 @@ public class TestPiece {
         gameEngine = new GameEngine(settings);
         board = gameEngine.getChessboard(); // new Chessboard(settings, new MovesHistoryView(new JPanelGame()));
 
-
         // JPanelGame g = new JPanelGame();
         // #1 bad API design
         // g.newGame(); // fails because coupled to GUI concerns and tabs stuff
