@@ -20,7 +20,7 @@
  */
 package jchess.utils;
 
-import jchess.core.Player;
+import jchess.core.players.Player;
 import java.io.Serializable;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;

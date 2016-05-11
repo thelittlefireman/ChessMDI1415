@@ -2,7 +2,7 @@ package jchess.core.initialPlaceStrategy;
 
 import jchess.core.Chessboard;
 import jchess.core.Colors;
-import jchess.core.Player;
+import jchess.core.players.Player;
 import jchess.core.pieces.implementation.*;
 import org.apache.log4j.Logger;
 

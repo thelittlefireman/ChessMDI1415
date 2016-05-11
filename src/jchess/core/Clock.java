@@ -20,6 +20,8 @@
  */
 package jchess.core;
 
+import jchess.core.players.Player;
+
 /** Class to represent seperate wall-clock for one player.
  *  Full ChessClock is represented by JPanelGameClock object (two clock - one for each player)
  */

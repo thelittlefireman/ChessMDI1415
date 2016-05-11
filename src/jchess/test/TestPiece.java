@@ -63,7 +63,6 @@ public class TestPiece {
     @Test
     public void testBasicMovement() throws Exception {
 
-
         Square sq = board.getSquare(5, 1); // 1st rown (black relative)
         Piece p = sq.getPiece();
         assertTrue(p instanceof Pawn);

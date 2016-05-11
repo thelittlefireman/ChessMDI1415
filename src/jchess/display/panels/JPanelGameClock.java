@@ -21,7 +21,7 @@
 package jchess.display.panels;
 
 import jchess.core.Clock;
-import jchess.core.Player;
+import jchess.core.players.Player;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
 

@@ -15,21 +15,15 @@
 
 package jchess.core.pieces;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.awt.Point;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
 import jchess.core.*;
 import jchess.core.pieces.traits.behaviors.Behavior;
-import jchess.core.visitorsPieces.VisitorPieceInterface;
+import jchess.core.players.Player;
 import org.apache.log4j.Logger;
 
 /**

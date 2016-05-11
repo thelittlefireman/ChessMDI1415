@@ -18,7 +18,7 @@ package jchess.display.panels;
 import jchess.JChessApp;
 import jchess.core.Chessboard;
 import jchess.core.GameEngine;
-import jchess.core.Player;
+import jchess.core.players.Player;
 import jchess.core.Square;
 import jchess.core.commands.MoveCommands;
 import jchess.core.pieces.implementation.King;

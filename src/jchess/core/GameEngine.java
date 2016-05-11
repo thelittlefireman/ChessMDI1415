@@ -4,6 +4,7 @@ import jchess.JChessApp;
 import jchess.core.commands.CommandsManager;
 import jchess.core.commands.MoveCommands;
 import jchess.core.errors.ReadGameError;
+import jchess.core.players.Player;
 import jchess.display.panels.JPanelGame;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;

@@ -17,7 +17,7 @@ package jchess.display.windows;
 
 import jchess.JChessApp;
 import jchess.core.GameEngine;
-import jchess.core.Player;
+import jchess.core.players.Player;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
 

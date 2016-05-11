@@ -18,7 +18,9 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess.core;
+package jchess.core.players;
+
+import jchess.core.Colors;
 
 import java.io.Serializable;
 
@@ -46,10 +48,6 @@ public class Player implements Serializable
 
     protected boolean goDown;
 
-    /**
-     * Empty constructor.
-     */
-    public Player(){}
 
     /**
      * Constructor for Player class
@@ -61,6 +59,11 @@ public class Player implements Serializable
         this.name = name;
         this.color = Colors.valueOf(color.toUpperCase());
         this.goDown = false;
+    }
+
+    public Player(String name, String color, playerTypes playerType){
+        this(name,color);
+        this.playerType =playerType;
     }
 
     /** Method setting the players name

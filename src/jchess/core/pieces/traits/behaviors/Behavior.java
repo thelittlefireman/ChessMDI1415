@@ -17,7 +17,6 @@ package jchess.core.pieces.traits.behaviors;
 import java.util.HashSet;
 import java.util.Set;
 import jchess.core.Colors;
-import jchess.core.Player;
 import jchess.core.Square;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.King;

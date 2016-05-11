@@ -1,7 +1,7 @@
 package jchess.core.pieces.implementation;
 
 import jchess.core.Chessboard;
-import jchess.core.Player;
+import jchess.core.players.Player;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.traits.behaviors.implementation.ValetBehavior;
 import jchess.core.visitorsPieces.VisitorPieceInterface;

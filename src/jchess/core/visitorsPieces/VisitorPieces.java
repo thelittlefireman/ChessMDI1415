@@ -1,6 +1,6 @@
 package jchess.core.visitorsPieces;
 
-import jchess.core.Player;
+import jchess.core.players.Player;
 import jchess.core.pieces.implementation.*;
 
 /**
