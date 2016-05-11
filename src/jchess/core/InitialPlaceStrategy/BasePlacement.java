@@ -9,7 +9,7 @@ import org.apache.log4j.Logger;
 /**
  * Created by thoma on 08/05/2016.
  */
-public class BasePlacement extends InitialPlaceStrategy {
+public class BasePlacement extends jchess.core.initialPlaceStrategy.InitialPlaceStrategy {
     private static final Logger LOG = Logger.getLogger(BasePlacement.class);
 
     public BasePlacement(Chessboard chessboard) {

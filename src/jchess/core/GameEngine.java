@@ -5,6 +5,7 @@ import jchess.core.commands.CommandsManager;
 import jchess.core.commands.MoveCommands;
 import jchess.core.errors.ReadGameError;
 import jchess.core.players.Player;
+import jchess.core.players.ia.IAInterface;
 import jchess.display.panels.JPanelGame;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
@@ -343,11 +344,14 @@ public class GameEngine {
                 ", color: " + activePlayer.getColor().name() +
                 ", type: " + activePlayer.getPlayerType().name()
         );
+
         if (activePlayer.getPlayerType() == Player.playerTypes.localUser) {
             this.blockedChessboard = false;
         } else if (activePlayer.getPlayerType() == Player.playerTypes.networkUser) {
             this.blockedChessboard = true;
         } else if (activePlayer.getPlayerType() == Player.playerTypes.computer) {
+            this.blockedChessboard = true;
+            ((IAInterface) activePlayer).playATurn();
         }
     }
 

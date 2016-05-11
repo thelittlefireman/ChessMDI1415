@@ -202,7 +202,7 @@ private GameEngine gameEngine;
         for (int i = 0; i < squares.length; i++) {
             for (int j = 0; j < squares[i].length; j++) {
                 Square sq = squares[i][j];
-                if (null != sq.getPiece() && (sq.getPiece().getPlayer().color == color || color == null)) {
+                if (null != sq.getPiece() && (sq.getPiece().getPlayer().getColor() == color || color == null)) {
                     result.add(sq.getPiece());
                 }
             }
