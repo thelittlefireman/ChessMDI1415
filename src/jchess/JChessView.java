@@ -15,6 +15,17 @@
 
 package jchess;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+
+import javax.swing.Icon;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.Timer;
+
 import jchess.core.GameEngine;
 import jchess.display.panels.JPanelGame;
 import jchess.display.windows.JChessAboutBox;
@@ -22,15 +33,13 @@ import jchess.display.windows.PawnPromotionWindow;
 import jchess.display.windows.ThemeChooseWindow;
 import jchess.utils.GUI;
 import jchess.utils.Settings;
+
 import org.apache.log4j.Logger;
 import org.jdesktop.application.Action;
-import org.jdesktop.application.*;
-
-import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
+import org.jdesktop.application.FrameView;
+import org.jdesktop.application.ResourceMap;
+import org.jdesktop.application.SingleFrameApplication;
+import org.jdesktop.application.TaskMonitor;
 
 
 

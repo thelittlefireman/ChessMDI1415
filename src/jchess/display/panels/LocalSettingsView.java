@@ -157,7 +157,6 @@ public class LocalSettingsView extends JPanel implements ActionListener
         else if (clickedComponent == isRenderLabelsEnabled) 
         {
             gameEngine.getSettings().setRenderLabels(isRenderLabelsEnabled.isSelected());
-            gameEngine.getjPanelGame().resizeGame();
         }
         else if (clickedComponent == isTimeEnabled){
         	gameEngine.getSettings().setTimeEnabled(isTimeEnabled.isSelected());

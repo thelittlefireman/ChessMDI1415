@@ -15,13 +15,12 @@
 
 package jchess.display.panels;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -31,8 +30,8 @@ import jchess.core.Chessboard;
 import jchess.core.GameEngine;
 import jchess.core.Square;
 import jchess.core.commands.MoveCommands;
-import jchess.core.pieces.implementation.King;
 import jchess.core.players.Player;
+import jchess.display.components.HintTextArea;
 import jchess.display.views.chessboard.ChessboardView;
 import jchess.utils.Settings;
 
@@ -47,12 +46,12 @@ import org.apache.log4j.Logger;
  * This class is also responsible for appoing player with have
  * a move at the moment
  */
-public class JPanelGame extends JPanel implements ComponentListener, MouseListener {
+public class JPanelGame extends JPanel implements MouseListener {
 
     private static final Logger LOG = org.apache.log4j.Logger.getLogger(JPanelGame.class);
     protected LocalSettingsView localSettingsView;
-    protected JTabbedPane tabPane;
     private boolean firstPlay = true;
+    private HintTextArea commentary;
     protected GameEngine gameEngine;
     /**
      * JPanelGame clock object
@@ -60,39 +59,38 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
     protected jchess.display.panels.JPanelGameClock JPanelGameClock;
 
     public JPanelGame(GameEngine gameEngine) {
-        this.setLayout(null);
+        this.setLayout(new BorderLayout());
+        
+        
         this.gameEngine = gameEngine;
 
         ChessboardView chessboardView = gameEngine.getChessboard().getChessboardView();
-        int chessboardWidth = chessboardView.getChessboardWidht(true);
-        this.add(chessboardView);
+        chessboardView.setPreferredSize(chessboardView.getSize());
+        this.add(chessboardView, BorderLayout.WEST);
 
         //this.chessboard.
+        JPanel panelControl = new JPanel();
         JPanelGameClock = new JPanelGameClock(this);
-        JPanelGameClock.setSize(new Dimension(200, 100));
-        JPanelGameClock.setLocation(new Point(500, 0));
-        this.add(JPanelGameClock);
+        JPanelGameClock.setPreferredSize(new Dimension(200, 100));
+        panelControl.add(JPanelGameClock);
 
         JScrollPane Moves = gameEngine.getCommandsManager().getMovesHistoryView().getScrollPane();
-        Moves.setSize(new Dimension(180, 350));
-        Moves.setLocation(new Point(500, 121));
-        this.add(Moves);
+        Moves.setPreferredSize(new Dimension(200, 250));
+        panelControl.add(Moves);
+        
+        commentary = new HintTextArea("Commentez votre tour");
+        commentary.setPreferredSize(new Dimension(200, 50));
+        panelControl.add(commentary);
 
-
-        this.tabPane = new JTabbedPane();
+        
         this.localSettingsView = new LocalSettingsView(gameEngine);
-        //this.tabPane.addTab(Settings.lang("game_chat"), this.chat);
-        this.tabPane.addTab(Settings.lang("game_settings"), this.localSettingsView);
-        this.tabPane.setSize(new Dimension(380, 100));
-        this.tabPane.setLocation(new Point(chessboardWidth, chessboardWidth / 2));
-        this.tabPane.setMinimumSize(new Dimension(400, 100));
-        this.add(tabPane);
+        localSettingsView.setBorder(BorderFactory.createTitledBorder(Settings.lang("game_settings")));
+        this.localSettingsView.setPreferredSize(new Dimension(200, 200));
+        panelControl.add(localSettingsView);
 
-
-        this.setLayout(null);
+        this.add(panelControl, BorderLayout.CENTER);
         this.setDoubleBuffered(true);
         chessboardView.addMouseListener(this);
-        this.addComponentListener(this);
     }
 
     public GameEngine getGameEngine() {
@@ -200,28 +198,6 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
     @Override
     public void mouseExited(MouseEvent arg0) {
     }
-
-    @Override
-    public void componentResized(ComponentEvent e) {
-        resizeGame();
-    }
-
-    @Override
-    public void componentMoved(ComponentEvent e) {
-        componentResized(e);
-        repaint();
-    }
-
-    @Override
-    public void componentShown(ComponentEvent e) {
-        componentResized(e);
-    }
-
-    @Override
-    public void componentHidden(ComponentEvent e) {
-    }
-
-
     /**
      * @return the JPanelGameClock
      */
@@ -233,9 +209,6 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
     @Override
     public void repaint() {
         super.repaint();
-        if (null != this.tabPane) {
-            this.tabPane.repaint();
-        }
         if (null != this.localSettingsView) {
             this.localSettingsView.repaint();
         }
@@ -244,23 +217,4 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
         }
     }
 
-    public void resizeGame() {
-        int height = this.getHeight() >= this.getWidth() ? this.getWidth() : this.getHeight();
-
-        int chessHeight = (int) Math.round((height * 0.88) / 8) * 8;
-        int chessWidthWithLabels;
-        JScrollPane movesScrollPane = gameEngine.getCommandsManager().getMovesHistoryView().getScrollPane();
-        ChessboardView chessboardView = gameEngine.getChessboard().getChessboardView();
-        chessboardView.resizeChessboard((int) chessHeight);
-        chessHeight = chessboardView.getHeight();
-        chessWidthWithLabels = chessboardView.getChessboardWidht(true);
-        movesScrollPane.setLocation(new Point(chessHeight + 5, 100));
-        movesScrollPane.setSize(movesScrollPane.getWidth(), chessHeight - 100 - (chessWidthWithLabels / 4));
-        getJPanelGameClock().setLocation(new Point(chessHeight + 5, 0));
-        if (null != tabPane) {
-            tabPane.setLocation(new Point(chessWidthWithLabels + 5, ((int) chessWidthWithLabels / 4) * 3));
-            tabPane.setSize(new Dimension(movesScrollPane.getWidth(), chessWidthWithLabels / 4));
-            tabPane.repaint();
-        }
-    }
 }

@@ -176,7 +176,6 @@ public class JChessTabbedPane extends JTabbedPane implements MouseListener, Imag
         {
             JTabbedPane sourceTabbedPane = (JTabbedPane) changeEvent.getSource();
             JPanelGame JPanelGame = (JPanelGame) sourceTabbedPane.getSelectedComponent();
-            JPanelGame.resizeGame();
         }
     }
 }

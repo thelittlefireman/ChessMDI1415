@@ -2,14 +2,18 @@ package jchess.core.commands;
 
 import jchess.JChessApp;
 import jchess.core.Chessboard;
-import jchess.core.GameEngine;
 import jchess.core.Square;
 import jchess.core.moves.Castling;
-import jchess.core.moves.Move;
 import jchess.core.moves.MovesHistoryView;
 import jchess.core.pieces.Piece;
-import jchess.core.pieces.implementation.*;
-import jchess.utils.Settings;
+import jchess.core.pieces.implementation.Bishop;
+import jchess.core.pieces.implementation.King;
+import jchess.core.pieces.implementation.Knight;
+import jchess.core.pieces.implementation.Pawn;
+import jchess.core.pieces.implementation.Queen;
+import jchess.core.pieces.implementation.Rook;
+import jchess.core.pieces.implementation.Valet;
+
 import org.apache.log4j.Logger;
 
 /**
@@ -149,6 +153,7 @@ public class MoveCommands implements CommandInterface {
         } else {
             this.movesHistoryView.addMove(tempBegin, tempEnd, false, wasCastling, wasEnPassant, promotedPiece);
         }
+        
     }/*endOf-move()-*/
 
     /**
