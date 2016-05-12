@@ -175,22 +175,6 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
                         //switch player
                         gameEngine.nextMove();
 
-                        //checkmate or stalemate
-                        King king;
-                        if (gameEngine.getActivePlayer() == gameEngine.getSettings().getPlayerWhite()) {
-                            king = this.gameEngine.getChessboard().getKingWhite();
-                        } else {
-                            king = this.gameEngine.getChessboard().getKingBlack();
-                        }
-
-                        switch (king.isCheckmatedOrStalemated()) {
-                            case 1:
-                                gameEngine.endGame("Checkmate! " + king.getPlayer().getColor().toString() + " player lose!");
-                                break;
-                            case 2:
-                                gameEngine.endGame("Stalemate! Draw!");
-                                break;
-                        }
                     }
 
                 } catch (Exception exc) {

@@ -3,6 +3,7 @@ package jchess.core;
 import jchess.JChessApp;
 import jchess.core.commands.CommandsManager;
 import jchess.core.errors.ReadGameError;
+import jchess.core.pieces.implementation.King;
 import jchess.core.players.Player;
 import jchess.core.players.ia.IAInterface;
 import jchess.display.panels.JPanelGame;
@@ -352,6 +353,23 @@ public class GameEngine {
         } else if (activePlayer.getPlayerType() == Player.playerTypes.computer) {
             this.blockedChessboard = true;
             ((IAInterface) activePlayer).playATurn();
+        }
+
+        //checkmate or stalemate
+        King king;
+        if (this.getActivePlayer() == this.getSettings().getPlayerWhite()) {
+            king = this.getChessboard().getKingWhite();
+        } else {
+            king = this.getChessboard().getKingBlack();
+        }
+
+        switch (king.isCheckmatedOrStalemated()) {
+            case 1:
+                this.endGame("Checkmate! " + king.getPlayer().getColor().toString() + " player lose!");
+                break;
+            case 2:
+                this.endGame("Stalemate! Draw!");
+                break;
         }
     }
 

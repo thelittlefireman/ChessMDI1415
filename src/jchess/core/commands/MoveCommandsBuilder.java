@@ -28,7 +28,7 @@ public class MoveCommandsBuilder {
         return new MoveCommands(fromSQ, toSQ, true);
     }
     public static MoveCommands buildMoveCommands(Chessboard chessboard, String from, String to){
-
+        new UnsupportedOperationException("not yet implemented");
         return null;
     }
     public static MoveCommandsBuilder load(Chessboard chessboard){

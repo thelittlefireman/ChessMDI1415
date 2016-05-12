@@ -197,7 +197,7 @@ public class Chessboard2D extends ChessboardView
             g.drawImage(image, 0, 0, height, height, null);
             g.dispose();            
             
-            this.squareHeight = (float) (height / 8);
+            this.squareHeight = (float) (height / this.getChessboard().getSettings().getSizeM());
             if (getChessboard().getSettings().isRenderLabels()) 
             {
                 /* if labels, make final size larger
@@ -234,7 +234,7 @@ public class Chessboard2D extends ChessboardView
         int minLabelHeight = 20;
         int labelHeight = (int) Math.ceil(squareHeight / 4);
         labelHeight = (labelHeight < minLabelHeight) ? minLabelHeight : labelHeight;
-        int labelWidth =  (int) Math.ceil(squareHeight * 8 + (2 * labelHeight)); 
+        int labelWidth =  (int) Math.ceil(squareHeight * this.getChessboard().getSettings().getSizeM() + (2 * labelHeight));
         BufferedImage uDL = new BufferedImage(labelWidth + minLabelHeight, labelHeight, BufferedImage.TYPE_3BYTE_BGR);
         Graphics2D uDL2D = (Graphics2D) uDL.createGraphics();
         uDL2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -252,11 +252,11 @@ public class Chessboard2D extends ChessboardView
 
         String[] letters =
         {
-            "a", "b", "c", "d", "e", "f", "g", "h"
+            "a", "b", "c", "d", "e", "f", "g", "h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"
         };
         if (!getChessboard().getSettings().isUpsideDown())
         {
-            for (int i = 1; i <= letters.length; i++)
+            for (int i = 1; i <= letters.length && i<=this.getChessboard().getSettings().getSizeN(); i++)
             {
                 uDL2D.drawString(letters[i - 1], (squareHeight * (i - 1)) + addX, 10 + (labelHeight / 3));
             }
@@ -264,7 +264,7 @@ public class Chessboard2D extends ChessboardView
         else
         {
             int j = 1;
-            for (int i = letters.length; i > 0; i--, j++)
+            for (int i = this.getChessboard().getSettings().getSizeN(); i > 0; i--, j++)
             {
                 uDL2D.drawString(letters[i - 1], (squareHeight * (j - 1)) + addX, 10 + (labelHeight / 3));
             }
@@ -283,7 +283,7 @@ public class Chessboard2D extends ChessboardView
 
         if (getChessboard().getSettings().isUpsideDown())
         {
-            for (int i = 1; i <= 8; i++)
+            for (int i = 1; i <= this.getChessboard().getSettings().getSizeM(); i++)
             {
                 uDL2D.drawString(new Integer(i).toString(), 3 + (labelHeight / 3), (squareHeight * (i - 1)) + addX);
             }
@@ -291,7 +291,7 @@ public class Chessboard2D extends ChessboardView
         else
         {
             int j = 1;
-            for (int i = 8; i > 0; i--, j++)
+            for (int i = this.getChessboard().getSettings().getSizeM(); i > 0; i--, j++)
             {
                 uDL2D.drawString(new Integer(i).toString(), 3 + (labelHeight / 3), (squareHeight * (j - 1)) + addX);
             }
@@ -349,9 +349,9 @@ public class Chessboard2D extends ChessboardView
 
     private void drawPieces(Square[][] squares, Graphics2D g2d)
     {
-        for (int i = 0; i < 8; i++) //drawPiecesOnSquares
+        for (int i = 0; i < this.getChessboard().getSettings().getSizeN(); i++) //drawPiecesOnSquares
         {
-            for (int y = 0; y < 8; y++)
+            for (int y = 0; y < this.getChessboard().getSettings().getSizeM(); y++)
             {
                 if (squares[i][y].getPiece() != null)
                 {
