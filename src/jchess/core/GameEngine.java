@@ -338,7 +338,6 @@ public class GameEngine {
                 getjPanelGame().getJPanelGameClock().start();
             }
             firstAttempt = false;
-            jPanelGame.getJPanelGameClock().getTimeSetGame().setEnabled(false);
         }
 
         switchActive();
