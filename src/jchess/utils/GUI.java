@@ -16,7 +16,7 @@
 package jchess.utils;
 
 import jchess.JChessApp;
-import jchess.core.Colors;
+import jchess.core.utils.Colors;
 import jchess.display.panels.JPanelGame;
 import org.apache.log4j.Logger;
 

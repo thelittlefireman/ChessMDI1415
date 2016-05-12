@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
-import jchess.core.Colors;
+import jchess.core.utils.Colors;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.Bishop;
 import jchess.core.pieces.implementation.King;

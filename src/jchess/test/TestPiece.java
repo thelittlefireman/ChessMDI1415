@@ -1,7 +1,7 @@
 package jchess.test;
 
 import jchess.core.Chessboard;
-import jchess.core.Colors;
+import jchess.core.utils.Colors;
 import jchess.core.GameEngine;
 import jchess.core.Square;
 import jchess.core.commands.MoveCommandsBuilder;

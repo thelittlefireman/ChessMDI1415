@@ -27,7 +27,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import org.apache.log4j.Logger;
 import jchess.JChessApp;
-import jchess.core.Colors;
+import jchess.core.utils.Colors;
 
 /** Class representings game settings available for the current player
  */

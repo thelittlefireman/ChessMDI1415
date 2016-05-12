@@ -20,7 +20,7 @@
  */
 package jchess.display.panels;
 
-import jchess.core.Clock;
+import jchess.core.utils.Clock;
 import jchess.core.players.Player;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
@@ -40,14 +40,23 @@ public class JPanelGameClock extends JPanel implements Runnable
 {
     private static final Logger LOG = org.apache.log4j.Logger.getLogger(JPanelGameClock.class);
 
-    public Clock clock1;
-    public Clock clock2;
+    public Clock white_clock;
+    public Clock black_clock;
+
+    public Clock getWhite_clock() {
+        return white_clock;
+    }
+
+    public Clock getBlack_clock() {
+        return black_clock;
+    }
+
     private Clock runningClock;
     private Settings settings;
     private Thread thread;
     private jchess.display.panels.JPanelGame JPanelGame;
     private Graphics g;
-    private String white_clock, black_clock;
+    private String white_clock_string, black_clock_string;
     private BufferedImage background;
     private Graphics bufferedGraphics;
     private JComboBox timeSetGame;
@@ -55,9 +64,9 @@ public class JPanelGameClock extends JPanel implements Runnable
     JPanelGameClock(final JPanelGame JPanelGame)
     {
         super();
-        this.clock1 = new Clock();//white player clock
-        this.clock2 = new Clock();//black player clock
-        this.runningClock = this.clock1;//running/active clock
+        this.white_clock = new Clock();//white player clock
+        this.black_clock = new Clock();//black player clock
+        this.runningClock = this.white_clock;//running/active clock
         this.JPanelGame = JPanelGame;
         this.settings = JPanelGame.getGameEngine().getSettings();
         this.background = new BufferedImage(600, 600, BufferedImage.TYPE_INT_ARGB);
@@ -148,8 +157,8 @@ public class JPanelGameClock extends JPanel implements Runnable
     public void paint(Graphics g)
     {
         super.paint(g);
-        white_clock = this.clock1.prepareString();
-        black_clock = this.clock2.prepareString();
+        white_clock_string = this.white_clock.prepareString();
+        black_clock_string = this.black_clock.prepareString();
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(this.background, 0, 0, this);
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
@@ -173,8 +182,8 @@ public class JPanelGameClock extends JPanel implements Runnable
         g.drawString(settings.getPlayerBlack().getName(), 100, 50);
         g2d.setFont(font);
         g.setColor(Color.BLACK);
-        g2d.drawString(white_clock, 10, 80);
-        g2d.drawString(black_clock, 90, 80);
+        g2d.drawString(white_clock_string, 10, 80);
+        g2d.drawString(black_clock_string, 90, 80);
     }
 
     /**
@@ -193,14 +202,15 @@ public class JPanelGameClock extends JPanel implements Runnable
     {
         /*in documentation this method is called 'switch', but it's restricted name
         to switch block (in pascal called "case") - this've to be repaired in documentation by Wąsu:P*/
-        if (this.runningClock == this.clock1)
+        if (this.runningClock == this.white_clock)
         {
-            this.runningClock = this.clock2;
+            this.runningClock = this.black_clock;
         }
         else
         {
-            this.runningClock = this.clock1;
+            this.runningClock = this.white_clock;
         }
+        this.runningClock.setDecrementActualNumber(0);
     }
 
     /** Method with is setting the players clocks time
@@ -211,8 +221,8 @@ public class JPanelGameClock extends JPanel implements Runnable
     {
         /*rather in chess JPanelGame players got the same time 4 JPanelGame, so why in documentation
          * this method've 2 parameters ? */
-        this.clock1.init(t1);
-        this.clock2.init(t2);
+        this.white_clock.init(t1);
+        this.black_clock.init(t2);
     }
 
     /** Method with is setting the players clocks
@@ -226,13 +236,13 @@ public class JPanelGameClock extends JPanel implements Runnable
         dojdziemy do tego:D:D:D*/
         if (p1.getColor() == p1.getColor().WHITE)
         {
-            this.clock1.setPlayer(p1);
-            this.clock2.setPlayer(p2);
+            this.white_clock.setPlayer(p1);
+            this.black_clock.setPlayer(p2);
         }
         else
         {
-            this.clock1.setPlayer(p2);
-            this.clock2.setPlayer(p1);
+            this.white_clock.setPlayer(p2);
+            this.black_clock.setPlayer(p1);
         }
     }
 
@@ -271,13 +281,13 @@ public class JPanelGameClock extends JPanel implements Runnable
     private void timeOver()
     {
         String color = new String();
-        if (this.clock1.getLeftTime() == 0)
+        if (this.white_clock.getLeftTime() == 0)
         {//Check which player win
-            color = this.clock2.getPlayer().getColor().toString();
+            color = this.black_clock.getPlayer().getColor().toString();
         }
-        else if (this.clock2.getLeftTime() == 0)
+        else if (this.black_clock.getLeftTime() == 0)
         {
-            color = this.clock1.getPlayer().getColor().toString();
+            color = this.white_clock.getPlayer().getColor().toString();
         }
         else
         {//if called in wrong moment

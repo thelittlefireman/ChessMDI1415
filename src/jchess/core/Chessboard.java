@@ -22,6 +22,7 @@ import jchess.core.initialPlaceStrategy.BasePlacement;
 import jchess.core.initialPlaceStrategy.InitialPlaceStrategy;
 import jchess.core.pieces.Piece;
 import jchess.core.pieces.implementation.*;
+import jchess.core.utils.Colors;
 import jchess.core.visitorsPieces.VisitorPieceInterface;
 import jchess.display.views.chessboard.ChessboardView;
 import jchess.display.views.chessboard.implementation.graphic2D.Chessboard2D;

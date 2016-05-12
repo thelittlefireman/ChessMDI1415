@@ -6,6 +6,7 @@ import jchess.core.errors.ReadGameError;
 import jchess.core.pieces.implementation.King;
 import jchess.core.players.Player;
 import jchess.core.players.ia.IAInterface;
+import jchess.core.utils.timePerStroke.TimePerStrokeSave;
 import jchess.display.panels.JPanelGame;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
@@ -339,6 +340,7 @@ public class GameEngine {
             firstAttempt = false;
             jPanelGame.getJPanelGameClock().getTimeSetGame().setEnabled(false);
         }
+
         switchActive();
 
         LOG.debug("next move, active player: " + activePlayer.getName() +
@@ -358,7 +360,7 @@ public class GameEngine {
         //checkmate or stalemate
         King king;
         if (this.getActivePlayer() == this.getSettings().getPlayerWhite()) {
-            king = this.getChessboard().getKingWhite();
+                     king = this.getChessboard().getKingWhite();
         } else {
             king = this.getChessboard().getKingBlack();
         }

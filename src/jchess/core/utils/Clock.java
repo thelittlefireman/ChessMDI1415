@@ -18,7 +18,7 @@
  * Mateusz Sławomir Lach ( matlak, msl )
  * Damian Marciniak
  */
-package jchess.core;
+package jchess.core.utils;
 
 import jchess.core.players.Player;
 
@@ -31,6 +31,16 @@ public class Clock
     private int timeLeft;
     
     private Player player;
+
+    public int getDecrementActualNumber() {
+        return decrementActualNumber;
+    }
+
+    public void setDecrementActualNumber(int decrementActualNumber) {
+        this.decrementActualNumber = decrementActualNumber;
+    }
+
+    private int decrementActualNumber;
 
     /**
      * Default constructor
@@ -65,6 +75,7 @@ public class Clock
         if (this.timeLeft > 0)
         {
             this.timeLeft = this.timeLeft - 1;
+            decrementActualNumber ++;
             return true;
         }
         return false;

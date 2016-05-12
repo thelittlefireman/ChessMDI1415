@@ -37,7 +37,7 @@ public class GloutonIA extends IAInterface {
             this.gameEngine.getCommandsManager().execute(new MoveCommands(begin, end));
             this.gameEngine.nextMove();
         }else {
-            new RandomIA(this.gameEngine,getName(),this.color.toString()).playATurn();
+            new RandomIA(this.gameEngine,getName(),this.color.getColorName()).playATurn();
         }
 
     }

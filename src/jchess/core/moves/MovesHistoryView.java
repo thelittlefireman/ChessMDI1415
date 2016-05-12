@@ -21,11 +21,13 @@
 package jchess.core.moves;
 
 import jchess.core.Chessboard;
-import jchess.core.Colors;
+import jchess.core.utils.Colors;
 import jchess.core.GameEngine;
 import jchess.core.Square;
 import jchess.core.commands.MoveCommandsBuilder;
 import jchess.core.pieces.Piece;
+import jchess.core.utils.timePerStroke.TimePerStrokeSave;
+import jchess.core.utils.timePerStroke.TimePerStrokeSaveWithCommentary;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
 
@@ -38,17 +40,17 @@ import java.util.EmptyStackException;
 import java.util.Set;
 import java.util.Stack;
 
-/** Class representing the players moves, it's also checking
+/**
+ * Class representing the players moves, it's also checking
  * that the moves taken by player are correct.
  * All moves which was taken by current player are saving as List of Strings
  * The history of moves is printing in a table
  */
-public class MovesHistoryView extends AbstractTableModel
-{
+public class MovesHistoryView extends AbstractTableModel {
     private static final Logger LOG = Logger.getLogger(MovesHistoryView.class);
     protected Stack<Move> moveBackStack = new Stack<Move>();
     protected Stack<Move> moveForwardStack = new Stack<Move>();
-    private ArrayList<String> move = new ArrayList<String>();
+    private ArrayList<String> strokeList = new ArrayList<String>();
     private int columnsNum = 3;
     private int rowsNum = 0;
     private String[] names = new String[]
@@ -61,8 +63,7 @@ public class MovesHistoryView extends AbstractTableModel
     private boolean enterBlack = false;
     private GameEngine gameEngine;
 
-    public MovesHistoryView(GameEngine gameEngine)
-    {
+    public MovesHistoryView(GameEngine gameEngine) {
         super();
         this.tableModel = new MyDefaultTableModel();
         this.table = new JTable(this.tableModel);
@@ -79,10 +80,10 @@ public class MovesHistoryView extends AbstractTableModel
     }
 
     /**
-     * Method with is checking is the move is correct
+     * Method with is checking is the strokeList is correct
      *
-     * @param move String which in is capt player move
-     * @return boolean 1 if the move is correct, else 0
+     * @param move String which in is capt player strokeList
+     * @return boolean 1 if the strokeList is correct, else 0
      */
     static public boolean isMoveCorrect(String move) {
         if (move.equals(Castling.SHORT_CASTLING.getSymbol()) || move.equals(Castling.LONG_CASTLING.getSymbol())) {
@@ -138,225 +139,197 @@ public class MovesHistoryView extends AbstractTableModel
         return true;
     }
 
-    public void draw()
-    {
+    public void draw() {
     }
 
     @Override
-    public String getValueAt(int x, int y)
-    {
-        return this.move.get((y * 2) - 1 + (x - 1));
+    public String getValueAt(int x, int y) {
+        return this.strokeList.get((y * 2) - 1 + (x - 1));
     }
 
     @Override
-    public int getRowCount()
-    {
+    public int getRowCount() {
         return this.rowsNum;
     }
 
     @Override
-    public int getColumnCount()
-    {
+    public int getColumnCount() {
         return this.columnsNum;
     }
 
-    protected void addRow()
-    {
+    protected void addRow() {
         this.tableModel.addRow(new String[2]);
     }
 
-    protected void addCastling(String move)
-    {
-        this.move.remove(this.move.size() - 1);//remove last element (move of Rook)
-        if (!this.enterBlack)
-        {
+    protected void addCastling(String move) {
+        this.strokeList.remove(this.strokeList.size() - 1);//remove last element (strokeList of Rook)
+        if (!this.enterBlack) {
             this.tableModel.setValueAt(move, this.tableModel.getRowCount() - 1, 1);//replace last value
-        }
-        else
-        {
+        } else {
             this.tableModel.setValueAt(move, this.tableModel.getRowCount() - 1, 0);//replace last value
         }
-        this.move.add(move);//add new move (O-O or O-O-O)
+        this.addNewStroke(move);//add new strokeList (O-O or O-O-O)
     }
 
     @Override
-    public boolean isCellEditable(int a, int b)
-    {
+    public boolean isCellEditable(int a, int b) {
         return false;
     }
 
-    /** Method of adding new moves to the table
-     * @param str String which in is saved player move
+    /**
+     * Method of adding new moves to the table
+     *
+     * @param str String which in is saved player strokeList
      */
-    protected void addMove2Table(String str)
-    {
-        try
-        {
-            if (!this.enterBlack)
-            {
+    protected void addMove2Table(String str) {
+        try {
+            if (!this.enterBlack) {
                 this.addRow();
                 this.rowsNum = this.tableModel.getRowCount() - 1;
                 this.tableModel.setValueAt(str, rowsNum, 0);
-            }
-            else
-            {
+            } else {
                 this.tableModel.setValueAt(str, rowsNum, 1);
                 this.rowsNum = this.tableModel.getRowCount() - 1;
             }
             this.enterBlack = !this.enterBlack;
             this.table.scrollRectToVisible(table.getCellRect(table.getRowCount() - 1, 0, true));//scroll to down
 
-        }
-        catch (ArrayIndexOutOfBoundsException exc)
-        {
-            if (this.rowsNum > 0)
-            {
+        } catch (ArrayIndexOutOfBoundsException exc) {
+            if (this.rowsNum > 0) {
                 this.rowsNum--;
                 addMove2Table(str);
             }
         }
     }
 
-    /** Method of adding new move
-     * @param move String which in is capt player move
+    /**
+     * Method of adding new strokeList
+     *
+     * @param move String which in is capt player strokeList
      */
-    public void addMove(String move)
-    {
-        if (isMoveCorrect(move))
-        {
-            this.move.add(move);
-            this.addMove2Table(move);
+    public void addMove(String move) {
+        if (isMoveCorrect(move)) {
+
+            this.addMove2Table(this.addNewStroke(move));
             this.moveForwardStack.clear();
         }
 
     }
 
-    public void addMove(Square begin, Square end, boolean registerInHistory, Castling castlingMove, boolean wasEnPassant, Piece promotedPiece)
-    {
+    public void addMove(Square begin, Square end, boolean registerInHistory, Castling castlingMove, boolean wasEnPassant, Piece promotedPiece) {
         boolean wasCastling = castlingMove != Castling.NONE;
         String locMove = begin.getPiece().getSymbol();
 
-        if (gameEngine.getSettings().isUpsideDown() )
-        {
-            locMove += Character.toString((char) ( ( Chessboard.getBottom() - begin.getPozX()) + 97));//add letter of Square from which move was made
-            locMove += Integer.toString( begin.getPozY() + 1 );//add number of Square from which move was made
-        }
-        else
-        {
-            locMove += Character.toString((char) (begin.getPozX() + 97));//add letter of Square from which move was made
-            locMove += Integer.toString(8 - begin.getPozY());//add number of Square from which move was made
+        if (gameEngine.getSettings().isUpsideDown()) {
+            locMove += Character.toString((char) ((Chessboard.getBottom() - begin.getPozX()) + 97));//add letter of Square from which strokeList was made
+            locMove += Integer.toString(begin.getPozY() + 1);//add number of Square from which strokeList was made
+        } else {
+            locMove += Character.toString((char) (begin.getPozX() + 97));//add letter of Square from which strokeList was made
+            locMove += Integer.toString(8 - begin.getPozY());//add number of Square from which strokeList was made
         }
 
-        if (end.piece != null)
-        {
+        if (end.piece != null) {
             locMove += "x";//take down opponent piece
-        }
-        else
-        {
-            locMove += "-";//normal move
+        } else {
+            locMove += "-";//normal strokeList
         }
 
-        if (gameEngine.getSettings().isUpsideDown() )
-        {
-            locMove += Character.toString((char) (( Chessboard.getBottom() - end.getPozX()) +  97));//add letter of Square to which move was made
-            locMove += Integer.toString( end.getPozY() + 1 );//add number of Square to which move was made
-        }
-        else
-        {
-            locMove += Character.toString((char) (end.getPozX() + 97));//add letter of Square to which move was made
-            locMove += Integer.toString(8 - end.getPozY());//add number of Square to which move was made
+        if (gameEngine.getSettings().isUpsideDown()) {
+            locMove += Character.toString((char) ((Chessboard.getBottom() - end.getPozX()) + 97));//add letter of Square to which strokeList was made
+            locMove += Integer.toString(end.getPozY() + 1);//add number of Square to which strokeList was made
+        } else {
+            locMove += Character.toString((char) (end.getPozX() + 97));//add letter of Square to which strokeList was made
+            locMove += Integer.toString(8 - end.getPozY());//add number of Square to which strokeList was made
         }
 
-        if (begin.getPiece().getSymbol().equals("") && begin.getPozX() - end.getPozX() != 0 && end.piece == null)
-        {
+        if (begin.getPiece().getSymbol().equals("") && begin.getPozX() - end.getPozX() != 0 && end.piece == null) {
             locMove += "(e.p)";//pawn take down opponent en passant
             wasEnPassant = true;
         }
         if ((!this.enterBlack && this.gameEngine.getChessboard().getKingBlack().isChecked())
-                || (this.enterBlack && this.gameEngine.getChessboard().getKingWhite().isChecked()))
-        {//if checked
+                || (this.enterBlack && this.gameEngine.getChessboard().getKingWhite().isChecked())) {//if checked
 
             if ((!this.enterBlack && this.gameEngine.getChessboard().getKingBlack().isCheckmatedOrStalemated() == 1)
-                    || (this.enterBlack && this.gameEngine.getChessboard().getKingWhite().isCheckmatedOrStalemated() == 1))
-            {//check if checkmated
+                    || (this.enterBlack && this.gameEngine.getChessboard().getKingWhite().isCheckmatedOrStalemated() == 1)) {//check if checkmated
                 locMove += "#";//check mate
-            }
-            else
-            {
+            } else {
                 locMove += "+";//check
             }
         }
-        if (castlingMove != Castling.NONE)
-        {
+        if (castlingMove != Castling.NONE) {
             this.addCastling(castlingMove.getSymbol());
-        }
-        else
-        {
-            this.move.add(locMove);
-            this.addMove2Table(locMove);
+        } else {
+
+            this.addMove2Table(this.addNewStroke(locMove));
         }
         this.scrollPane.scrollRectToVisible(new Rectangle(0, this.scrollPane.getHeight() - 2, 1, 1));
 
-        if (registerInHistory)
-        {
+        if (registerInHistory) {
             Move moveToAdd = new Move(new Square(begin), new Square(end), begin.piece, end.piece, castlingMove, wasEnPassant, promotedPiece);
             this.moveBackStack.add(moveToAdd);
         }
     }
 
-    public void clearMoveForwardStack()
-    {
+    public String addNewStroke(String stroke) {
+        int time;
+        if (this.gameEngine.getActivePlayer() == this.gameEngine.getSettings().getPlayerWhite()) {
+            time = this.gameEngine.getjPanelGame().getJPanelGameClock().getWhite_clock().getDecrementActualNumber();
+        } else {
+
+            time = this.gameEngine.getjPanelGame().getJPanelGameClock().getBlack_clock().getDecrementActualNumber();
+        }
+        TimePerStrokeSave timePerStrokeSave =new TimePerStrokeSave(time);
+        if(equals("")) {
+            timePerStrokeSave = new TimePerStrokeSaveWithCommentary(timePerStrokeSave,"");
+        }
+            this.gameEngine.getActivePlayer().getTimePerStrokeSaveList().add(timePerStrokeSave);
+        stroke =stroke+" "+timePerStrokeSave.getTimeStrokeInformation();
+        this.strokeList.add(stroke);
+        return stroke;
+    }
+
+    public void clearMoveForwardStack() {
         this.moveForwardStack.clear();
     }
 
-    public JScrollPane getScrollPane()
-    {
+    public JScrollPane getScrollPane() {
         return this.scrollPane;
     }
 
-    public ArrayList<String> getMoves()
-    {
-        return this.move;
+    public ArrayList<String> getMoves() {
+        return this.strokeList;
     }
 
-    /** Method to set all moves from String with validation test (usefoul for network gameEngine)
-     *  @param  moves String to set in String like PGN with full-notation format
+    /**
+     * Method to set all moves from String with validation test (usefoul for network gameEngine)
+     *
+     * @param moves String to set in String like PGN with full-notation format
      */
-    public void setMoves(String moves)
-    {
+    public void setMoves(String moves) {
         int from = 0;
         int to = 0;
         int n = 1;
         ArrayList<String> tempArray = new ArrayList();
         int tempStrSize = moves.length() - 1;
-        while (true)
-        {
+        while (true) {
             from = moves.indexOf(" ", from);
             to = moves.indexOf(" ", from + 1);
-            try
-            {
+            try {
                 tempArray.add(moves.substring(from + 1, to).trim());
-            }
-            catch (StringIndexOutOfBoundsException exc)
-            {
+            } catch (StringIndexOutOfBoundsException exc) {
                 LOG.error("setMoves/StringIndexOutOfBoundsException: error parsing file to load: " + exc);
                 break;
             }
-            if (n % 2 == 0)
-            {
+            if (n % 2 == 0) {
                 from = moves.indexOf(".", to);
-                if (from < to)
-                {
+                if (from < to) {
                     break;
                 }
-            }
-            else
-            {
+            } else {
                 from = to;
             }
             n += 1;
-            if (from > tempStrSize || to > tempStrSize)
-            {
+            if (from > tempStrSize || to > tempStrSize) {
                 break;
             }
         }
@@ -364,13 +337,12 @@ public class MovesHistoryView extends AbstractTableModel
         {
             if (!MovesHistoryView.isMoveCorrect(locMove.trim())) //if not
             {
-                JOptionPane.showMessageDialog(this.gameEngine.getjPanelGame(), Settings.lang("invalid_file_to_load") + move);
+                JOptionPane.showMessageDialog(this.gameEngine.getjPanelGame(), Settings.lang("invalid_file_to_load") + strokeList);
                 return;//show message and finish reading gameEngine
             }
         }
         boolean canMove = false;
-        for (String locMove : tempArray)
-        {
+        for (String locMove : tempArray) {
             if (Castling.isCastling(locMove)) //if castling
             {
                 int[] values = new int[4];
@@ -380,36 +352,31 @@ public class MovesHistoryView extends AbstractTableModel
                         values = new int[]
                                 {
                                         4, 0, 2, 0
-                                };//move value for castling (King move)
-                    }
-                    else
-                    {
+                                };//strokeList value for castling (King strokeList)
+                    } else {
                         values = new int[]
                                 {
                                         4, 7, 2, 7
-                                };//move value for castling (King move)
+                                };//strokeList value for castling (King strokeList)
                     }
-                }
-                else if (locMove.equals(Castling.SHORT_CASTLING.getSymbol())) //if short castling
+                } else if (locMove.equals(Castling.SHORT_CASTLING.getSymbol())) //if short castling
                 {
                     if (this.gameEngine.getActivePlayer().getColor() == Colors.BLACK) //if black turn
                     {
                         values = new int[]
                                 {
                                         4, 0, 6, 0
-                                };//move value for castling (King move)
-                    }
-                    else
-                    {
+                                };//strokeList value for castling (King strokeList)
+                    } else {
                         values = new int[]
                                 {
                                         4, 7, 6, 7
-                                };//move value for castling (King move)
+                                };//strokeList value for castling (King strokeList)
                     }
                 }
                 canMove = MoveCommandsBuilder.load(this.gameEngine.getChessboard()).xFrom(values[0]).yFrom(values[1]).xTo(values[2]).yTo(values[3]).buildMoveCommands().simulateMove();
 
-                if (!canMove) //if move is illegal
+                if (!canMove) //if strokeList is illegal
                 {
                     JOptionPane.showMessageDialog(this.gameEngine.getjPanelGame(), Settings.lang("illegal_move_on") + locMove);
                     return;//finish reading gameEngine and show message
@@ -418,8 +385,7 @@ public class MovesHistoryView extends AbstractTableModel
             }
             from = 0;
             int num = locMove.charAt(from);
-            if (num <= 90 && num >= 65)
-            {
+            if (num <= 90 && num >= 65) {
                 from = 1;
             }
             int xFrom = 9; //set to higher value than chessboard has fields, to cause error if piece won't be found
@@ -427,23 +393,19 @@ public class MovesHistoryView extends AbstractTableModel
             int xTo = 9;
             int yTo = 9;
             boolean pieceFound = false;
-            if(locMove.length() <= 3) {
+            if (locMove.length() <= 3) {
                 Square[][] squares = this.gameEngine.getChessboard().getSquares();
                 xTo = locMove.charAt(from) - 97;//from ASCII
                 yTo = Chessboard.getBottom() - (locMove.charAt(from + 1) - 49);//from ASCII
-                for(int i=0; i<squares.length && !pieceFound; i++)
-                {
-                    for(int j=0; j<squares[i].length && !pieceFound; j++) {
-                        if (squares[i][j].piece == null || this.gameEngine.getActivePlayer().getColor() != squares[i][j].getPiece().getPlayer().getColor())
-                        {
+                for (int i = 0; i < squares.length && !pieceFound; i++) {
+                    for (int j = 0; j < squares[i].length && !pieceFound; j++) {
+                        if (squares[i][j].piece == null || this.gameEngine.getActivePlayer().getColor() != squares[i][j].getPiece().getPlayer().getColor()) {
                             continue;
                         }
                         Set<Square> pieceMoves = squares[i][j].getPiece().getAllMoves();
-                        for(Object square : pieceMoves)
-                        {
-                            Square currSquare = (Square)square;
-                            if(currSquare.getPozX() == xTo && currSquare.getPozY() == yTo)
-                            {
+                        for (Object square : pieceMoves) {
+                            Square currSquare = (Square) square;
+                            if (currSquare.getPozX() == xTo && currSquare.getPozY() == yTo) {
                                 xFrom = squares[i][j].getPiece().getSquare().getPozX();
                                 yFrom = squares[i][j].getPiece().getSquare().getPozY();
                                 pieceFound = true;
@@ -451,16 +413,14 @@ public class MovesHistoryView extends AbstractTableModel
                         }
                     }
                 }
-            }
-            else
-            {
+            } else {
                 xFrom = locMove.charAt(from) - 97;//from ASCII
                 yFrom = Chessboard.getBottom() - (locMove.charAt(from + 1) - 49);//from ASCII
                 xTo = locMove.charAt(from + 3) - 97;//from ASCII
                 yTo = Chessboard.getBottom() - (locMove.charAt(from + 4) - 49);//from ASCII
             }
             canMove = MoveCommandsBuilder.load(this.gameEngine.getChessboard()).xFrom(xFrom).yFrom(yFrom).xTo(xTo).yTo(yTo).buildMoveCommands().simulateMove();
-            if (!canMove) //if move is illegal
+            if (!canMove) //if strokeList is illegal
             {
                 JOptionPane.showMessageDialog(this.gameEngine.getjPanelGame(), Settings.lang("illegal_move_on") + locMove);
                 this.gameEngine.getChessboard().resetActiveSquare();
@@ -509,7 +469,7 @@ public class MovesHistoryView extends AbstractTableModel
                         this.tableModel.setValueAt("", this.tableModel.getRowCount() - 1, 1);
                     }
                 }
-                this.move.remove(this.move.size() - 1);
+                this.strokeList.remove(this.strokeList.size() - 1);
                 this.enterBlack = !this.enterBlack;
             }
             return last;
@@ -550,7 +510,7 @@ public class MovesHistoryView extends AbstractTableModel
     /**
      * Method of getting the moves in string
      *
-     * @return str String which in is capt player move
+     * @return str String which in is capt player strokeList
      */
     public String getMovesInString() {
         int n = 1;
@@ -572,17 +532,14 @@ public class MovesHistoryView extends AbstractTableModel
  * (history cannot be edited by player)
  */
 
-class MyDefaultTableModel extends DefaultTableModel
-{
+class MyDefaultTableModel extends DefaultTableModel {
 
-    MyDefaultTableModel()
-    {
+    MyDefaultTableModel() {
         super();
     }
 
     @Override
-    public boolean isCellEditable(int a, int b)
-    {
+    public boolean isCellEditable(int a, int b) {
         return false;
     }
 }

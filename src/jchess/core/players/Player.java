@@ -20,9 +20,12 @@
  */
 package jchess.core.players;
 
-import jchess.core.Colors;
+import jchess.core.utils.Colors;
+import jchess.core.utils.timePerStroke.TimePerStrokeSave;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -34,6 +37,8 @@ public class Player implements Serializable
     protected String name;
 
     protected Colors color;
+
+    private List<TimePerStrokeSave> timePerStrokeSaveList;
 
     public enum playerTypes
     {
@@ -49,6 +54,10 @@ public class Player implements Serializable
     protected boolean goDown;
 
 
+    public List<TimePerStrokeSave> getTimePerStrokeSaveList() {
+        return timePerStrokeSaveList;
+    }
+
     /**
      * Constructor for Player class
      * @param name
@@ -56,9 +65,11 @@ public class Player implements Serializable
      */
     public Player(String name, String color)
     {
+
         this.name = name;
         this.color = Colors.valueOf(color.toUpperCase());
         this.goDown = false;
+        this.timePerStrokeSaveList = new ArrayList<>();
     }
 
     public Player(String name, String color, playerTypes playerType){

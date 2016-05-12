@@ -24,6 +24,7 @@ import java.util.Set;
 import jchess.core.*;
 import jchess.core.pieces.traits.behaviors.Behavior;
 import jchess.core.players.Player;
+import jchess.core.utils.Colors;
 import org.apache.log4j.Logger;
 
 /**

@@ -1,14 +1,15 @@
 package jchess.core.players.ia;
 
 import jchess.core.Chessboard;
+import jchess.core.GameEngine;
 
 /**
  * Created by thoma on 09/05/2016.
  */
 public class MinMaxIA extends IAInterface {
-    public MinMaxIA(Chessboard chessboard,String name, String color) {
+    public MinMaxIA(GameEngine gameEngine, String name, String color) {
         super(name, color, playerTypes.computer);
-        this.chessboard =chessboard;
+        this.gameEngine =gameEngine;
     }
 
     @Override
