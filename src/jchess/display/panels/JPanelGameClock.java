@@ -131,9 +131,9 @@ public class JPanelGameClock extends JPanel implements Runnable
         g2d.drawRect(5, 60, 170, 30);
         g2d.drawLine(85, 30, 85, 90);
         font = new Font("Serif", Font.ITALIC, 16);
-        g2d.drawString(settings.getPlayerWhite().getName(), 10, 50);
-        g2d.setColor(Color.WHITE);
-        g2d.drawString(settings.getPlayerBlack().getName(), 100, 50);
+       // g2d.drawString(settings.getPlayerWhite().getName(), 10, 50);
+       // g2d.setColor(Color.WHITE);
+       // g2d.drawString(settings.getPlayerBlack().getName(), 100, 50);
         this.bufferedGraphics = this.background.getGraphics();
     }
 
