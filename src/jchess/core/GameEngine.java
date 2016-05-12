@@ -367,9 +367,11 @@ public class GameEngine {
         switch (king.isCheckmatedOrStalemated()) {
             case 1:
                 this.endGame("Checkmate! " + king.getPlayer().getColor().toString() + " player lose!");
+                this.getActivePlayer().setLoose(true);
                 break;
             case 2:
                 this.endGame("Stalemate! Draw!");
+                this.getActivePlayer().setLoose(true);
                 break;
         }
     }
