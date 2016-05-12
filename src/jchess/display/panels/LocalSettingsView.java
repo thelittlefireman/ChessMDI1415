@@ -128,7 +128,6 @@ public class LocalSettingsView extends JPanel implements ActionListener
 					gameEngine.getjPanelGame().getJPanelGameClock().setTimes(gameEngine.getSettings().getTimeForGame(), gameEngine.getSettings().getTimeForGame());
 					gameEngine.getjPanelGame().repaint();
 				}
-
 			}
 		});
 	}
@@ -167,8 +166,11 @@ public class LocalSettingsView extends JPanel implements ActionListener
 			gameEngine.getSettings().setTimeForGame((int) val * 60);//set time for game and mult it to seconds
 			gameEngine.getjPanelGame().getJPanelGameClock().setTimes(gameEngine.getSettings().getTimeForGame(), gameEngine.getSettings().getTimeForGame());
 
-			if (!isTimeEnabled.isSelected())
+			if (!isTimeEnabled.isSelected()){
 				gameEngine.getjPanelGame().getJPanelGameClock().setTimes(0, 0);
+				gameEngine.getSettings().setTimeForGame(0);
+			}
+				
 		}
         gameEngine.getjPanelGame().repaint();
     }
