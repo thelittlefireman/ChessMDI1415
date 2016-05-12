@@ -2,7 +2,6 @@ package jchess.core;
 
 import jchess.JChessApp;
 import jchess.core.commands.CommandsManager;
-import jchess.core.commands.MoveCommands;
 import jchess.core.errors.ReadGameError;
 import jchess.core.players.Player;
 import jchess.core.players.ia.IAInterface;
@@ -44,7 +43,7 @@ public class GameEngine {
     /**
      * History of movesManager object
      */
-    protected CommandsManager commandsManager;
+    public CommandsManager commandsManager;
 
     public CommandsManager getCommandsManager() {
         return commandsManager;
@@ -412,40 +411,4 @@ public class GameEngine {
         return status;
     }
 
-    /**
-     * Method to simulate Move to check if it's correct etc. (usable for network game).
-     *
-     * @param beginX from which X (on chessboard) move starts
-     * @param beginY from which Y (on chessboard) move starts
-     * @param endX   to   which X (on chessboard) move go
-     * @param endY   to   which Y (on chessboard) move go
-     */
-    public boolean simulateMove(int beginX, int beginY, int endX, int endY) {
-        try {
-            Square begin = getChessboard().getSquare(beginX, beginY);
-            Square end = getChessboard().getSquare(endX, endY);
-            getChessboard().select(begin);
-            if (getChessboard().getActiveSquare().getPiece().getAllMoves().contains(end)) //move
-            {
-               this.getCommandsManager().execute(new MoveCommands(begin, end));
-            } else {
-                LOG.debug("Bad move: beginX: " + beginX + " beginY: " + beginY + " endX: " + endX + " endY: " + endY);
-                return false;
-            }
-            getChessboard().unselect();
-            nextMove();
-
-            return true;
-
-        } catch (StringIndexOutOfBoundsException exc) {
-            LOG.error("StringIndexOutOfBoundsException: " + exc);
-            return false;
-        } catch (ArrayIndexOutOfBoundsException exc) {
-            LOG.error("ArrayIndexOutOfBoundsException: " + exc);
-            return false;
-        } catch (NullPointerException exc) {
-            LOG.error("NullPointerException: " + exc + " stack: " + exc.getStackTrace());
-            return false;
-        }
-    }
 }

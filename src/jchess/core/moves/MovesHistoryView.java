@@ -24,6 +24,7 @@ import jchess.core.Chessboard;
 import jchess.core.Colors;
 import jchess.core.GameEngine;
 import jchess.core.Square;
+import jchess.core.commands.MoveCommandsBuilder;
 import jchess.core.pieces.Piece;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
@@ -406,7 +407,7 @@ public class MovesHistoryView extends AbstractTableModel
                                 };//move value for castling (King move)
                     }
                 }
-                canMove = this.gameEngine.simulateMove(values[0], values[1], values[2], values[3]);
+                canMove = MoveCommandsBuilder.load(this.gameEngine.getChessboard()).xFrom(values[0]).yFrom(values[1]).xTo(values[2]).yTo(values[3]).buildMoveCommands().simulateMove();
 
                 if (!canMove) //if move is illegal
                 {
@@ -458,7 +459,7 @@ public class MovesHistoryView extends AbstractTableModel
                 xTo = locMove.charAt(from + 3) - 97;//from ASCII
                 yTo = Chessboard.getBottom() - (locMove.charAt(from + 4) - 49);//from ASCII
             }
-            canMove = this.gameEngine.simulateMove(xFrom, yFrom, xTo, yTo);
+            canMove = MoveCommandsBuilder.load(this.gameEngine.getChessboard()).xFrom(xFrom).yFrom(yFrom).xTo(xTo).yTo(yTo).buildMoveCommands().simulateMove();
             if (!canMove) //if move is illegal
             {
                 JOptionPane.showMessageDialog(this.gameEngine.getjPanelGame(), Settings.lang("illegal_move_on") + locMove);

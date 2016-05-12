@@ -90,7 +90,7 @@ public class BasePlacement extends jchess.core.initialPlaceStrategy.InitialPlace
             LOG.error("error setting pawns etc.");
             return;
         }
-        for (int x = 0; x < 8; x++) {
+        for (int x = 0; x < this.getChessboard().getSettings().getSizeN(); x++) {
             this.getChessboard().getSquare(x, i).setPiece(new Pawn(this.getChessboard(), player));
         }
     }

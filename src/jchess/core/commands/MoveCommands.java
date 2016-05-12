@@ -2,6 +2,7 @@ package jchess.core.commands;
 
 import jchess.JChessApp;
 import jchess.core.Chessboard;
+import jchess.core.GameEngine;
 import jchess.core.Square;
 import jchess.core.moves.Castling;
 import jchess.core.moves.Move;
@@ -31,9 +32,6 @@ public class MoveCommands implements CommandInterface {
         this.movesHistoryView = movesHistoryView;
     }
 
-    public MoveCommands(Chessboard chessboard){
-        this.chessboard = chessboard;
-    }
     public MoveCommands(Square begin, Square end, boolean refresh, boolean clearForwardHistory) {
         this.begin =begin;
         this.end =end;
@@ -152,6 +150,36 @@ public class MoveCommands implements CommandInterface {
             this.movesHistoryView.addMove(tempBegin, tempEnd, false, wasCastling, wasEnPassant, promotedPiece);
         }
     }/*endOf-move()-*/
+
+    /**
+     * Method to simulate Move to check if it's correct etc. (usable for network game).
+     */
+    public boolean simulateMove() {
+        try {
+            this.chessboard.select(begin);
+            if (this.chessboard.getActiveSquare().getPiece().getAllMoves().contains(end)) //move
+            {
+              this.execute();
+            } else {
+                LOG.debug("Bad move: beginX: " + this.begin.getPozX() + " beginY: " +  this.begin.getPozY() + " endX: " +  this.end.getPozX() + " endY: " + this.end.getPozY());
+                return false;
+            }
+            this.chessboard.unselect();
+            this.chessboard.getGameEngine().nextMove();
+
+            return true;
+
+        } catch (StringIndexOutOfBoundsException exc) {
+            LOG.error("StringIndexOutOfBoundsException: " + exc);
+            return false;
+        } catch (ArrayIndexOutOfBoundsException exc) {
+            LOG.error("ArrayIndexOutOfBoundsException: " + exc);
+            return false;
+        } catch (NullPointerException exc) {
+            LOG.error("NullPointerException: " + exc + " stack: " + exc.getStackTrace());
+            return false;
+        }
+    }
 
 
     @Override

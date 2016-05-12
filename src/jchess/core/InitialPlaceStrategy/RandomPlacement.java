@@ -58,7 +58,7 @@ public class RandomPlacement extends InitialPlaceStrategy {
         this.getChessboard().getSquare(getXYRandom().get(0), getXYRandom().get(1)).setPiece(new Knight(this.getChessboard(), player));
         this.getChessboard().getSquare(getXYRandom().get(0), getXYRandom().get(1)).setPiece(new Bishop(this.getChessboard(), player));
         this.getChessboard().getSquare(getXYRandom().get(0), getXYRandom().get(1)).setPiece(new Bishop(this.getChessboard(), player));
-        for (int x = 0; x < 8; x++) {
+        for (int x = 0; x < this.getChessboard().getSettings().getSizeN(); x++) {
             this.getChessboard().getSquare(getXYRandom().get(0), getXYRandom().get(1)).setPiece(new Pawn(this.getChessboard(), player));
         }
 
