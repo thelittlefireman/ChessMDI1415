@@ -59,7 +59,6 @@ public class JPanelGameClock extends JPanel implements Runnable
     private String white_clock_string, black_clock_string;
     private BufferedImage background;
     private Graphics bufferedGraphics;
-    private JComboBox timeSetGame;
 
     JPanelGameClock(final JPanelGame JPanelGame)
     {
@@ -82,19 +81,8 @@ public class JPanelGameClock extends JPanel implements Runnable
             thread.start();
         }
         this.drawBackground();
-        this.timeSetGame = new JComboBox(times);
-        this.add(timeSetGame);
-        this.timeSetGame.addItemListener(new ItemListener() {
-            @Override
-            public void itemStateChanged(ItemEvent e) {
-                JPanelGame.getGameEngine().changeTime(Integer.valueOf(times[timeSetGame.getSelectedIndex()]));
-            }
-        });
-        this.setDoubleBuffered(true);
-    }
 
-    public JComboBox getTimeSetGame() {
-        return timeSetGame;
+        this.setDoubleBuffered(true);
     }
 
     /** Method to init JPanelGame clock
