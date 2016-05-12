@@ -8,6 +8,7 @@ public class TimePerStrokeSaveWithCommentary extends TimePerStrokeSaveWithOption
     String commentary;
     public TimePerStrokeSaveWithCommentary(TimePerStrokeSave timePerStrokeSave, String commentary){
         super(timePerStrokeSave.getTime());
+        this.timePerStrokeSave=timePerStrokeSave;
         this.commentary =commentary;
     }
     @Override
