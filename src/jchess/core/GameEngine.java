@@ -55,8 +55,8 @@ public class GameEngine {
     public GameEngine(Settings set) {
         this.blockedChessboard = false;
         settings = set;
-        this.commandsManager = new CommandsManager(this);
         chessboard = new Chessboard(this);
+        this.commandsManager = new CommandsManager(this);
         firstAttempt = true;
     }
 

@@ -58,6 +58,10 @@ public class JPanelGame extends JPanel implements MouseListener {
      */
     protected jchess.display.panels.JPanelGameClock JPanelGameClock;
 
+    public HintTextArea getCommentary() {
+        return commentary;
+    }
+
     public JPanelGame(GameEngine gameEngine) {
         this.setLayout(new BorderLayout());
         

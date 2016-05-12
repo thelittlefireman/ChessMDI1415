@@ -1,5 +1,6 @@
 package jchess.test;
 
+import jchess.JChessApp;
 import jchess.core.Chessboard;
 import jchess.core.utils.Colors;
 import jchess.core.GameEngine;
@@ -11,6 +12,7 @@ import jchess.core.pieces.implementation.King;
 import jchess.core.pieces.implementation.Knight;
 import jchess.core.pieces.implementation.Pawn;
 import jchess.utils.Settings;
+import org.jdesktop.application.SingleFrameApplication;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,8 +31,8 @@ public class TestPiece {
 
     @Before
     public void setUp() {
-        //SingleFrameApplication.launch(JChessApp.class, new String[] {});
-
+        SingleFrameApplication.launch(JChessApp.class, new String[] {});
+//        board = JChessApp.getActiveGameEngine().get(0).getChessboard();
         settings = new Settings();
         gameEngine = new GameEngine(settings);
         board = gameEngine.getChessboard(); // new Chessboard(settings, new MovesHistoryView(new JPanelGame()));
@@ -39,7 +41,7 @@ public class TestPiece {
         // #1 bad API design
         // g.newGame(); // fails because coupled to GUI concerns and tabs stuff
         // anyway
-        board.getInitialPlaceStrategy().setPieces("");
+     //   board.getInitialPlaceStrategy().setPieces("");
 
 
         // #2 bad API design
@@ -136,6 +138,28 @@ public class TestPiece {
 
         // bishop in c1
         Piece b1 = board.getSquare(2, 7).getPiece();
+        assertTrue(b1 instanceof Bishop);
+        assertEquals(Colors.WHITE, b1.getPlayer().getColor());
+
+        assertEquals(5, b1.getAllMoves().size());
+
+
+    }
+
+    @Test
+    public void testBishop3() throws Exception {
+//b2 -> b4 et d2->d4
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(1).yFrom(6).xTo(1).yTo(4).buildMoveCommands());
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(3).yFrom(6).xTo(3).yTo(4).buildMoveCommands());
+
+
+        //c1->e3
+
+        gameEngine.getCommandsManager().execute(MoveCommandsBuilder.load(board).xFrom(2).yFrom(7).xTo(4).yTo(5).buildMoveCommands());
+
+
+        // bishop in c1
+        Piece b1 = board.getSquare(4, 5).getPiece();
         assertTrue(b1 instanceof Bishop);
         assertEquals(Colors.WHITE, b1.getPlayer().getColor());
 

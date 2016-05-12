@@ -55,7 +55,6 @@ public class KnightBehavior extends Behavior {
         int pozX = piece.getSquare().getPozX();
         int pozY = piece.getSquare().getPozY();
 
-        //TODO cavalier deplacement
         int[][] squaresInRange = {
                 {pozX - 2, pozY - 1}, //1
                 {pozX - 1, pozY - 2}, //2

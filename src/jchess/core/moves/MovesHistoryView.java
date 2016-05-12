@@ -278,12 +278,12 @@ public class MovesHistoryView extends AbstractTableModel {
 
             time = this.gameEngine.getjPanelGame().getJPanelGameClock().getBlack_clock().getDecrementActualNumber();
         }
-        TimePerStrokeSave timePerStrokeSave =new TimePerStrokeSave(time);
-        if(equals("")) {
-            timePerStrokeSave = new TimePerStrokeSaveWithCommentary(timePerStrokeSave,"");
+        TimePerStrokeSave timePerStrokeSave = new TimePerStrokeSave(time);
+        if (!this.gameEngine.getjPanelGame().getCommentary().getText().equals("")) {
+            timePerStrokeSave = new TimePerStrokeSaveWithCommentary(timePerStrokeSave, this.gameEngine.getjPanelGame().getCommentary().getText());
         }
-            this.gameEngine.getActivePlayer().getTimePerStrokeSaveList().add(timePerStrokeSave);
-        stroke =stroke+" "+timePerStrokeSave.getTimeStrokeInformation();
+        this.gameEngine.getActivePlayer().getTimePerStrokeSaveList().add(timePerStrokeSave);
+        stroke = stroke + " " + timePerStrokeSave.getTimeStrokeInformation();
         this.strokeList.add(stroke);
         return stroke;
     }

@@ -43,7 +43,7 @@ public class BishopBehavior extends LongRangePieceBehavior
         
         list.addAll(getMovesForDirection(DIRECTION_LEFT,   DIRECTION_UP)); //left-up
         list.addAll(getMovesForDirection(DIRECTION_LEFT,   DIRECTION_BOTTOM)); //left-down
-        //ON AUTORISE LE FOU A BOUGER DANS LE COIN BAS GAUCHE
+        //ON AUTORISE LE FOU A BOUGER DANS LE COIN HAUT DROITE
         list.addAll(getMovesForDirection(DIRECTION_RIGHT, DIRECTION_UP)); //right-up
         list.addAll(getMovesForDirection(DIRECTION_RIGHT,  DIRECTION_BOTTOM)); //right-down
         

@@ -36,6 +36,11 @@ public class JChessApp extends SingleFrameApplication {
     public final static String LOG_FILE = "log4j.properties";
     public final static String MAIN_PACKAGE_NAME = "jchess";
     protected static JChessView javaChessView;
+
+    public static List<GameEngine> getActiveGameEngine() {
+        return activeGameEngine;
+    }
+
     protected static List<GameEngine> activeGameEngine;
 
     public JChessApp() {
@@ -72,6 +77,7 @@ public class JChessApp extends SingleFrameApplication {
      */
     public static void main(String[] args)
     {
+        activeGameEngine = new ArrayList<>();
         launch(JChessApp.class, args);
         Properties logProp = new Properties();
         try {
