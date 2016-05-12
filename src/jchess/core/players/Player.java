@@ -37,6 +37,15 @@ public class Player implements Serializable
     protected String name;
 
     protected Colors color;
+    private boolean loose=false;
+
+    public boolean isLoose() {
+        return loose;
+    }
+
+    public void setLoose(boolean loose) {
+        this.loose = loose;
+    }
 
     private List<TimePerStrokeSave> timePerStrokeSaveList;
 

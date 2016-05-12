@@ -105,11 +105,10 @@ public class VisitorPieces implements VisitorPieceInterface {
 
     /**
      *
-     * @param pl : joueur
      * @return
      */
-    public String  getNumberPiecesM1(Player pl) {
-        String rst=""+pl.getName();
+    public String  getNumberPiecesM1() {
+        String rst=""+this.player.getName();
         rst+="Bishop : "+ this.getNumberBishop()*3;
         rst+="King : "+this.getNumberKing()*1000;
         rst+="Knight : "+ this.getNumberKnight()*3;
@@ -125,7 +124,7 @@ public class VisitorPieces implements VisitorPieceInterface {
      * @param pl : joueur
      * @return
      */
-    public int getScorePiecesM2(Player pl) {
+    public int getScorePiecesM2() {
         int score =0;
         score+= this.getNumberBishop()*3;
         score+=this.getNumberKing()*1000;
