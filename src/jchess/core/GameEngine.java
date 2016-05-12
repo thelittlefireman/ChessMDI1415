@@ -43,7 +43,8 @@ public class GameEngine {
     /**
      * History of movesManager object
      */
-    public CommandsManager commandsManager;
+
+    protected CommandsManager commandsManager;
 
     public CommandsManager getCommandsManager() {
         return commandsManager;

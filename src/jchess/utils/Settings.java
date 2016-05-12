@@ -70,6 +70,8 @@ public class Settings implements Serializable
     
     protected boolean upsideDown;
     
+    protected boolean timeEnabled;
+    
     protected boolean displayLegalMovesEnabled = true;
 
     /**
@@ -250,4 +252,12 @@ public class Settings implements Serializable
         LOG.debug("Locale: " + Settings.loc.getLocale().toString());
         return result;
     }
+    
+	public boolean isTimeEnabled() {
+		return timeEnabled;
+	}
+
+	public void setTimeEnabled(boolean selected) {
+		timeEnabled = selected;
+	}
 }
