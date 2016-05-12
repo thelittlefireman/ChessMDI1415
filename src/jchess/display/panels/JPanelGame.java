@@ -15,23 +15,28 @@
 
 package jchess.display.panels;
 
-import jchess.JChessApp;
-import jchess.core.Chessboard;
-import jchess.core.GameEngine;
-import jchess.core.players.Player;
-import jchess.core.Square;
-import jchess.core.commands.MoveCommands;
-import jchess.core.pieces.implementation.King;
-import jchess.display.views.chessboard.ChessboardView;
-import jchess.utils.Settings;
-import org.apache.log4j.Logger;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+
+import jchess.JChessApp;
+import jchess.core.Chessboard;
+import jchess.core.GameEngine;
+import jchess.core.Square;
+import jchess.core.commands.MoveCommands;
+import jchess.core.pieces.implementation.King;
+import jchess.core.players.Player;
+import jchess.display.views.chessboard.ChessboardView;
+import jchess.utils.Settings;
+
+import org.apache.log4j.Logger;
 
 
 /**
@@ -47,6 +52,7 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
     private static final Logger LOG = org.apache.log4j.Logger.getLogger(JPanelGame.class);
     protected LocalSettingsView localSettingsView;
     protected JTabbedPane tabPane;
+    private boolean firstPlay = true;
     protected GameEngine gameEngine;
     /**
      * JPanelGame clock object
@@ -134,6 +140,12 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
         {
 
             if (!this.gameEngine.isBlockedChessboard()) {
+            	if (firstPlay){
+            		firstPlay = false;
+            		localSettingsView.disableTime();
+            		if (gameEngine.getSettings().isTimeEnabled())
+            			getJPanelGameClock().start();
+            	}
                 try {
                     int x = event.getX();//get X position of mouse
                     int y = event.getY();//get Y position of mouse
@@ -267,6 +279,4 @@ public class JPanelGame extends JPanel implements ComponentListener, MouseListen
             tabPane.repaint();
         }
     }
-
-
 }

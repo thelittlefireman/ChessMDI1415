@@ -44,6 +44,7 @@ public class GameEngine {
     /**
      * History of movesManager object
      */
+    
     protected CommandsManager commandsManager;
 
     public CommandsManager getCommandsManager() {

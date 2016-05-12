@@ -4,13 +4,20 @@
  */
 package jchess.display.panels;
 
-import jchess.core.GameEngine;
-import jchess.utils.Settings;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JPanel;
+
+import jchess.core.GameEngine;
+import jchess.utils.Settings;
 
 /**
  *
@@ -22,14 +29,20 @@ public class LocalSettingsView extends JPanel implements ActionListener
     
     private JCheckBox isDisplayLegalMovesEnabled;
     
-    private JCheckBox isRenderLabelsEnabled;    
+    private JCheckBox isRenderLabelsEnabled;  
+    
+	private String[] time = {"1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"};
+
+	private JCheckBox isTimeEnabled;  
+	
+	private JComboBox<String> times;  
      
     private GridBagConstraints gbc;
     
     private GridBagLayout gbl;
 
     private GameEngine gameEngine;
-
+    
     public LocalSettingsView(GameEngine gameEngine)
     {
         this.gameEngine = gameEngine;
@@ -42,6 +55,7 @@ public class LocalSettingsView extends JPanel implements ActionListener
         initUpsideDownControl();
         initDisplayLegalMovesControl();
         initRenderLabelsControl();
+        initTimeEnabled();
         refreshCheckBoxesState();
     }
     
@@ -84,6 +98,40 @@ public class LocalSettingsView extends JPanel implements ActionListener
         
         isRenderLabelsEnabled.addActionListener(this);        
     }
+    
+    private void initTimeEnabled()
+	{
+		this.isTimeEnabled = new JCheckBox("Time Game (min)");
+
+		this.gbc.gridx = 0;
+		this.gbc.gridy = 3;
+		this.gbl.setConstraints(isTimeEnabled, gbc);
+		this.add(isTimeEnabled);
+
+
+		isTimeEnabled.addActionListener(this);
+
+		times = new JComboBox<String>(time);
+		this.gbc.gridx = 1;
+		this.gbc.gridy = 3;
+		this.gbl.setConstraints(times, gbc);
+		this.add(times);
+
+		times.addItemListener(new ItemListener(){
+
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				if (isTimeEnabled.isSelected()){
+					String value = time[times.getSelectedIndex()];//set time for game
+					Integer val = new Integer(value);
+					gameEngine.getSettings().setTimeForGame((int) val * 60);//set time for game and mult it to seconds
+					gameEngine.getjPanelGame().getJPanelGameClock().setTimes(gameEngine.getSettings().getTimeForGame(), gameEngine.getSettings().getTimeForGame());
+					gameEngine.getjPanelGame().repaint();
+				}
+
+			}
+		});
+	}
         
     private void refreshCheckBoxesState()
     {
@@ -112,6 +160,16 @@ public class LocalSettingsView extends JPanel implements ActionListener
             gameEngine.getSettings().setRenderLabels(isRenderLabelsEnabled.isSelected());
             gameEngine.getjPanelGame().resizeGame();
         }
+        else if (clickedComponent == isTimeEnabled){
+        	gameEngine.getSettings().setTimeEnabled(isTimeEnabled.isSelected());
+			String value = this.time[this.times.getSelectedIndex()];//set time for game
+			Integer val = new Integer(value);
+			gameEngine.getSettings().setTimeForGame((int) val * 60);//set time for game and mult it to seconds
+			gameEngine.getjPanelGame().getJPanelGameClock().setTimes(gameEngine.getSettings().getTimeForGame(), gameEngine.getSettings().getTimeForGame());
+
+			if (!isTimeEnabled.isSelected())
+				gameEngine.getjPanelGame().getJPanelGameClock().setTimes(0, 0);
+		}
         gameEngine.getjPanelGame().repaint();
     }
     
@@ -127,4 +185,9 @@ public class LocalSettingsView extends JPanel implements ActionListener
         return null != isUpsideDown && null != isDisplayLegalMovesEnabled
                 && null != isRenderLabelsEnabled;
     }
+    
+	public void disableTime() {
+		times.setVisible(false);
+		isTimeEnabled.setVisible(false);
+	}
 }

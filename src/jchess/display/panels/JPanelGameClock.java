@@ -52,7 +52,7 @@ public class JPanelGameClock extends JPanel implements Runnable
     private Graphics bufferedGraphics;
     private JComboBox timeSetGame;
 
-    JPanelGameClock(JPanelGame JPanelGame)
+    JPanelGameClock(final JPanelGame JPanelGame)
     {
         super();
         this.clock1 = new Clock();//white player clock
