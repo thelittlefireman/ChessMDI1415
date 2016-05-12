@@ -31,7 +31,7 @@ public class LocalSettingsView extends JPanel implements ActionListener
     
     private JCheckBox isRenderLabelsEnabled;  
     
-	private String[] time = {"1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"};
+	private String[] time = {"1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120", "3600"};
 
 	private JCheckBox isTimeEnabled;  
 	
