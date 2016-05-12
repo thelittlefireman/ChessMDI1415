@@ -172,7 +172,6 @@ public class JPanelGame extends JPanel implements MouseListener {
 
                         //switch player
                         gameEngine.nextMove();
-
                     }
 
                 } catch (Exception exc) {
@@ -184,7 +183,7 @@ public class JPanelGame extends JPanel implements MouseListener {
                 LOG.debug("Chessboard is blocked");
             }
         }
-        //chessboard.repaint();
+        repaint();
     }
 
     @Override
@@ -215,6 +214,7 @@ public class JPanelGame extends JPanel implements MouseListener {
         if (gameEngine != null && null != gameEngine.getChessboard()) {
             gameEngine.getChessboard().repaint();
         }
+        
     }
 
 }
