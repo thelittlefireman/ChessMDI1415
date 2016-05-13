@@ -14,14 +14,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
+
+import jchess.core.pieces.implementation.*;
 import jchess.core.utils.Colors;
 import jchess.core.pieces.Piece;
-import jchess.core.pieces.implementation.Bishop;
-import jchess.core.pieces.implementation.King;
-import jchess.core.pieces.implementation.Knight;
-import jchess.core.pieces.implementation.Pawn;
-import jchess.core.pieces.implementation.Queen;
-import jchess.core.pieces.implementation.Rook;
 import jchess.display.views.chessboard.ChessboardView;
 import jchess.utils.GUI;
 import org.apache.log4j.Logger;
@@ -119,7 +115,8 @@ public class Pieces2D
         result.put(Rook.class.getName(), GUI.loadPieceImage(Rook.class.getSimpleName(), color, size, FILE_EXT));
         result.put(King.class.getName(), GUI.loadPieceImage(King.class.getSimpleName(), color, size, FILE_EXT));
         result.put(Bishop.class.getName(), GUI.loadPieceImage(Bishop.class.getSimpleName(), color, size, FILE_EXT));    
-        
+        result.put(Valet.class.getName(), GUI.loadPieceImage(Valet.class.getSimpleName(), color, size, FILE_EXT));
+
         return result;
     }
     
