@@ -20,6 +20,8 @@
  */
 package jchess.utils;
 
+import jchess.core.initialPlaceStrategy.BasePlacement;
+import jchess.core.initialPlaceStrategy.InitialPlaceStrategy;
 import jchess.core.players.Player;
 import java.io.Serializable;
 import java.util.Locale;
@@ -34,7 +36,8 @@ import jchess.core.utils.Colors;
 public class Settings implements Serializable
 {
     private static final Logger LOG = Logger.getLogger(Settings.class);
-    
+
+
     private static ResourceBundle loc = null;
 
     private int sizeN;
@@ -213,6 +216,14 @@ public class Settings implements Serializable
     protected gameTypes gameType;
     protected boolean renderLabels = true;
 
+    public void setPlayerWhite(Player playerWhite) {
+        this.playerWhite = playerWhite;
+    }
+
+    public void setPlayerBlack(Player playerBlack) {
+        this.playerBlack = playerBlack;
+    }
+
     public Settings()
     {
         //temporally
@@ -221,6 +232,7 @@ public class Settings implements Serializable
         this.setSizeM(8);
         this.setSizeN(8);
         this.timeLimitSet = false;
+
 
         gameMode = gameModes.newGame;
     }
