@@ -339,6 +339,9 @@ public class GameEngine {
 
     public void newGame() {
         jPanelGame.newGame();
+        if(settings.getPlayerBlack().getPlayerType() == Player.playerTypes.computer && settings.getPlayerWhite().getPlayerType()== Player.playerTypes.computer){
+            ((IAInterface) settings.getPlayerWhite()).playATurn();
+        }
     }
 
     /**

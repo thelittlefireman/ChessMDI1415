@@ -60,6 +60,7 @@ public class JChessApp extends SingleFrameApplication {
         gameEngine.setjPanelGame(jPanelGame);
         activeGameEngine.add(gameEngine);
         gameEngine.newGame();
+
         return gameEngine;
     }
 
