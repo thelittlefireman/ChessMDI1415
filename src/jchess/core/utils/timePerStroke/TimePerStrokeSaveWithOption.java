@@ -6,8 +6,8 @@ package jchess.core.utils.timePerStroke;
 public abstract class TimePerStrokeSaveWithOption extends TimePerStrokeSave{
     TimePerStrokeSave timePerStrokeSave;
 
-    public TimePerStrokeSaveWithOption(int time) {
-        super(time);
+    public TimePerStrokeSaveWithOption(TimePerStrokeSave timePerStrokeSave) {
+        super(timePerStrokeSave.getTime());
     }
 
     public String getTimeStrokeInformation(){
