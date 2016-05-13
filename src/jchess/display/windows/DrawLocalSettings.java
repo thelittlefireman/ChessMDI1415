@@ -18,6 +18,7 @@ package jchess.display.windows;
 import jchess.JChessApp;
 import jchess.core.GameEngine;
 import jchess.core.initialPlaceStrategy.BasePlacement;
+import jchess.core.initialPlaceStrategy.NewPiecePlacement;
 import jchess.core.initialPlaceStrategy.RandomPlacement;
 import jchess.core.players.Player;
 import jchess.core.players.ia.GloutonIA;
@@ -44,7 +45,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
     private static final Logger LOG = Logger.getLogger(DrawLocalSettings.class);
     public static String times[] = {"0", "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"};
 
-    public static String placements[] = {"Base placement", "Random placement"};
+    public static String placements[] = {"Base placement", "Random placement","New Pièce Placement"};
     JDialog parent;//needet to close newGame window
     JComboBox color;//to choose color of player
     JRadioButton oponentComp;//choose oponent
@@ -263,6 +264,9 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
                     break;
                 case 1:
                     gameEngine.setInitialPlaceStrategy(new RandomPlacement(gameEngine.getChessboard()));
+                    break;
+                case 2:
+                    gameEngine.setInitialPlaceStrategy(new NewPiecePlacement(gameEngine.getChessboard()));
                     break;
             }
 

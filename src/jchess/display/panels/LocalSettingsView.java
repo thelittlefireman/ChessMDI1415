@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import jchess.core.GameEngine;
+import jchess.core.visitorsPieces.VisitorPieces;
 import jchess.utils.Settings;
 
 /**
@@ -88,8 +89,9 @@ public class LocalSettingsView extends JPanel implements ActionListener
         score.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				JOptionPane.showMessageDialog(null, "CHANGE MOI", "Score", JOptionPane.INFORMATION_MESSAGE);
+                VisitorPieces visitorPieces = new VisitorPieces(gameEngine.getActivePlayer());
+                gameEngine.getChessboard().accept(visitorPieces);
+				JOptionPane.showMessageDialog(null,visitorPieces.getNumberPiecesM1() , "Score", JOptionPane.INFORMATION_MESSAGE);
 			}
         });       
     }

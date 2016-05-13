@@ -109,13 +109,13 @@ public class VisitorPieces implements VisitorPieceInterface {
      */
     public String  getNumberPiecesM1() {
         String rst=""+this.player.getName();
-        rst+="Bishop : "+ this.getNumberBishop()*3;
-        rst+="King : "+this.getNumberKing()*1000;
-        rst+="Knight : "+ this.getNumberKnight()*3;
-        rst+="Pawn : "+ this.getNumberPawn()*1;
-        rst+="Queen : "+ this.getNumberQueen()*10;
-        rst+="Rook : "+ this.getNumberRook()*5;
-        rst+="Valet : "+ this.getNumberValet()*3;
+        rst+=" Bishop : "+ this.getNumberBishop()*3;
+        rst+=" King : "+this.getNumberKing()*1000;
+        rst+=" Knight : "+ this.getNumberKnight()*3;
+        rst+=" Pawn : "+ this.getNumberPawn()*1;
+        rst+=" Queen : "+ this.getNumberQueen()*10;
+        rst+=" Rook : "+ this.getNumberRook()*5;
+        rst+=" Valet : "+ this.getNumberValet()*3;
         return rst;
     }
 

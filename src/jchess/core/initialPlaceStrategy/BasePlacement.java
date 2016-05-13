@@ -37,7 +37,7 @@ public class BasePlacement extends jchess.core.initialPlaceStrategy.InitialPlace
     /**
      *
      */
-    private void setPieces4NewGame(Player plWhite, Player plBlack) {
+    protected void setPieces4NewGame(Player plWhite, Player plBlack) {
         /* WHITE PIECES */
         Player player = plBlack;
         Player player1 = plWhite;
