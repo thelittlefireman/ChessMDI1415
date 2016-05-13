@@ -281,6 +281,7 @@ public class MovesHistoryView extends AbstractTableModel {
         TimePerStrokeSave timePerStrokeSave = new TimePerStrokeSave(time);
         if (!this.gameEngine.getjPanelGame().getCommentary().getText().equals("")) {
             timePerStrokeSave = new TimePerStrokeSaveWithCommentary(timePerStrokeSave, this.gameEngine.getjPanelGame().getCommentary().getText());
+            this.gameEngine.getjPanelGame().getCommentary().reset();
         }
         this.gameEngine.getActivePlayer().getTimePerStrokeSaveList().add(timePerStrokeSave);
         stroke = stroke + " " + timePerStrokeSave.getTimeStrokeInformation();
