@@ -274,15 +274,21 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
 
             if (this.oponentComp.isSelected()) //if computer oponent is checked
             {
-
+                String color="";
+                if (this.color.getActionCommand().equals("biały")) //if first player is white
+                {
+                    color = Colors.WHITE.getColorName();
+                }else{
+                    color = Colors.BLACK.getColorName();
+                }
+                Player computer;
                 if (this.computerLevel.getValue()==1)
-                    pl2 = new RandomIA(gameEngine, "computer", Colors.BLACK.getColorName());
+                    computer = new RandomIA(gameEngine, "computer",color);
                 else if (this.computerLevel.getValue()==2)
-                    pl2 = new GloutonIA(gameEngine, "computer", Colors.BLACK.getColorName());
+                    computer = new GloutonIA(gameEngine, "computer", color);
                 else
-                    pl2 = new MinMaxIA(gameEngine, "computer", Colors.BLACK.getColorName());
-
-                sett.setPlayerBlack(pl2);
+                    computer = new MinMaxIA(gameEngine, "computer", color);
+                sett.setPlayerBlack(computer);
             }
             sett.setUpsideDown(this.upsideDown.isSelected());
 
