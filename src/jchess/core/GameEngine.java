@@ -360,14 +360,7 @@ public class GameEngine {
                 ", type: " + activePlayer.getPlayerType().name()
         );
 
-        if (activePlayer.getPlayerType() == Player.playerTypes.localUser) {
-            this.blockedChessboard = false;
-        } else if (activePlayer.getPlayerType() == Player.playerTypes.networkUser) {
-            this.blockedChessboard = true;
-        } else if (activePlayer.getPlayerType() == Player.playerTypes.computer) {
-            this.blockedChessboard = true;
-            ((IAInterface) activePlayer).playATurn();
-        }
+
 
         //checkmate or stalemate
         King king;
@@ -386,6 +379,15 @@ public class GameEngine {
                 this.endGame("Stalemate! Draw!");
                 this.getActivePlayer().setLoose(true);
                 break;
+        }
+
+        if (activePlayer.getPlayerType() == Player.playerTypes.localUser) {
+            this.blockedChessboard = false;
+        } else if (activePlayer.getPlayerType() == Player.playerTypes.networkUser) {
+            this.blockedChessboard = true;
+        } else if (activePlayer.getPlayerType() == Player.playerTypes.computer) {
+            this.blockedChessboard = true;
+            ((IAInterface) activePlayer).playATurn();
         }
     }
 
