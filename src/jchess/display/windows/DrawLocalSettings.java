@@ -37,10 +37,9 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
 {
 
     private static final Logger LOG = Logger.getLogger(DrawLocalSettings.class);
-    public static String times[] =
-            {
-                    "0", "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"
-            };
+    public static String times[] =  {  "0", "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"  };
+    
+    public static String placements[] =  {"Random placement", "Base placement"};
     JDialog parent;//needet to close newGame window
     JComboBox color;//to choose color of player
     JRadioButton oponentComp;//choose oponent
@@ -61,6 +60,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
     JButton okButton;
     JCheckBox timeGame;
     JComboBox time4Game;
+    JComboBox<String> placement;
     String colors[] =
     {
         Settings.lang("white"), Settings.lang("black")
@@ -88,6 +88,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
         this.upsideDown = new JCheckBox(Settings.lang("upside_down"));
         this.timeGame = new JCheckBox(Settings.lang("time_game_min"));
         this.time4Game = new JComboBox(times);
+        this.placement = new JComboBox<String>(placements);
 
         this.oponentComp = new JRadioButton(Settings.lang("against_computer"), false);
         this.oponentHuman = new JRadioButton(Settings.lang("against_other_human"), true);
@@ -151,6 +152,11 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
         this.gbc.gridwidth = 1;
         this.gbl.setConstraints(time4Game, gbc);
         this.add(time4Game);
+        this.gbc.gridx = 0;
+        this.gbc.gridy = 9;
+        this.gbc.gridwidth = 1;
+        this.gbl.setConstraints(placement, gbc);
+        this.add(placement);
         this.gbc.gridx = 1;
         this.gbc.gridy = 9;
         this.gbc.gridwidth = 0;
