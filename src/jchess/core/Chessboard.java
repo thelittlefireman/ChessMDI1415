@@ -41,7 +41,7 @@ import java.util.ArrayList;
 public class Chessboard implements ChessboardParts {
     protected static final int TOP = 0;
     protected static final int BOTTOM = 7;
-    private InitialPlaceStrategy initialPlaceStrategy;
+
     private static final Logger LOG = Logger.getLogger(Chessboard.class);
     /*
      * squares of chessboard
@@ -49,6 +49,8 @@ public class Chessboard implements ChessboardParts {
     protected Square squares[][];
     protected King kingWhite;
     protected King kingBlack;
+
+
     //For En passant:
     //|-> Pawn whose in last turn moved two square
     protected Pawn twoSquareMovedPawn = null;
@@ -76,9 +78,6 @@ private GameEngine gameEngine;
         return gameEngine;
     }
 
-    public InitialPlaceStrategy getInitialPlaceStrategy() {
-        return initialPlaceStrategy;
-    }
 
     /**
      * Chessboard class constructor
@@ -103,7 +102,7 @@ private GameEngine gameEngine;
                 this.squares[i][y] = new Square(i, y, null);
             }
         }//--endOf--create object for each square
-        this.initialPlaceStrategy = new BasePlacement(this);
+
     }/*--endOf-Chessboard--*/
 
     /**

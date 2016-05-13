@@ -3,6 +3,8 @@ package jchess.core;
 import jchess.JChessApp;
 import jchess.core.commands.CommandsManager;
 import jchess.core.errors.ReadGameError;
+import jchess.core.initialPlaceStrategy.BasePlacement;
+import jchess.core.initialPlaceStrategy.InitialPlaceStrategy;
 import jchess.core.pieces.implementation.King;
 import jchess.core.players.Player;
 import jchess.core.players.ia.IAInterface;
@@ -25,6 +27,16 @@ public class GameEngine {
     private static final Logger LOG = org.apache.log4j.Logger.getLogger(GameEngine.class);
     static Random rnd = new Random();
     protected boolean firstAttempt;
+
+    private InitialPlaceStrategy initialPlaceStrategy;
+
+    public InitialPlaceStrategy getInitialPlaceStrategy() {
+        return initialPlaceStrategy;
+    }
+
+    public void setInitialPlaceStrategy(InitialPlaceStrategy initialPlaceStrategy) {
+        this.initialPlaceStrategy = initialPlaceStrategy;
+    }
     protected JPanelGame jPanelGame;
     /**
      * Settings object of the current game
@@ -56,6 +68,7 @@ public class GameEngine {
         this.blockedChessboard = false;
         settings = set;
         chessboard = new Chessboard(this);
+        this.initialPlaceStrategy = new BasePlacement(chessboard);
         this.commandsManager = new CommandsManager(this);
         firstAttempt = true;
     }
@@ -102,7 +115,7 @@ public class GameEngine {
         locSetts.setGameMode(Settings.gameModes.loadGame);
         locSetts.setGameType(Settings.gameTypes.local);
 
-        GameEngine gameEngine = JChessApp.addNewGame(locSetts, whiteName + " vs. " + blackName);
+        GameEngine gameEngine = JChessApp.addNewGame(new GameEngine(locSetts), whiteName + " vs. " + blackName);
 
         gameEngine.setBlockedChessboard(true);
         JChessApp.getJavaChessView().setLastTabAsActive();
@@ -209,7 +222,7 @@ public class GameEngine {
                 + "\nwhite on top?: " + sett.isUpsideDown() + "\n****************");//4test
 
 
-        JChessApp.addNewGame(sett, firstName + " vs " + secondName);
+        JChessApp.addNewGame(new GameEngine(sett), firstName + " vs " + secondName);
         //newGUI.getChat().setEnabled(false);
         JChessApp.getJavaChessView().getActiveTabGame().repaint();
         JChessApp.getJavaChessView().setActiveTabGame(JChessApp.getJavaChessView().getNumberOfOpenedTabs() - 1);

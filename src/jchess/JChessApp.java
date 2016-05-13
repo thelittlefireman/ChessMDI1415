@@ -54,8 +54,8 @@ public class JChessApp extends SingleFrameApplication {
         return javaChessView;
     }
 
-    public static GameEngine addNewGame(Settings settings, String title) {
-        GameEngine gameEngine = new GameEngine(settings);
+    public static GameEngine addNewGame(GameEngine gameEngine, String title) {
+
         JPanelGame jPanelGame = getJavaChessView().addNewTab(title, gameEngine);
         gameEngine.setjPanelGame(jPanelGame);
         activeGameEngine.add(gameEngine);

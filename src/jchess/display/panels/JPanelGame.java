@@ -102,7 +102,7 @@ public class JPanelGame extends JPanel implements MouseListener {
     }
 
     public void newGame() {
-        gameEngine.getChessboard().getInitialPlaceStrategy().setPieces("");
+        gameEngine.getInitialPlaceStrategy().setPieces("");
 
         gameEngine.setActivePlayer(gameEngine.getSettings().getPlayerWhite());
         if (gameEngine.getActivePlayer().getPlayerType() != Player.playerTypes.localUser) {

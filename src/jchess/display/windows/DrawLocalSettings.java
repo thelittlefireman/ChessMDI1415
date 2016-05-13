@@ -17,7 +17,13 @@ package jchess.display.windows;
 
 import jchess.JChessApp;
 import jchess.core.GameEngine;
+import jchess.core.initialPlaceStrategy.BasePlacement;
+import jchess.core.initialPlaceStrategy.RandomPlacement;
 import jchess.core.players.Player;
+import jchess.core.players.ia.GloutonIA;
+import jchess.core.players.ia.MinMaxIA;
+import jchess.core.players.ia.RandomIA;
+import jchess.core.utils.Colors;
 import jchess.utils.Settings;
 import org.apache.log4j.Logger;
 
@@ -33,13 +39,12 @@ import java.awt.event.TextListener;
  * @author: Mateusz Sławomir Lach ( matlak, msl )
  * Class responsible for drawing the fold with local game settings
  */
-public class DrawLocalSettings extends JPanel implements ActionListener, TextListener
-{
+public class DrawLocalSettings extends JPanel implements ActionListener, TextListener {
 
     private static final Logger LOG = Logger.getLogger(DrawLocalSettings.class);
-    public static String times[] =  {  "0", "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"  };
-    
-    public static String placements[] =  {"Random placement", "Base placement"};
+    public static String times[] = {"0", "1", "3", "5", "8", "10", "15", "20", "25", "30", "60", "120"};
+
+    public static String placements[] = {"Base placement", "Random placement"};
     JDialog parent;//needet to close newGame window
     JComboBox color;//to choose color of player
     JRadioButton oponentComp;//choose oponent
@@ -62,9 +67,9 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
     JComboBox time4Game;
     JComboBox<String> placement;
     String colors[] =
-    {
-        Settings.lang("white"), Settings.lang("black")
-    };
+            {
+                    Settings.lang("white"), Settings.lang("black")
+            };
 
     public DrawLocalSettings(JDialog parent) {
         super();
@@ -162,64 +167,55 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
         this.gbc.gridwidth = 0;
         this.gbl.setConstraints(okButton, gbc);
         this.add(okButton);
-        this.oponentComp.setEnabled(false);//for now, becouse not implemented!
+        //this.oponentComp.setEnabled(false);//for now, becouse not implemented!
 
     }
 
     /**
      * Method witch is checking correction of edit tables
+     *
      * @param e Object where is saving this what contents edit tables
      */
     @Override
-    public void textValueChanged(TextEvent e)
-    {
+    public void textValueChanged(TextEvent e) {
         Object target = e.getSource();
-        if (target == this.firstName || target == this.secondName)
-        {
+        if (target == this.firstName || target == this.secondName) {
             JTextField temp = new JTextField();
-            if (target == this.firstName)
-            {
+            if (target == this.firstName) {
                 temp = this.firstName;
-            }
-            else if (target == this.secondName)
-            {
+            } else if (target == this.secondName) {
                 temp = this.secondName;
             }
 
             int len = temp.getText().length();
-            if (len > 8)
-            {
-                try
-                {
+            if (len > 8) {
+                try {
                     temp.setText(temp.getText(0, 7));
-                }
-                catch (BadLocationException exc)
-                {
+                } catch (BadLocationException exc) {
                     LOG.error("BadLocationException: Something wrong in editables, msg: " + exc.getMessage() + " object: " + exc);
                 }
             }
         }
     }
 
-    /** Method responsible for changing the options which can make a player
+    /**
+     * Method responsible for changing the options which can make a player
      * when he want to start new local game
+     *
      * @param e where is saving data of performed action
      */
     @Override
-    public void actionPerformed(ActionEvent e)
-    {
+    public void actionPerformed(ActionEvent e) {
         Object target = e.getSource();
         if (target == this.oponentComp) //toggle enabled of controls depends of oponent (if computer)
         {
             this.computerLevel.setEnabled(true);//enable level of computer abilities
             this.secondName.setEnabled(false);//disable field with name of player2
-        }
-        else if (target == this.oponentHuman) //else if oponent will be HUMAN
+        } else if (target == this.oponentHuman) //else if oponent will be HUMAN
         {
             this.computerLevel.setEnabled(false);//disable level of computer abilities
             this.secondName.setEnabled(true);//enable field with name of player2
-        }
-        else if (target == this.okButton) //if clicked OK button (on finish)
+        } else if (target == this.okButton) //if clicked OK button (on finish)
         {
             if (this.firstName.getText().length() > 9) //make names short to 10 digits
             {
@@ -230,13 +226,11 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
                 this.secondName.setText(this.trimString(secondName, 9));
             }
             if (!this.oponentComp.isSelected()
-                    && (this.firstName.getText().length() == 0 || this.secondName.getText().length() == 0))
-            {
+                    && (this.firstName.getText().length() == 0 || this.secondName.getText().length() == 0)) {
                 JOptionPane.showMessageDialog(this, Settings.lang("fill_names"));
                 return;
             }
-            if ((this.oponentComp.isSelected() && this.firstName.getText().length() == 0))
-            {
+            if ((this.oponentComp.isSelected() && this.firstName.getText().length() == 0)) {
                 JOptionPane.showMessageDialog(this, Settings.lang("fill_name"));
                 return;
             }
@@ -254,8 +248,7 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             {
                 pl1.setName(this.firstName.getText());//set name of player
                 pl2.setName(this.secondName.getText());//set name of player
-            }
-            else //else change names
+            } else //else change names
             {
                 pl2.setName(this.firstName.getText());//set name of player
                 pl1.setName(this.secondName.getText());//set name of player
@@ -263,46 +256,64 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             pl1.setType(Player.playerTypes.localUser);//set type of player
             pl2.setType(Player.playerTypes.localUser);//set type of player
             sett.setGameType(Settings.gameTypes.local);
+            GameEngine gameEngine = new GameEngine(sett);
+            switch (placement.getSelectedIndex()) {
+                case 0:
+                    gameEngine.setInitialPlaceStrategy(new BasePlacement(gameEngine.getChessboard()));
+                    break;
+                case 1:
+                    gameEngine.setInitialPlaceStrategy(new RandomPlacement(gameEngine.getChessboard()));
+                    break;
+            }
+
+            gameEngine = JChessApp.addNewGame(gameEngine, this.firstName.getText() + " vs " + this.secondName.getText());
+
             if (this.oponentComp.isSelected()) //if computer oponent is checked
             {
-                pl2.setType(Player.playerTypes.computer);
-            }
-            sett.setUpsideDown(this.upsideDown.isSelected());
-            GameEngine gameEngine = JChessApp.addNewGame(sett, this.firstName.getText() + " vs " + this.secondName.getText());
-            if (this.timeGame.isSelected()) //if timeGame is checked
-            {
-                gameEngine.changeTime(Integer.valueOf(this.times[this.time4Game.getSelectedIndex()]));
-                ;//set time for game
-            }
-            LOG.debug("this.time4Game.getActionCommand(): " + this.time4Game.getActionCommand());
-            //this.time4Game.getComponent(this.time4Game.getSelectedIndex());
-            LOG.debug("****************\nStarting new game: " + pl1.getName() + " vs. " + pl2.getName()
-                    + "\ntime 4 game: " + sett.getTimeForGame() + "\ntime limit set: " + sett.isTimeLimitSet()
-                    + "\nwhite on top?: " + sett.isUpsideDown() + "\n****************");//4test
 
-            this.parent.setVisible(false);//hide parent
-            JChessApp.getJavaChessView().getActiveTabGame().repaint();
-            JChessApp.getJavaChessView().setActiveTabGame(JChessApp.getJavaChessView().getNumberOfOpenedTabs()-1);
+                if (this.computerLevel.getValue() >= 1 && this.computerLevel.getValue() <= 1.75)
+                    pl2 = new RandomIA(gameEngine, "computer", Colors.BLACK.getColorName());
+                else if (this.computerLevel.getValue() >= 2 && this.computerLevel.getValue() <= 2.5)
+                    pl2 = new GloutonIA(gameEngine, "computer", Colors.BLACK.getColorName());
+                else
+                    pl2 = new MinMaxIA(gameEngine, "computer", Colors.BLACK.getColorName());
+
+                sett.setPlayerBlack(pl2);
+            }
+                sett.setUpsideDown(this.upsideDown.isSelected());
+
+
+                if (this.timeGame.isSelected()) //if timeGame is checked
+                {
+                    gameEngine.changeTime(Integer.valueOf(this.times[this.time4Game.getSelectedIndex()]));
+                    ;//set time for game
+                }
+                LOG.debug("this.time4Game.getActionCommand(): " + this.time4Game.getActionCommand());
+                //this.time4Game.getComponent(this.time4Game.getSelectedIndex());
+                LOG.debug("****************\nStarting new game: " + pl1.getName() + " vs. " + pl2.getName()
+                        + "\ntime 4 game: " + sett.getTimeForGame() + "\ntime limit set: " + sett.isTimeLimitSet()
+                        + "\nwhite on top?: " + sett.isUpsideDown() + "\n****************");//4test
+
+                this.parent.setVisible(false);//hide parent
+                JChessApp.getJavaChessView().getActiveTabGame().repaint();
+                JChessApp.getJavaChessView().setActiveTabGame(JChessApp.getJavaChessView().getNumberOfOpenedTabs() - 1);
+            }
+        }
+
+        /**
+         * Method responsible for triming white symbols from strings
+         *
+         * @param txt    Where is capt value to equal
+         * @param length How long is the string
+         * @return result trimmed String
+         */
+        public String trimString (JTextField txt,int length){
+            String result = new String();
+            try {
+                result = txt.getText(0, length);
+            } catch (BadLocationException exc) {
+                LOG.error("BadLocationException: Something wrong in trimString: \n" + exc);
+            }
+            return result;
         }
     }
-
-    /**
-     * Method responsible for triming white symbols from strings
-     * @param txt Where is capt value to equal
-     * @param length How long is the string
-     * @return result trimmed String
-     */
-    public String trimString(JTextField txt, int length)
-    {
-        String result = new String();
-        try
-        {
-            result = txt.getText(0, length);
-        }
-        catch (BadLocationException exc)
-        {
-            LOG.error("BadLocationException: Something wrong in trimString: \n" + exc);
-        }
-        return result;
-    }
-}
