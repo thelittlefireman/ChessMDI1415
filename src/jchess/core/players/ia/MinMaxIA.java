@@ -23,12 +23,12 @@ public class MinMaxIA extends IAInterface {
     @Override
     public void playATurn() {
         List<Piece> listPieceToMove = this.gameEngine.getChessboard().getAllPieces(this.getColor());
-        int max_val = Short.MAX_VALUE;
-        Square begin = null;
+        int max_val = -Integer.MAX_VALUE;
+        Square bestBegin=null,bestEnd = null;
         MoveCommands bestMoveCommands=null;
         //pour tous les coups possible
         for (Piece piece : listPieceToMove) {
-            begin = piece.getSquare();
+           Square begin = piece.getSquare();
             List<Square> possiblity = new ArrayList<>(piece.getAllMoves());
             for (Square end : possiblity) {
                 MoveCommands moveCommands = new MoveCommands(begin, end);
@@ -37,13 +37,15 @@ public class MinMaxIA extends IAInterface {
                 int val = min(3);
                 if (val > max_val) {
                     max_val = val;
-                    bestMoveCommands = moveCommands;
+                    bestBegin = begin;
+                    bestEnd = end;
                 }
 
                 this.gameEngine.getCommandsManager().undo(false);
             }
         }
-        this.gameEngine.getCommandsManager().execute(bestMoveCommands);
+        this.gameEngine.getCommandsManager().execute(new MoveCommands(bestBegin,bestEnd,true));
+        this.gameEngine.nextMove();
     }
 
     public int min(int profondeur) {

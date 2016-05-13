@@ -271,49 +271,49 @@ public class DrawLocalSettings extends JPanel implements ActionListener, TextLis
             if (this.oponentComp.isSelected()) //if computer oponent is checked
             {
 
-                if (this.computerLevel.getValue() >= 1 && this.computerLevel.getValue() <= 1.75)
+                if (this.computerLevel.getValue()==1)
                     pl2 = new RandomIA(gameEngine, "computer", Colors.BLACK.getColorName());
-                else if (this.computerLevel.getValue() >= 2 && this.computerLevel.getValue() <= 2.5)
+                else if (this.computerLevel.getValue()==2)
                     pl2 = new GloutonIA(gameEngine, "computer", Colors.BLACK.getColorName());
                 else
                     pl2 = new MinMaxIA(gameEngine, "computer", Colors.BLACK.getColorName());
 
                 sett.setPlayerBlack(pl2);
             }
-                sett.setUpsideDown(this.upsideDown.isSelected());
+            sett.setUpsideDown(this.upsideDown.isSelected());
 
 
-                if (this.timeGame.isSelected()) //if timeGame is checked
-                {
-                    gameEngine.changeTime(Integer.valueOf(this.times[this.time4Game.getSelectedIndex()]));
-                    ;//set time for game
-                }
-                LOG.debug("this.time4Game.getActionCommand(): " + this.time4Game.getActionCommand());
-                //this.time4Game.getComponent(this.time4Game.getSelectedIndex());
-                LOG.debug("****************\nStarting new game: " + pl1.getName() + " vs. " + pl2.getName()
-                        + "\ntime 4 game: " + sett.getTimeForGame() + "\ntime limit set: " + sett.isTimeLimitSet()
-                        + "\nwhite on top?: " + sett.isUpsideDown() + "\n****************");//4test
-
-                this.parent.setVisible(false);//hide parent
-                JChessApp.getJavaChessView().getActiveTabGame().repaint();
-                JChessApp.getJavaChessView().setActiveTabGame(JChessApp.getJavaChessView().getNumberOfOpenedTabs() - 1);
+            if (this.timeGame.isSelected()) //if timeGame is checked
+            {
+                gameEngine.changeTime(Integer.valueOf(this.times[this.time4Game.getSelectedIndex()]));
+                ;//set time for game
             }
-        }
+            LOG.debug("this.time4Game.getActionCommand(): " + this.time4Game.getActionCommand());
+            //this.time4Game.getComponent(this.time4Game.getSelectedIndex());
+            LOG.debug("****************\nStarting new game: " + pl1.getName() + " vs. " + pl2.getName()
+                    + "\ntime 4 game: " + sett.getTimeForGame() + "\ntime limit set: " + sett.isTimeLimitSet()
+                    + "\nwhite on top?: " + sett.isUpsideDown() + "\n****************");//4test
 
-        /**
-         * Method responsible for triming white symbols from strings
-         *
-         * @param txt    Where is capt value to equal
-         * @param length How long is the string
-         * @return result trimmed String
-         */
-        public String trimString (JTextField txt,int length){
-            String result = new String();
-            try {
-                result = txt.getText(0, length);
-            } catch (BadLocationException exc) {
-                LOG.error("BadLocationException: Something wrong in trimString: \n" + exc);
-            }
-            return result;
+            this.parent.setVisible(false);//hide parent
+            JChessApp.getJavaChessView().getActiveTabGame().repaint();
+            JChessApp.getJavaChessView().setActiveTabGame(JChessApp.getJavaChessView().getNumberOfOpenedTabs() - 1);
         }
     }
+
+    /**
+     * Method responsible for triming white symbols from strings
+     *
+     * @param txt    Where is capt value to equal
+     * @param length How long is the string
+     * @return result trimmed String
+     */
+    public String trimString(JTextField txt, int length) {
+        String result = new String();
+        try {
+            result = txt.getText(0, length);
+        } catch (BadLocationException exc) {
+            LOG.error("BadLocationException: Something wrong in trimString: \n" + exc);
+        }
+        return result;
+    }
+}

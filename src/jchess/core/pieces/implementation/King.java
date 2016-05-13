@@ -45,14 +45,14 @@ public class King extends Piece
 {
 
     protected boolean wasMotioned = false;
-    
-    protected static final short value = 99;
+
 
     public King(Chessboard chessboard, Player player)
     {
         super(chessboard, player);
         this.symbol = "K";
         this.addBehavior(new KingBehavior(this));
+        this.value =99;
     }
     /** Method to check is the king is checked
      *  @return bool true if king is not save, else returns false

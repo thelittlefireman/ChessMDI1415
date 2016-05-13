@@ -64,14 +64,14 @@ import jchess.core.visitorsPieces.VisitorPieceInterface;
 public class Pawn extends Piece
 {
     protected boolean down;
-    
-    protected static short value = 1;
+
     
     public Pawn(Chessboard chessboard, Player player)
     {
         super(chessboard, player);
         this.symbol = "";
         this.behaviors.add(new PawnBehavior(this));
+        this.value=1;
     }
 
     void promote(Piece newPiece)

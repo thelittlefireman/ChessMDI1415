@@ -46,14 +46,14 @@ public class Rook extends Piece
 {
 
     protected boolean wasMotioned = false;
-    
-    protected static final short value = 5;
+
 
     public Rook(Chessboard chessboard, Player player)
     {
         super(chessboard, player);//call initializer of super type: Piece
         this.symbol = "R";
         this.addBehavior(new RookBehavior(this));
+        this.value =5;
     }
 
     /**

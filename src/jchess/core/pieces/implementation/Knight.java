@@ -28,13 +28,14 @@ import jchess.core.visitorsPieces.VisitorPieceInterface;
  */
 public class Knight extends Piece
 {
-    protected static final short value = 3;
+
 
     public Knight(Chessboard chessboard, Player player)
     {
         super(chessboard, player);//call initializer of super type: Piece
         this.symbol = "N";
         this.addBehavior(new KnightBehavior(this));
+        this.value =3;
     }
     @Override
     public void accept(VisitorPieceInterface visitorPieceInterface) {

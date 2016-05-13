@@ -42,7 +42,6 @@ import jchess.core.visitorsPieces.VisitorPieceInterface;
  */
 public class Queen extends Piece
 {
-    protected static final short value = 9;
 
     public Queen(Chessboard chessboard, Player player)
     {
@@ -50,6 +49,7 @@ public class Queen extends Piece
         this.symbol = "Q";
         this.addBehavior(new RookBehavior(this));
         this.addBehavior(new BishopBehavior(this));
+        this.value =9;
     }
     @Override
     public void accept(VisitorPieceInterface visitorPieceInterface) {

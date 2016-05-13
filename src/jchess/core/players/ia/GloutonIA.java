@@ -26,11 +26,13 @@ public class GloutonIA extends IAInterface {
         for (Piece piece : listPieceToMove) {
             List<Square> possiblity = new ArrayList<>(piece.getAllMoves());
             for (Square square : possiblity) {
-                if(square.getPiece().getValue()>actualMaxValue){
-                    begin = piece.getSquare();
-                    end = square;
-                    actualMaxValue = square.getPiece().getValue();
-                }
+               if( square.getPiece() !=null) {
+                   if (square.getPiece().getValue() > actualMaxValue) {
+                       begin = piece.getSquare();
+                       end = square;
+                       actualMaxValue = square.getPiece().getValue();
+                   }
+               }
             }
         }
         if(begin!=null && end !=null) {

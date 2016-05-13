@@ -9,6 +9,7 @@ import jchess.core.pieces.Piece;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -22,13 +23,13 @@ public class RandomIA extends IAInterface {
 
     @Override
     public void playATurn() {
-        Piece pieceToMove = this.gameEngine.getChessboard().getAllPieces(this.getColor()).get((int) Math.random() * this.gameEngine.getChessboard().getAllPieces(this.getColor()).size());
+        Piece pieceToMove = this.gameEngine.getChessboard().getAllPieces(this.getColor()).get(new Random().nextInt(this.gameEngine.getChessboard().getAllPieces(this.getColor()).size()) );
         List<Square> possiblity = new ArrayList<>(pieceToMove.getAllMoves());
         while (possiblity.size() == 0) {
-            pieceToMove = this.gameEngine.getChessboard().getAllPieces(this.getColor()).get((int) Math.random() * this.gameEngine.getChessboard().getAllPieces(this.getColor()).size());
+            pieceToMove = this.gameEngine.getChessboard().getAllPieces(this.getColor()).get( new Random().nextInt(this.gameEngine.getChessboard().getAllPieces(this.getColor()).size()));
             possiblity = new ArrayList<>(pieceToMove.getAllMoves());
         }
-        Square end = possiblity.get((int) Math.random() * possiblity.size());
+        Square end = possiblity.get(new Random().nextInt(possiblity.size()));
         this.gameEngine.getCommandsManager().execute(new MoveCommands(pieceToMove.getSquare(), end));
         this.gameEngine.nextMove();
     }

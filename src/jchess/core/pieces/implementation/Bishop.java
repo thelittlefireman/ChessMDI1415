@@ -42,13 +42,13 @@ import jchess.core.visitorsPieces.VisitorPieceInterface;
  */
 public class Bishop extends Piece
 {
-    protected static final short value = 3;
 
     public Bishop(Chessboard chessboard, Player player)
     {
         super(chessboard, player); //call initializer of super type: Piece
         this.symbol = "B";
         this.addBehavior(new BishopBehavior(this));
+        this.value =3;
     }
 
     @Override

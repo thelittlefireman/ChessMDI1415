@@ -158,7 +158,9 @@ private GameEngine gameEngine;
         for (int i = 0; i < settings.getSizeN() - 1; i++) {
             for (int j = 0; j < settings.getSizeM() - 1; j++) {
                 Piece pieces = squares[i][j].getPiece();
-                pieces.accept(visitorPieceInterface);
+                if(pieces !=null) {
+                    pieces.accept(visitorPieceInterface);
+                }
             }
         }
     }

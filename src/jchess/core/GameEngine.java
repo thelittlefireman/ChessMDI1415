@@ -372,7 +372,7 @@ public class GameEngine {
         //checkmate or stalemate
         King king;
         if (this.getActivePlayer() == this.getSettings().getPlayerWhite()) {
-                     king = this.getChessboard().getKingWhite();
+            king = this.getChessboard().getKingWhite();
         } else {
             king = this.getChessboard().getKingBlack();
         }

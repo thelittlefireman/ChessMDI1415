@@ -11,13 +11,12 @@ import jchess.core.visitorsPieces.VisitorPieceInterface;
  */
 public class Valet extends Piece {
 
-    protected static final short value = 3;
-
 
     public Valet(Chessboard chessboard, Player player) {
         super(chessboard, player);
         this.symbol = "V";
         this.addBehavior(new ValetBehavior(this));
+        this.value =3;
     }
 
     @Override
