@@ -11,6 +11,7 @@ import jchess.core.pieces.implementation.Bishop;
 import jchess.core.pieces.implementation.King;
 import jchess.core.pieces.implementation.Knight;
 import jchess.core.pieces.implementation.Pawn;
+import jchess.display.panels.JPanelGame;
 import jchess.utils.Settings;
 import org.jdesktop.application.SingleFrameApplication;
 import org.junit.Before;
@@ -35,13 +36,15 @@ public class TestPiece {
 //        board = JChessApp.getActiveGameEngine().get(0).getChessboard();
         settings = new Settings();
         gameEngine = new GameEngine(settings);
+        gameEngine.setjPanelGame(new JPanelGame(gameEngine));
+        gameEngine.setActivePlayer(gameEngine.getSettings().getPlayerWhite());
         board = gameEngine.getChessboard(); // new Chessboard(settings, new MovesHistoryView(new JPanelGame()));
 
         // JPanelGame g = new JPanelGame();
         // #1 bad API design
         // g.newGame(); // fails because coupled to GUI concerns and tabs stuff
         // anyway
-     //   board.getInitialPlaceStrategy().setPieces("");
+       board.getInitialPlaceStrategy().setPieces("");
 
 
         // #2 bad API design
