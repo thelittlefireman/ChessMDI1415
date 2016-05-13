@@ -25,6 +25,7 @@ import jchess.core.*;
 import jchess.core.pieces.traits.behaviors.Behavior;
 import jchess.core.players.Player;
 import jchess.core.utils.Colors;
+import jchess.core.visitorsPieces.VisitorPieceInterface;
 import org.apache.log4j.Logger;
 
 /**
@@ -280,5 +281,6 @@ public abstract class Piece implements ChessboardParts
         this.name = name;
     }
 
-
+    @Override
+    public abstract void accept(VisitorPieceInterface visitorPieceInterface);
 }
