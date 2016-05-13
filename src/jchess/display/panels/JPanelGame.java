@@ -17,13 +17,12 @@ package jchess.display.panels;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.BorderFactory;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 
 import jchess.JChessApp;
 import jchess.core.Chessboard;
@@ -95,6 +94,7 @@ public class JPanelGame extends JPanel implements MouseListener {
         this.add(panelControl, BorderLayout.CENTER);
         this.setDoubleBuffered(true);
         chessboardView.addMouseListener(this);
+
     }
 
     public GameEngine getGameEngine() {
