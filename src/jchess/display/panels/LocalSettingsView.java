@@ -6,14 +6,15 @@ package jchess.display.panels;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import jchess.core.GameEngine;
@@ -35,6 +36,8 @@ public class LocalSettingsView extends JPanel implements ActionListener
 
 	private JCheckBox isTimeEnabled;  
 	
+	private JButton score;
+	
 	private JComboBox<String> times;  
      
     private GridBagConstraints gbc;
@@ -53,9 +56,11 @@ public class LocalSettingsView extends JPanel implements ActionListener
         this.setLayout(gbl);
         
         initUpsideDownControl();
+        initScore();
         initDisplayLegalMovesControl();
         initRenderLabelsControl();
         initTimeEnabled();
+        
         refreshCheckBoxesState();
     }
     
@@ -63,14 +68,30 @@ public class LocalSettingsView extends JPanel implements ActionListener
     {
         this.isUpsideDown = new JCheckBox();
         this.isUpsideDown.setText(Settings.lang("upside_down"));
-        this.isUpsideDown.setSize(this.isUpsideDown.getHeight(), this.getWidth());
         this.gbc.gridx = 0;
-        this.gbc.gridy = 0;
-        this.gbc.insets = new Insets(3, 3, 3, 3);
+        this.gbc.gridy = 1;
         this.gbl.setConstraints(isUpsideDown, gbc);
         this.add(isUpsideDown);
         
         isUpsideDown.addActionListener(this);
+    }
+    
+    private void initScore()
+    {
+        this.score = new JButton("score");
+        
+        this.gbc.gridx = 0;
+        this.gbc.gridy = 0;
+        this.gbl.setConstraints(score, gbc);
+        this.add(score);
+        
+        score.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				JOptionPane.showMessageDialog(null, "CHANGE MOI", "Score", JOptionPane.INFORMATION_MESSAGE);
+			}
+        });       
     }
     
     private void initDisplayLegalMovesControl()
@@ -79,7 +100,7 @@ public class LocalSettingsView extends JPanel implements ActionListener
         this.isDisplayLegalMovesEnabled.setText(Settings.lang("display_legal_moves"));     
         
         this.gbc.gridx = 0;
-        this.gbc.gridy = 1;
+        this.gbc.gridy = 2;
         this.gbl.setConstraints(isDisplayLegalMovesEnabled, gbc);
         this.add(isDisplayLegalMovesEnabled);
         
@@ -92,7 +113,7 @@ public class LocalSettingsView extends JPanel implements ActionListener
         this.isRenderLabelsEnabled.setText(Settings.lang("display_labels"));     
         
         this.gbc.gridx = 0;
-        this.gbc.gridy = 2;
+        this.gbc.gridy = 3;
         this.gbl.setConstraints(isRenderLabelsEnabled, gbc);
         this.add(isRenderLabelsEnabled);
         
@@ -104,7 +125,7 @@ public class LocalSettingsView extends JPanel implements ActionListener
 		this.isTimeEnabled = new JCheckBox("Time Game (min)");
 
 		this.gbc.gridx = 0;
-		this.gbc.gridy = 3;
+		this.gbc.gridy = 4;
 		this.gbl.setConstraints(isTimeEnabled, gbc);
 		this.add(isTimeEnabled);
 
@@ -113,7 +134,7 @@ public class LocalSettingsView extends JPanel implements ActionListener
 
 		times = new JComboBox<String>(time);
 		this.gbc.gridx = 1;
-		this.gbc.gridy = 3;
+		this.gbc.gridy = 4;
 		this.gbl.setConstraints(times, gbc);
 		this.add(times);
 
